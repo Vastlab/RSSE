@@ -10,13 +10,14 @@ package cachemodule;
  */
 public class CacheModule
 {
-
+    public static Logger l;
+    
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args)
     {
-        
+        l=new Logger();
     }
     
 }
