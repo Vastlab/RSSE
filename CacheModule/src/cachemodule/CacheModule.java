@@ -11,6 +11,7 @@ package cachemodule;
 public class CacheModule
 {
     public static Logger l;
+    public static CMConfig cfg;
     
     /**
      * @param args the command line arguments
@@ -18,6 +19,7 @@ public class CacheModule
     public static void main(String[] args)
     {
         l=new Logger();
+        cfg=new CMConfig();
     }
     
 }

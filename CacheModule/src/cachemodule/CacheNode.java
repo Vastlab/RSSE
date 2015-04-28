@@ -39,7 +39,8 @@ public class CacheNode
     public String generateURI()
     {
         // TODO Implement!
-        return null;
+        //return null;
+        return f.toURI().toASCIIString();
     }
     
     /**
