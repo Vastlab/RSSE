@@ -290,7 +290,7 @@ public class CacheRequestProtocolServer
                             
                             if(strScanner.next().equalsIgnoreCase("OK"))
                             {
-                                //TODO: use dumpbin to transfer the data after sending file size, etc.
+                                dumpBin(n.getFile(), rawOut);
                             }
                             
                             else
