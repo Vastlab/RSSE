@@ -12,5 +12,21 @@ package cachemodule;
  */
 public class CacheErrorException extends Exception
 {
+    private int internalCode;
     
+    public CacheErrorException(int errCode)
+    {
+        internalCode=errCode;
+    }
+    
+    public int getErr()
+    {
+        return internalCode;
+    }
+    
+    @Override
+    public String toString()
+    {
+        return "CacheError: "+internalCode;
+    }
 }
