@@ -27,15 +27,17 @@ import java.util.Scanner;
 public class CacheRequestProtocolServer
 {
     public static final String CACHE_REQUEST_PROTOCOL_SERVER_TAG="CacheRequestProtocolServer";
-    Database availableDatabase;
+    private Database availableDatabase;
+    private ConcurrentRequestManager reqMan;
     
-    public CacheRequestProtocolServer(Database d)
+    public CacheRequestProtocolServer(Database d, ConcurrentRequestManager r)
     {
         availableDatabase=d;
     }
     
     private static final int CONNECTION_TYPE_LOCAL=1;
     private static final int CONNECTION_TYPE_REMOTE=2;
+    private static final int CONNECTION_TYPE_AUTODETECT=3;
     
     private int autoDetect(Socket s, ServerSocket srvr)
     {
@@ -87,7 +89,7 @@ public class CacheRequestProtocolServer
      * @param s
      * @return 
      */
-    public int handleConnection(Socket s, ServerSocket srvr)
+    public int handleConnection(Socket s, ServerSocket srvr) throws InterruptedException
     {
         //Set up some abstraction for the socket's interface:
         try
@@ -139,16 +141,25 @@ public class CacheRequestProtocolServer
                 else
                 {
                     url=sockIn.readLine();
-
-                    if(CacheFetcher.fetch(availableDatabase, url))
+                    
+                    //Check if the file is already being fetched:
+                    if(!reqMan.fileBeingFetched(url))
                     {
-                        sockOut.println("OK");
-                    }
+                        //Register the request:
+                        reqMan.addFileFetch(url);
+                        
+                        if(CacheFetcher.fetch(availableDatabase, url))
+                        {
+                            sockOut.println("OK");
+                        }
 
-                    else
-                    {
-                        sockOut.println("ERR 3");
-                    }
+                        else
+                        {
+                            sockOut.println("ERR 3");
+                        }
+                        
+                        reqMan.finishFileFetch(url);
+                    } //Otherwise don't even bother.
                 }
             }
             
@@ -169,6 +180,12 @@ public class CacheRequestProtocolServer
                     else if(reqType.equalsIgnoreCase("LOCAL"))
                     {
                         sockSettings=CONNECTION_TYPE_LOCAL;
+                    }
+                    
+                    //Yay for kludges!
+                    else if(reqType.equalsIgnoreCase("AUTODETECT"))
+                    {
+                        sockSettings=CONNECTION_TYPE_AUTODETECT;
                     }
                     
                     else
@@ -219,29 +236,39 @@ public class CacheRequestProtocolServer
                         
                         else
                         {
-                            if(CacheFetcher.fetch(availableDatabase, url))
+                            if(reqMan.fileBeingFetched(url))
                             {
-                                n=availableDatabase.find(url);
+                                while(reqMan.fileBeingFetched(url))
+                                {
+                                    Thread.sleep(100);
+                                }
+                            }
+                            
+                            else
+                            {
+                                reqMan.addFileFetch(reqHeader);
                                 
-                                if(n==null)
+                                if(!CacheFetcher.fetch(availableDatabase, url))
                                 {
                                     sockOut.println("ERR 3");
-                                    
                                     retV=3;
                                 }
                                 
-                                else
-                                {
-                                    sockOut.println("OK");
-                                    sockOut.println("URI");
-                                    sockOut.println(n.generateURI());
-                                }
+                                reqMan.finishFileFetch(url);
+                            }
+                            
+                            if(n==null)
+                            {
+                                sockOut.println("ERR 3");
+
+                                retV=3;
                             }
 
                             else
                             {
-                                sockOut.println("ERR 3");
-                                retV=3;
+                                sockOut.println("OK");
+                                sockOut.println("URI");
+                                sockOut.println(n.generateURI());
                             }
                         }
                     }
@@ -266,10 +293,25 @@ public class CacheRequestProtocolServer
                         
                         if(n==null)
                         {
-                            if(!CacheFetcher.fetch(availableDatabase, url))
+                            if(reqMan.fileBeingFetched(url))
                             {
-                                sockOut.println("ERR 3");
-                                retV=3;
+                                while(reqMan.fileBeingFetched(url))
+                                {
+                                    Thread.sleep(100);
+                                }
+                            }
+                            
+                            else
+                            {
+                                reqMan.addFileFetch(reqHeader);
+                                
+                                if(!CacheFetcher.fetch(availableDatabase, url))
+                                {
+                                    sockOut.println("ERR 3");
+                                    retV=3;
+                                }
+                                
+                                reqMan.finishFileFetch(url);
                             }
                         }
                         
@@ -298,6 +340,22 @@ public class CacheRequestProtocolServer
                                 retV=strScanner.nextInt();
                             }
                         }
+                    }
+                }
+                
+                //Add compatibility for a new type of connection
+                else if(sockSettings==CONNECTION_TYPE_AUTODETECT)
+                {
+                    int connectionType=autoDetect(s, srvr);
+                    
+                    if(connectionType==CONNECTION_TYPE_REMOTE)
+                    {
+                        sockOut.println("REMOTE");
+                    }
+                    
+                    else
+                    {
+                        sockOut.println("LOCAL");
                     }
                 }
             }

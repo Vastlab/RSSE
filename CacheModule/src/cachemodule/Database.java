@@ -104,6 +104,169 @@ public class Database
     }
     
     /**
+     * Finds a node's parent for the remove method.
+     * @param uri
+     * @param n
+     * @return 
+     */
+    private CacheNodeWrapper rcsvParentFind(CacheNodeWrapper findVal, CacheNodeWrapper n, String uri)
+    {
+        int cmpVal;
+        
+        if(n==null)
+        {
+            return null;
+        }
+        
+        cmpVal=n.data.getOrigin().compareTo(uri);
+        
+        if(n.left==findVal||n.right==findVal)
+        {
+            return n;
+        }
+        
+        if(cmpVal>0)
+        {
+            return rcsvParentFind(findVal, n.right, uri);
+        }
+        
+        else if(cmpVal<0)
+        {
+            return rcsvParentFind(findVal, n.left, uri);
+        }
+        
+        else
+        {
+            //We've found the node but not its parent... interesting.
+            return null;
+        }
+    }
+    
+    private CacheNodeWrapper rcsvLowLevelFind(String uri, CacheNodeWrapper n)
+    {
+        int cmpVal;
+        
+        if(n==null)
+        {
+            return null;
+        }
+        
+        cmpVal=n.data.getOrigin().compareTo(uri);
+        
+        if(cmpVal>0)
+        {
+            return rcsvLowLevelFind(uri, n.right);
+        }
+        
+        else if(cmpVal<0)
+        {
+            return rcsvLowLevelFind(uri, n.left);
+        }
+        
+        else
+        {
+            return n;
+        }
+    }
+    
+    private void rcsvTraverseInsert(CacheNodeWrapper w)
+    {
+        if(w!=null)
+        {
+            rcsvInternalAdd(w.data, dbRoot);
+
+            rcsvTraverseInsert(w.left);
+            rcsvTraverseInsert(w.right);
+        }
+    }
+    
+    /**
+     * Inserts a tree into the database.
+     * @param tree 
+     */
+    private void insertTree(CacheNodeWrapper tree)
+    {
+        if(tree!=null)
+        {
+            rcsvTraverseInsert(tree);
+        }
+    }
+    
+    private void rcsvDeleteNode(CacheNodeWrapper w)
+    {
+        if(w!=null)
+        {
+            rcsvDeleteNode(w.left);
+            rcsvDeleteNode(w.right);
+            w.left=null;
+            w.right=null;
+        }
+    }
+    
+    /**
+     * Ensures that all references inside the tree are null so that the garbage collector can take care of it.
+     * (New garbage collectors should probably be able to handle this, but just in case...)
+     */
+    private void deleteTree(CacheNodeWrapper tree)
+    {
+        if(tree!=null)
+        {
+            rcsvDeleteNode(tree);
+        }
+    }
+    
+    public synchronized boolean remove(String uri)
+    {
+        boolean deletedElementFound=false;
+        
+        //See if we can find the parent of the node with this URI:
+        CacheNodeWrapper n=rcsvLowLevelFind(uri, dbRoot);
+        CacheNodeWrapper parent, leftTree, rightTree;
+        
+        //Now find that node's parent:
+        if(n!=null)
+        {
+            parent=rcsvParentFind(n, dbRoot, uri);
+            
+            //This should hopefully always happen...
+            if(parent!=null)
+            {
+                leftTree=n.left;
+                rightTree=n.right;
+                
+                if(parent.left==n)
+                {
+                    parent.left=null;
+                }
+                
+                else
+                {
+                    parent.right=null;
+                }
+                
+                //Now recursively insert these trees:
+                insertTree(leftTree);
+                insertTree(rightTree);
+                
+                //Methinks this may be unncecessary. I need to see how the JVM garbage collects
+                //in real-world situations.
+                deleteTree(leftTree);
+                deleteTree(rightTree);
+                
+                deletedElementFound=true;
+            }
+        }
+        
+        return deletedElementFound;
+    }
+    
+    //This will be far trickier to implement since it involves a full traversal.
+    public synchronized boolean remove(File f)
+    {
+        return false;
+    }
+    
+    /**
      * Finds a given CacheNode when provided with a source URI.
      * @param uri
      * @return 
