@@ -33,16 +33,27 @@ public class CacheRequestProtocolServer
     public CacheRequestProtocolServer(Database d, ConcurrentRequestManager r)
     {
         availableDatabase=d;
+        reqMan=r;
     }
     
     private static final int CONNECTION_TYPE_LOCAL=1;
     private static final int CONNECTION_TYPE_REMOTE=2;
     private static final int CONNECTION_TYPE_AUTODETECT=3;
     
+    /**
+     * This function detects whether or not a connection is local or remote.
+     * For the most part, it will currently always return remote, though that will be a configuration fix for future releases.
+     * @param s
+     * @param srvr
+     * @return 
+     */
     private int autoDetect(Socket s, ServerSocket srvr)
     {
         InetAddress remote=s.getInetAddress();
         InetAddress local=srvr.getInetAddress();
+        
+        System.out.println("Remote inetaddress: "+remote);
+        System.out.println("Local inetaddress: "+local);
         
         if(!local.equals(remote))
         {
@@ -62,6 +73,7 @@ public class CacheRequestProtocolServer
      */
     private void dumpBin(File f, OutputStream o)
     {
+        System.out.println("Dumping binary data...");
         try
         {
             int numRead;
@@ -74,6 +86,7 @@ public class CacheRequestProtocolServer
             while(numRead!=-1)
             {
                 o.write(bytes, 0, numRead);
+                numRead=s.read(bytes);
             }
         } catch(FileNotFoundException e)
         {
@@ -86,17 +99,19 @@ public class CacheRequestProtocolServer
     
     /**
      * Handles a caching server request based on the given incoming socket.
-     * @param s
+     * @param s Socket received for the connection.
+     * @param srvr Server socket used to determine whether the client is local or remote.
      * @return 
      */
     public int handleConnection(Socket s, ServerSocket srvr) throws InterruptedException
     {
+        System.out.println("In HandleConnection...");
         //Set up some abstraction for the socket's interface:
         try
         {
             int retV=-1;
             OutputStream rawOut=s.getOutputStream();
-            PrintWriter sockOut=new PrintWriter(s.getOutputStream());
+            PrintWriter sockOut=new PrintWriter(s.getOutputStream(), true);
             BufferedReader sockIn=new BufferedReader(new InputStreamReader(s.getInputStream()));
             
             //Now get the fetch request type.
@@ -106,6 +121,8 @@ public class CacheRequestProtocolServer
             String reqType=strScanner.next();
             
             String url;
+            
+            System.out.println("Reqtype="+reqType);
             
             //Handle the shortest and easiest type of request:
             if(reqType.equalsIgnoreCase("CHECK"))
@@ -210,6 +227,8 @@ public class CacheRequestProtocolServer
                     sockSettings=autoDetect(s, srvr);
                 }
                 
+                System.out.println("Socksettings="+sockSettings);
+                
                 //Now do the actual execution, again easiest first:
                 if(sockSettings==CONNECTION_TYPE_LOCAL)
                 {
@@ -224,7 +243,7 @@ public class CacheRequestProtocolServer
                     else
                     {
                         url=sockIn.readLine();
-                        
+                        System.out.println("Told to fetch: "+url);
                         CacheNode n=availableDatabase.find(url);
                         
                         if(n!=null)
@@ -256,6 +275,8 @@ public class CacheRequestProtocolServer
                                 
                                 reqMan.finishFileFetch(url);
                             }
+                            
+                            n=availableDatabase.find(url);
                             
                             if(n==null)
                             {
@@ -314,6 +335,9 @@ public class CacheRequestProtocolServer
                                 reqMan.finishFileFetch(url);
                             }
                         }
+                        
+                        //Now it should be handled:
+                        n=availableDatabase.find(url);
                         
                         //Catch the above error condition and begin the binary transfer.
                         if(retV!=3)

@@ -26,7 +26,10 @@ public class CacheFetcher
             URLFetcher f=new URLFetcher(CacheModule.cfg.getSetting(CMConfig.SETTING_STORAGE_DIR), CacheModule.l);
             File localFile=f.binFetchFromServer(url);
             
+            System.out.println("Fileamajig:"+localFile);
+            
             d.add(new CacheNode(localFile, url));
+            return true;
         } catch(FileNotFoundException e)
         {
             CacheModule.l.logErr(CACHE_FETCHER_TAG, "Couldn't fetch requested URL: "+url);
@@ -36,7 +39,5 @@ public class CacheFetcher
             CacheModule.l.logErr(CACHE_FETCHER_TAG, "Requested URL malformed: "+url);
             return false;
         } 
-        
-        return true;
     }
 }

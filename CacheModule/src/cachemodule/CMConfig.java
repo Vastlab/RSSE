@@ -21,7 +21,7 @@ public class CMConfig
     private String serverPort;
     private int configVersion;
     
-    private static final String DEFAULT_STORAGE_DIR="./";
+    private static final String DEFAULT_STORAGE_DIR="./storage";
     private static final String DEFAULT_CONFIG_DIR="./";
     private static final String DEFAULT_SERVER_PORT="9001";
     
@@ -53,33 +53,39 @@ public class CMConfig
     {
         try
         {
+            String buffr;
             String str;
             Scanner s=new Scanner(f);
             
             //Read version information:
-            s.next(); 
-            configVersion=s.nextInt();
+            buffr=s.nextLine();
+            Scanner buffrScanner=new Scanner(buffr);
+            buffrScanner.next();
+            configVersion=buffrScanner.nextInt();
             
             if(configVersion==1)
             {
                 while(s.hasNextLine())
                 {
-                    str=s.next();
+                    buffr=s.nextLine();
+                    System.out.println(buffr);
+                    buffrScanner=new Scanner(buffr);
+                    str=buffrScanner.next();//str=s.next();
                     
                     //Maintain Java 6 compatibility:
                     if(str.equals(SETTING_STORAGE_DIR_STR))
                     {
-                        storageDir=s.next();
+                        storageDir=buffrScanner.next();
                     }
                     
                     else if(str.equals(SETTING_CONFIG_DIR_STR))
                     {
-                        configDir=s.next();
+                        configDir=buffrScanner.next();
                     }
                     
                     else if(str.equals(SETTING_SERVER_PORT_STR))
                     {
-                        serverPort=s.next();
+                        serverPort=buffrScanner.next();
                     }
                 }
             }
@@ -93,6 +99,7 @@ public class CMConfig
     
     public boolean saveSettings(File f)
     {
+        System.out.println("In saveSettings");
         try
         {
             if(!f.exists())
@@ -107,11 +114,16 @@ public class CMConfig
             pw.println(SETTING_STORAGE_DIR_STR+" "+storageDir);
             pw.println(SETTING_CONFIG_DIR_STR+" "+configDir);
             pw.println(SETTING_SERVER_PORT_STR+" "+serverPort);
+            
+            pw.flush();
+            pw.close();
         } catch (FileNotFoundException e)
         {
+            System.out.println("Can't find file.");
             return false;
         } catch (IOException e)
         {
+            System.out.println("Can't write file.");
             return false;
         }
         
@@ -139,5 +151,10 @@ public class CMConfig
     public CMConfig(File f)
     {
         
+    }
+    
+    public File getDefaultSettingsFile()
+    {
+        return new File(DEFAULT_CONFIG_DIR+"cm.conf");
     }
 }

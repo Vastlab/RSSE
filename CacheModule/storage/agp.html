@@ -1,0 +1,1380 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+  <meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+  <meta name="description" content="AGP compatibility for sticklers">
+  <title>AGP compatibility for sticklers</title>
+  <link type="text/css" rel="stylesheet" href="../style.css">
+  <script src="../javascript/head.js" type="text/javascript"></script>
+</head>
+<body>
+
+<div class=standardindent>
+<!--(HEADER-->
+<p align=left>
+  <img src="../logo.gif" width=750 height=80 alt="PlayTool page top" border=0
+   usemap="#pagetopmap">
+  <map name=pagetopmap>
+    <area shape=rect coords="0,0,270,80" href="../home/index.html" alt="home">
+    <area shape=rect coords="550,44,616,69"
+      href="../home/index.html" alt="home">
+    <area shape=rect coords="653,44,742,69"
+      href="../contact/contact.html" alt="contact page">
+  </map>
+</p>
+<!--HEADER)-->
+
+<!--(VIDLINKS-->
+<table width=750 bgcolor="#FFFFFF" border=2 cellpadding=2 cellspacing=2>
+  <tr>
+    <th bgcolor="#C0C0C0">Video card information</th>
+  </tr>
+  <tr>
+    <td>
+      <ul>
+        <li><a href="../selectvid/select.html"><b>How to select a video card</b></a>
+        <li><a href="../installvid/install.html"><b>How to install a video card</b></a>
+        <li><a href="../troubleshooting/intro.html"><b>How to troubleshoot video card problems</b></a>
+        <li><a href="../vidtable/table.html">The big fat table of video cards</a>
+        <li><a href="../agpcompat/agp.html">AGP compatibility for sticklers</a>
+        <li><a href="../dvicompat/dvi.html">DVI compatibility for sticklers</a>
+        <li><a href="../agpfix/agpfix.html">Troubleshooting AGP</a>
+        <li><a href="../underclockvid/slowdown.html">Troubleshoot your video card by underclocking</a>
+        <li><a href="../artifacts/artifacts.html">Diagnose your video card problems by comparing with example corrupted screens</a>
+        <li><a href="../dvitrouble/dvitrouble.html">Troubleshooting DVI problems</a>
+        <li><a href="../basic3d/basics.html">The basics of 3D graphics without making your eyes glaze over - just enough to get you started</a>
+        <li><a href="../uninstallgraphics/uninstall.html">How to uninstall your current display drivers</a>
+        <li><a href="../installgraphics/install.html">How to install display drivers for your video card</a>
+        <li><a href="../vramwidth/width.html">Understanding video RAM memory bandwidth</a>
+        <li><a href="../vidslots/slots.html">What kind of expansion slot should you use for your video card?</a>
+        <li><a href="../vga/vga.html">VGA video card outputs</a>
+      </ul>
+    </td>
+  </tr>
+</table>
+<!--VIDLINKS)-->
+
+<hr size=3>
+
+<h3>AGP compatibility for sticklers: The Short Version</h3>
+<p>
+  If an
+  <a class="defs" href="../defs/defs.html#agp" title="accelerated graphics port - an expansion slot for a video card" onClick="return DefPopup(this)">AGP</a>
+  card fits in an AGP
+  <a class="defs" href="../defs/defs.html#expansionslot" title="motherboard connector which can accept an expansion card" onClick="return DefPopup(this)">expansion slot</a>
+  then they are compatible. But read the rest of this anyway. There are some
+  rare exceptions where motherboard and video card manufacturers don't obey the
+  rules.
+</p>
+
+<h3>AGP compatibility for sticklers: The Long Version</h3>
+
+<h4>AGP Basics</h4>
+<p>
+  In 1996, Intel introduced AGP 1.0. AGP was a modified version of
+  <a class="defs" href="../defs/defs.html#pci" title="peripheral component interconnect - a kind of expansion slot" onClick="return DefPopup(this)">PCI</a>
+  designed to speed up transfers to
+  <a class="defs" href="../defs/defs.html#videocard" title="expansion card which displays images on a monitor" onClick="return DefPopup(this)">video cards</a>.
+  It was followed by AGP 2.0 in 1998 and AGP 3.0 in 2002. Each new version
+  added new speeds and signaling voltages.
+</p>
+<table align=center width=600 bgcolor="#FFFFFF" border=2 cellpadding=2 cellspacing=2>
+  <tr align=center>
+    <th width=100 bgcolor="#C0C0C0">AGP Version</th>
+    <th width=130 bgcolor="#C0C0C0">Signaling Voltage</th>
+    <th width=370 bgcolor="#C0C0C0">Peak Speeds</th>
+  </tr>
+  <tr>
+    <td align=center>AGP 1.0  </td>
+    <td align=center>3.3 volts</td>
+    <td>1x at 267MB/s, 2x at 533MB/s</td>
+  </tr>
+  <tr>
+    <td align=center>AGP 2.0  </td>
+    <td align=center>1.5 volts</td>
+    <td>1x at 267MB/s, 2x at 533MB/s, 4x at 1067MB/s</td>
+  </tr>
+  <tr>
+    <td align=center>AGP 3.0  </td>
+    <td align=center>0.8 volts</td>
+    <td>4x at 1067MB/s, 8x at 2133MB/s</td>
+  </tr>
+</table>
+<p>
+  The signaling voltage is the voltage used to send data between the AGP card
+  and the AGP
+  <a class="defs" href="../defs/defs.html#motherboard" title="main circuit board in the computer which holds CPU, RAM, and expansion slots" onClick="return DefPopup(this)">motherboard.</a>
+  "1x" means "1 times". 1x is the base AGP speed. 2x is twice as fast as the
+  base speed, 4x is four times as fast, and 8x is eight times as fast.
+  You can download the final AGP 3.0 specification from 
+  <a href="agp30.pdf">here</a>. You may also want to look at the
+  <a href="agp10.pdf">AGP 1.0 specification</a>, the
+  <a href="http://www.motherboards.org/files/techspecs/agp20.pdf">
+  AGP 2.0 specification</a>, and the
+  <a href="http://www.motherboards.org/files/techspecs/apro_r11a.pdf">AGP Pro 1.1a
+  specification.</a>
+</p>
+
+<h4>AGP Multipliers</h4>
+<table align=center bgcolor="#FFFFFF" border=2 cellpadding=2 cellspacing=2>
+  <tr>
+    <th bgcolor="#C0C0C0">AGP Version</th>
+    <th bgcolor="#C0C0C0">Signaling Voltage</th>
+    <th bgcolor="#C0C0C0">Possible Multipliers</th>
+  </tr>
+  <tr>
+    <td align=center>AGP 1.0</td>
+    <td align=center>3.3 volts</td>
+    <td>1x, 2x</td>
+  </tr>
+  <tr>
+    <td align=center>AGP 2.0</td>
+    <td align=center>1.5 volts</td>
+    <td>1x, 2x, 4x</td>
+  </tr>
+  <tr>
+    <td align=center>AGP 3.0</td>
+    <td align=center>0.8 volts</td>
+    <td>4x, 8x</td>
+  </tr>
+</table>
+<p>
+  AGP supports four different speed multipliers: 1x, 2x, 4x, and 8x. Looking
+  at the various possible signaling voltages and speed multipliers, you might
+  think that there are a large number of different kinds of video cards and
+  motherboards supporting various combinations of voltages and multipliers. But
+  it's actually much simpler than that. The AGP 1.0 specification requires that
+  all implementations support the 1x speed multiplier at 3.3 volts. The 2x
+  multiplier is optional. There's no such thing as a 3.3 volt video card or
+  motherboard which only supports 2x. By default, when the AGP 1.0 machine
+  powers up it selects the fastest speed multiplier supported by both the video
+  card and the motherboard. If they both support 2x then they will run at 2x.
+  Otherwise they run at 1x which is always implemented by all AGP 1.0 video
+  cards and motherboards. There is often an option in the BIOS which allows you
+  to limit the speed to 1x if 2x is not reliable. The AGP 2.0 specification has
+  a similar requirement. 2x and 1x support at 1.5 volts are required and 4x
+  support is optional. The AGP 3.0 specification requires support for 8x. The
+  3.0 specification isn't as clear as the 1.0 and 2.0 specifications on the
+  subject of requiring the lower multiplier but all AGP 3.0 implementations
+  that I've seen support both 8x and 4x. As a result, you can
+  completely ignore speed multipliers when you're checking for compatibility
+  between an AGP video card and an AGP motherboard. If the video card and
+  motherboard both support the same signaling voltage then there is always at
+  least one common speed multiplier supported by both at that voltage. You only
+  need to make sure that the video card and motherboard have at least one
+  signaling voltage in common.
+</p>
+
+<h4>AGP Connectors And Slots</h4>
+<p align=center>
+  <img src="voltageslots.jpg" width="750" height="263" alt="AGP card voltage slots">
+</p>
+<p>
+  Each AGP card has one or two slots in its card edge. If a video card has the
+  3.3 volt slot, then it can use 3.3 volt signaling. AGP 2.0 added the 1.5 volt
+  slot on cards which could use 1.5 volt signaling. If the card has both
+  slots then it can use both signaling voltages. AGP 3.0 added support for 0.8
+  volt signaling but it did not add a new kind of slot. If a video card
+  supports either 1.5 volt or 0.8 volt signaling then it has the 1.5 volt slot.
+</p>
+<p align=center>
+  <img src="agpslots.gif" width="544" height="738" alt="AGP motherboard connectors cross section">
+</p>
+<p>
+  The AGP connectors on the motherboard are keyed to prevent insertion of AGP
+  cards which would be damaged if plugged in. An AGP 3.3V motherboard connector
+  can only accept AGP cards which have the 3.3V slot. If you try to insert a
+  card without a 3.3V slot into an AGP 3.3V motherboard connector, the
+  card will bump into the connector key and cannot be inserted. Likewise an AGP
+  1.5V motherboard connector can only accept AGP cards with the 1.5V slot. An
+  AGP universal motherboard connector has no keys and therefore can accept any
+  kind of AGP card. An AGP card with both voltage slots can be plugged into any
+  kind of AGP motherboard connector. If you can plug an AGP card into an AGP
+  motherboard connector, then neither the card nor the motherboard will be
+  damaged (assuming they obey the AGP specifications).
+</p>
+<p>
+  AGP Pro motherboard connectors were created to support video cards which
+  use more power than a plain AGP connector can supply. There are extra
+  connectors on both ends of an AGP Pro motherboard connector which allow an
+  AGP Pro video card to draw more power. Plain AGP cards are fully compatible
+  with AGP Pro motherboards, but it doesn't work the other way around. AGP
+  motherboards are not compatible with AGP Pro video cards. High-end
+  motherboards are often actually AGP Pro motherboards because they can accept
+  both AGP cards and AGP Pro cards. But AGP Pro video cards are rarely seen
+  outside the workstation market because they aren't compatible with AGP
+  motherboards. Consumer-oriented video cards which need to draw lots of power
+  usually require you to plug in a disk drive power supply cable. That way they
+  can be compatible with all motherboards and still use lots of power.
+</p>
+
+<h4>Official AGP Compatibility</h4>
+<table align=center width=720 bgcolor="#FFFFFF" border=2 cellpadding=2 cellspacing=2>
+  <tr align=center>
+    <th colspan=3 bgcolor="#C0C0C0">Graphics Card Types (table 16 from the AGP
+      3.0 specification)</th>
+  </tr>
+  <tr>
+    <th width=190 bgcolor="#C0C0C0">Graphics Card Types</th>
+    <th width=110 bgcolor="#C0C0C0">Connector Type     </th>
+    <th width=420 bgcolor="#C0C0C0">Description        </th>
+  </tr>
+  <tr id=agp33vcard>
+    <td align=center>AGP 3.3V Card</td>
+    <td align=center>3.3V slot</td>
+    <td>Supports only 3.3V signaling. Available speeds 1x, 2x.</td>
+  </tr>
+  <tr id=agp15vcard>
+    <td align=center>AGP 1.5V Card</td>
+    <td align=center>1.5V slot</td>
+    <td>Supports only 1.5V signaling. Available speeds 1x, 2x, 4x.</td>
+  </tr>
+  <tr id=universalagpcard>
+    <td align=center>Universal AGP Card</td>
+    <td align=center>Double slotted</td>
+    <td>Supports 3.3V and 1.5V signaling. Available speeds 1x, 2x at 3.3V and
+        1x, 2x, 4x at 1.5V.</td>
+  </tr>
+  <tr id=agp30card>
+    <td align=center>AGP 3.0 Card</td>
+    <td align=center>1.5V slot</td>
+    <td>Supports only 0.8V signaling. Available speeds 4x, 8x.</td>
+  </tr>
+  <tr id=universal15vagp30card>
+    <td align=center>Universal 1.5V AGP 3.0 Card</td>
+    <td align=center>1.5V slot</td>
+    <td>Supports 1.5V and 0.8V signaling. Available speeds 1x, 2x, 4x at 1.5V
+        and 4x, 8x at 0.8V.</td>
+  </tr>
+  <tr id=universalagp30card>
+    <td align=center>Universal AGP 3.0 Card</td>
+    <td align=center>Double slotted</td>
+    <td>Supports AGP 3.3v, 1.5V, and 0.8V signaling. Available speeds 1x, 2x at
+        3.3V and 1x, 2x, 4x at 1.5V and 4x, 8x at 0.8V.</td>
+  </tr>
+</table>
+<p>
+  The table above gives Intel's official names for the various kinds of AGP
+  cards allowed by the AGP specifications. Unfortunately, the technical
+  specifications for a video card rarely use these terms properly (if at all)
+  to describe the video card. They usually just list the fastest AGP
+  multipliers it supports: "8X, 4X", or "4X". From that information and the
+  voltage slots on a picture of the video card, you can often figure out
+  exactly what it is. I've seen plenty of video cards listed as
+  "<a href="#agp30card">AGP 3.0 cards</a>"
+  when in fact they are actually <a href="#universal15vagp30card">universal 1.5V AGP 3.0 cards</a>. I've also
+  seen cards listed as "AGP 8X,4X 1.5 volt only" when there is really no such
+  thing. What they are trying to tell you is that it's a <a href="#universal15vagp30card">universal 1.5V AGP 3.0
+  card</a> and doesn't support 3.3 volts. It is required to support 0.8 volts if it
+  supports 8X.
+</p>
+<table align=center width=720 bgcolor="#FFFFFF" border=2 cellpadding=2 cellspacing=2>
+  <tr align=center>
+    <th colspan=3 bgcolor="#C0C0C0">Motherboard Types (table 15 from the AGP
+      3.0 specification)</th>
+  </tr>
+  <tr align=center>
+    <th width=190 bgcolor="#C0C0C0">Motherboard Types</th>
+    <th width=110 bgcolor="#C0C0C0">Connector Type   </th>
+    <th width=420 bgcolor="#C0C0C0">Description      </th>
+  </tr>
+  <tr id=agp33vmotherboard>
+    <td align=center>AGP 3.3V Motherboard</td>
+    <td align=center>3.3V keyed</td>
+    <td>Supports only 3.3V signaling. Available speeds 1x, 2x.</td>
+  </tr>
+  <tr id=agp15vmotherboard>
+    <td align=center>AGP 1.5V Motherboard</td>
+    <td align=center>1.5V keyed</td>
+    <td>Supports only 1.5V signaling. Available speeds 1x, 2x, 4x.</td>
+  </tr>
+  <tr id=universalagpmotherboard>
+    <td align=center>Universal AGP Motherboard</td>
+    <td align=center>Universal</td>
+    <td>Supports both 3.3V and 1.5V signaling. Available speeds 1x, 2x at 3.3V
+        and 1x, 2x, 4x at 1.5V.</td>
+  </tr>
+  <tr id=agp30motherboard>
+    <td align=center>AGP 3.0 Motherboard</td>
+    <td align=center>1.5V keyed</td>
+    <td>Supports only 0.8V signaling. Additional electrical ID to prevent 1.5V
+        operation. Available speeds 4x, 8x.</td>
+  </tr>
+  <tr id=universal15vagp30motherboard>
+    <td align=center>Universal 1.5V AGP 3.0 Motherboard</td>
+    <td align=center>1.5V keyed</td>
+    <td>Supports 1.5V and 0.8V signaling. Available speeds 1x, 2x, 4x at 1.5V
+        and 4x, 8x at 0.8V.</td>
+  </tr>
+  <tr id=universalagp30motherboard>
+    <td align=center>Universal AGP 3.0 Motherboard</td>
+    <td align=center>Universal</td>
+    <td>Supports 3.3V, 1.5V, and 0.8V signaling. Available speeds 1x, 2x at
+        3.3V and 1x, 2x, 4x at 1.5V and 4x, 8x at 0.8V.</td>
+  </tr>
+</table>
+<p>
+  The table above gives Intel's official names for the various kinds of AGP
+  motherboards allowed by the AGP specifications. The technical specifications
+  for motherboards tend to be just as sloppy as they are for video cards.
+  Sometimes they use the official motherboard type names properly and sometimes
+  they do not.
+</p>
+<table align=center width=800 bgcolor="#FFFFFF" border=2 cellpadding=2 cellspacing=2>
+  <tr align=center>
+    <th colspan=7 bgcolor="#C0C0C0">Motherboard And Card Compatibility (table
+      35 from the AGP 3.0 specification)</th>
+  </tr>
+  <tr align=center>
+    <th bgcolor="#C0C0C0">&nbsp;</th>
+    <th bgcolor="#C0C0C0"><a href="#agp33vcard">AGP 3.3V Card</a></th>
+    <th bgcolor="#C0C0C0"><a href="#agp15vcard">AGP 1.5V Card</a></th>
+    <th bgcolor="#C0C0C0"><a href="#universalagpcard">Universal AGP Card</a></th>
+    <th bgcolor="#C0C0C0"><a href="#agp30card">AGP 3.0 Card</a></th>
+    <th bgcolor="#C0C0C0"><a href="#universal15vagp30card">Universal 1.5V AGP 3.0 Card</a></th>
+    <th bgcolor="#C0C0C0"><a href="#universalagp30card">Universal AGP 3.0 Card</a></th>
+  </tr>
+  <tr align=center>
+    <th bgcolor="#C0C0C0"><a href="#agp33vmotherboard">AGP 3.3V Motherboard</a></th>
+    <td>Works at 3.3V</td>
+    <td bgcolor="#FFC0C0">Won't fit in slot</td>
+    <td>Works at 3.3V</td>
+    <td bgcolor="#FFC0C0">Won't fit in slot</td>
+    <td bgcolor="#FFC0C0">Won't fit in slot</td>
+    <td>Works at 3.3V</td>
+  </tr>
+  <tr align=center>
+    <th bgcolor="#C0C0C0"><a href="#agp15vmotherboard">AGP 1.5V Motherboard</a></th>
+    <td bgcolor="#FFC0C0">Won't fit in slot</td>
+    <td>Works at 1.5V</td>
+    <td>Works at 1.5V</td>
+    <td bgcolor="#FFFFC0">Fits in slot but won't work.</td>
+    <td>Works at 1.5V</td>
+    <td>Works at 1.5V</td>
+  </tr>
+  <tr align=center>
+    <th bgcolor="#C0C0C0"><a href="#universalagpmotherboard">Universal AGP Motherboard</a></th>
+    <td>Works at 3.3V</td>
+    <td>Works at 1.5V</td>
+    <td>Works at 1.5V</td>
+    <td bgcolor="#FFFFC0">Fits in slot but won't work</td>
+    <td>Works at 1.5V</td>
+    <td>Works at 1.5V</td>
+  </tr>
+  <tr align=center>
+    <th bgcolor="#C0C0C0"><a href="#agp30motherboard">AGP 3.0 Motherboard</a></th>
+    <td bgcolor="#FFC0C0">Won't fit in slot</td>
+    <td bgcolor="#FFFFC0">Fits in slot but won't work</td>
+    <td bgcolor="#FFFFC0">Fits in slot but won't work</td>
+    <td>Works at 0.8V</td>
+    <td>Works at 0.8V</td>
+    <td>Works at 0.8V</td>
+  </tr>
+  <tr align=center>
+    <th bgcolor="#C0C0C0"><a href="#universal15vagp30motherboard">Universal 1.5V AGP 3.0 Motherboard</a></th>
+    <td bgcolor="#FFC0C0">Won't fit in slot</td>
+    <td>Works at 1.5V</td>
+    <td>Works at 1.5V</td>
+    <td>Works at 0.8V</td>
+    <td>Works at 0.8V</td>
+    <td>Works at 0.8V</td>
+  </tr>
+  <tr align=center>
+    <th bgcolor="#C0C0C0"><a href="#universalagp30motherboard">Universal AGP 3.0 Motherboard</a></th>
+    <td>Works at 3.3V</td>
+    <td>Works at 1.5V</td>
+    <td>Works at 1.5V</td>
+    <td>Works at 0.8V</td>
+    <td>Works at 0.8V</td>
+    <td>Works at 0.8V</td>
+  </tr>
+</table>
+<p>
+  The table above shows the results of all possible combinations of AGP cards
+  and AGP motherboards.
+</p>
+   
+<h4>Practical AGP Compatibility</h4>
+<p>
+  The previous table shows that there are combinations of motherboards and
+  video cards which can be plugged together but do not work. According to the
+  AGP specifications there should be no damage, but the combination would not
+  be compatible. You see people posting in forums worrying about this
+  possibility all the time. There are also stories that you can get some 0.8
+  volt only cards which are willing to tolerate 1.5 volts but that you really
+  shouldn't plug them into an AGP 4X motherboard even if they work. Given the
+  previous table, the confusion is understandable. But there are two pieces of
+  information which they're missing: nobody makes AGP 3.0 cards, and nobody
+  makes AGP 3.0 motherboards. At least not any manufacturers I can find. Every
+  single video card I could find which claimed to be an AGP 3.0 card was
+  actually a <a href="#universal15vagp30card">universal 1.5V AGP 3.0 card</a>. And every motherboard which claimed
+  to be an AGP 3.0 motherboard turned out to be a universal 1.5V AGP 3.0
+  motherboard. It makes sense, if you think about it, because if anyone
+  actually shipped a consumer-oriented product which supported only 0.8 volts,
+  they would end up with lots of confused customers and a support nightmare. In
+  the consumer market, you'd have to be crazy to ship a 0.8 volt only product.
+  And as far as I can tell, there aren't any in the workstation market either.
+  There may be some obscure product somewhere, but I sure can't find any. It's
+  easy to find ones which are mislabeled as AGP 3.0 cards or motherboards but I
+  haven't been able to find the actual item. If you remove the 0.8 volt only
+  entries from the compatibility table, then you end up with the following
+  table.
+</p>
+<table align=center width=800 bgcolor="#FFFFFF" border=2 cellpadding=2 cellspacing=2>
+  <tr align=center>
+    <th colspan=6 bgcolor="#C0C0C0">Practical Motherboard And Card
+      Compatibility</th>
+  </tr>
+  <tr align=center>
+    <th bgcolor="#C0C0C0">&nbsp;</th>
+    <th bgcolor="#C0C0C0"><a href="#agp33vcard">AGP 3.3V Card</a></th>
+    <th bgcolor="#C0C0C0"><a href="#agp15vcard">AGP 1.5V Card</a></th>
+    <th bgcolor="#C0C0C0"><a href="#universalagpcard">Universal AGP Card</a></th>
+    <th bgcolor="#C0C0C0"><a href="#universal15vagp30card">Universal 1.5V AGP 3.0 Card</a></th>
+    <th bgcolor="#C0C0C0"><a href="#universalagp30card">Universal AGP 3.0 Card</a></th>
+  </tr>
+  <tr align=center>
+    <th bgcolor="#C0C0C0"><a href="#agp33vmotherboard">AGP 3.3V Motherboard</a></th>
+    <td>Works at 3.3V</td>
+    <td bgcolor="#FFC0C0">Won't fit in slot</td>
+    <td>Works at 3.3V</td>
+    <td bgcolor="#FFC0C0">Won't fit in slot</td>
+    <td>Works at 3.3V</td>
+  </tr>
+  <tr align=center>
+    <th bgcolor="#C0C0C0"><a href="#agp15vmotherboard">AGP 1.5V Motherboard</a></th>
+    <td bgcolor="#FFC0C0">Won't fit in slot</td>
+    <td>Works at 1.5V</td>
+    <td>Works at 1.5V</td>
+    <td>Works at 1.5V</td>
+    <td>Works at 1.5V</td>
+  </tr>
+  <tr align=center>
+    <th bgcolor="#C0C0C0"><a href="#universalagpmotherboard">Universal AGP Motherboard</a></th>
+    <td>Works at 3.3V</td>
+    <td>Works at 1.5V</td>
+    <td>Works at 1.5V</td>
+    <td>Works at 1.5V</td>
+    <td>Works at 1.5V</td>
+  </tr>
+  <tr align=center>
+    <th bgcolor="#C0C0C0"><a href="#universal15vagp30motherboard">Universal 1.5V AGP 3.0 Motherboard</a></th>
+    <td bgcolor="#FFC0C0">Won't fit in slot</td>
+    <td>Works at 1.5V</td>
+    <td>Works at 1.5V</td>
+    <td>Works at 0.8V</td>
+    <td>Works at 0.8V</td>
+  </tr>
+  <tr align=center>
+    <th bgcolor="#C0C0C0"><a href="#universalagp30motherboard">Universal AGP 3.0 Motherboard</a></th>
+    <td>Works at 3.3V</td>
+    <td>Works at 1.5V</td>
+    <td>Works at 1.5V</td>
+    <td>Works at 0.8V</td>
+    <td>Works at 0.8V</td>
+  </tr>
+</table>
+<p>
+  That's why "If an AGP card fits in an AGP slot then they are compatible" is
+  actually correct if you only consider stuff you can really buy.
+</p>
+<p>
+  One practical matter which must be considered is the fact that some of
+  the original AGP 1.0 motherboards do not provide enough power to operate some
+  newer AGP video cards reliably. For example, some of the original
+  motherboards using the first chipsets which supported AGP (like the Intel
+  440LX and 440BX) can become unstable if you install video cards which draw
+  lots of power through the AGP slot. The motherboards can't always supply the
+  necessary current for the newer video cards. So if you're adding a video card
+  to an AGP 1.0 motherboard then it's a good idea to install a video card which
+  doesn't consume very much power.
+</p>
+<p>
+  You can also occasionally get memory resource conflicts by installing a new
+  AGP video card into an old AGP 1.0 motherboard. The video card will work
+  properly until you install the display driver. Once you try to install the
+  driver, a memory conflict shows up. The range of conflicting addresses varies
+  from case to case. This problem is very unusual and when it happens it is
+  rarely possible to fix it. I'm not sure exactly what causes the problem but
+  apparently the motherboard and the video card are incompatible in some way
+  which prevents Windows from properly assigning memory addresses to the video
+  card. In the cases I've seen, there doesn't seem to be any way to predict
+  from the video card chipset and motherboard chipset whether there will be a
+  problem. Sometimes a particular video card chipset and motherboard chipset
+  get along well and other times they don't. I'd guess that it's some
+  kind of incompatibility caused by an outdated motherboard
+  <a class="defs" href="../defs/defs.html#bios" title="Basic Input Output System" onClick="return DefPopup(this)">BIOS</a>
+  and possibly the video card BIOS. The one thing you can try is to flash your
+  motherboard with the most recent BIOS. But since it's an old motherboard, the
+  manufacturer will most likely not have anything but old BIOSes available.
+  If you're running Windows 95, 98, or ME, it may be possible to manually assign
+  addresses and get it to work but I've seen people try this and the process is
+  about as enjoyable as a root canal and usually fails to fully solve the
+  problem anyway. If you're running Windows 2000 or XP then it's probably
+  impossible to fix because the newer versions of Windows almost always prevent
+  you from manually assigning addresses, IRQs, etc. That's almost always true
+  even if you select the <a href="http://support.microsoft.com/?kbid=299340">standard PC HAL</a>
+  while installing Windows with the hope that it will allow you to assign
+  resources manually. If you run into one of these memory resource conflicts
+  then you should probably give up and try a different video card. It's rarely
+  fixable. 
+</p>
+
+<h4>AGP Cards</h4>
+<p>
+  The table below lists the AGP graphics card type for just about all of the
+  consumer-oriented AGP graphics cards. Note the complete lack of "AGP 3.0
+  Card" entries. The graphics chipset determines what kind of AGP card it is;
+  not the brand of the video card. If you would like to know what kind of video
+  card is in your computer, open the "Control Panel" and double-click "Display"
+  to bring up the "Display Properties" window. Then select the "Settings" tab,
+  click "Advanced", and select the "Adapter" tab.
+  <a href="http://www.sisoftware.net/dload/sware_figure.php?&amp;a=&amp;langx=en">Sandra Lite</a>
+  can also give you very detailed information about your display adapter.
+</p>
+<p>
+  Sometimes manufacturers don't obey the rules. I found a video card which had
+  incorrect voltage slots. It had only a 3.3 volt slot when in fact the video
+  card could also have accepted 1.5 volts. That card would work correctly in an
+  <a href="#agp33vmotherboard">AGP 3.3V motherboard</a> but it also would have worked in a 1.5 volt motherboard
+  had it been given the 1.5 volt slot. There also was a SiS video card
+  manufactured years ago which had the wrong voltage slots. If you plugged it
+  into the wrong motherboard, it would be destroyed. The "wrong slots" case
+  used to be extremely rare and any manufacturer which made that mistake
+  quickly acquired a very bad reputation. Unfortunately building AGP video
+  cards with the wrong voltage slots is becoming more common. It's not
+  difficult to find no-name, low-budget, Chinese video cards on EBAY which have
+  the 3.3 volt slot despite the fact that the graphics chipset does not support
+  3.3 volts. It pays to stick with competent manufacturers. As long as they
+  obey the AGP spec, you cannot damage anything by plugging a video card into a
+  motherboard.
+</p>
+<table align=center width=750 bgcolor="#FFFFFF" border=2 cellpadding=2 cellspacing=2>
+  <tr align=center>
+    <th bgcolor="#C0C0C0">Graphics Card</th>
+    <th bgcolor="#C0C0C0">Graphics Card Type</th>
+  </tr>
+  <tr>
+    <td>ATI FireGL 1</td>
+    <td><a href="#agp33vcard">AGP 3.3V Card</a></td>
+  </tr>
+  <tr>
+    <td>ATI FireGL 2</td>
+    <td><a href="#universalagpcard">Universal AGP Card</a></td>
+  </tr>
+  <tr>
+    <td>ATI FireGL 3</td>
+    <td><a href="#universalagpcard">Universal AGP Card</a></td>
+  </tr>
+  <tr>
+    <td>ATI FireGL 4</td>
+    <td><a href="#universalagpcard">Universal AGP Card</a></td>
+  </tr>
+  <tr>
+    <td>ATI FireGL 8700</td>
+    <td><a href="#universalagpcard">Universal AGP Card</a></td>
+  </tr>
+  <tr>
+    <td>ATI FireGL 8800</td>
+    <td><a href="#universalagpcard">Universal AGP Card</a></td>
+  </tr>
+  <tr>
+    <td>ATI FireGL T2</td>
+    <td><a href="#universal15vagp30card">Universal 1.5V AGP 3.0 Card</a></td>
+  </tr>
+  <tr>
+    <td>ATI FireGL X1</td>
+    <td><a href="#universal15vagp30card">Universal 1.5V AGP 3.0 Card</a></td>
+  </tr>
+  <tr>
+    <td>ATI FireGL X1-256p</td>
+    <td><a href="#universal15vagp30card">Universal 1.5V AGP 3.0 Card</a></td>
+  </tr>
+  <tr>
+    <td>ATI FireGL X2-256t</td>
+    <td><a href="#universal15vagp30card">Universal 1.5V AGP 3.0 Card</a></td>
+  </tr>
+  <tr>
+    <td>ATI FireGL Z1</td>
+    <td><a href="#universal15vagp30card">Universal 1.5V AGP 3.0 Card</a></td>
+  </tr>
+  <tr>
+    <td>ATI Radeon Mac Edition</td>
+    <td><a href="#universalagpcard">Universal AGP Card</a></td>
+  </tr>
+  <tr>
+    <td>ATI Radeon (Radeon 32, Radeon 64, All In Wonder Radeon)</td>
+    <td><a href="#universalagpcard">Universal AGP Card</a></td>
+  </tr>
+  <tr>
+    <td>ATI Radeon VE</td>
+    <td><a href="#universalagpcard">Universal AGP Card</a></td>
+  </tr>
+  <tr>
+    <td>ATI Radeon 7000</td>
+    <td><a href="#universalagpcard">Universal AGP Card</a></td>
+  </tr>
+  <tr>
+    <td>ATI Radeon 7200</td>
+    <td><a href="#universalagpcard">Universal AGP Card</a></td>
+  </tr>
+  <tr>
+    <td>ATI Radeon 7500</td>
+    <td><a href="#universalagpcard">Universal AGP Card</a></td>
+  </tr>
+  <tr>
+    <td>ATI Radeon 8500</td>
+    <td><a href="#universalagpcard">Universal AGP Card</a></td>
+  </tr>
+  <tr>
+    <td>ATI Radeon 9000</td>
+    <td><a href="#universalagpcard">Universal AGP Card</a></td>
+  </tr>
+  <tr>
+    <td>ATI Radeon 9200</td>
+    <td><a href="#universalagp30card">Universal AGP 3.0 Card</a></td>
+  </tr>
+  <tr>
+    <td>ATI Radeon 9250</td>
+    <td><a href="#universalagp30card">Universal AGP 3.0 Card</a></td>
+  </tr>
+  <tr>
+    <td>ATI Radeon 9500</td>
+    <td><a href="#universalagp30card">Universal AGP 3.0 Card</a></td>
+  </tr>
+  <tr>
+    <td>ATI Radeon 9550</td>
+    <td><a href="#universal15vagp30card">Universal 1.5V AGP 3.0 Card</a></td>
+  </tr>
+  <tr>
+    <td>ATI Radeon 9600</td>
+    <td><a href="#universal15vagp30card">Universal 1.5V AGP 3.0 Card</a></td>
+  </tr>
+  <tr>
+    <td>ATI Radeon 9700</td>
+    <td><a href="#universalagp30card">Universal AGP 3.0 Card</a></td>
+  </tr>
+  <tr>
+    <td>ATI Radeon 9800</td>
+    <td><span style="white-space: nowrap;"><a href="#universal15vagp30card">Universal 1.5V AGP 3.0 Card</a> or</span> <span style="white-space: nowrap;"><a href="#universalagp30card">Universal AGP 3.0 Card</a></span></td>
+  </tr>
+  <tr>
+    <td>ATI Radeon X800</td>
+    <td><a href="#universal15vagp30card">Universal 1.5V AGP 3.0 Card</a></td>
+  </tr>
+  <tr>
+    <td>ATI Radeon X850</td>
+    <td><a href="#universal15vagp30card">Universal 1.5V AGP 3.0 Card</a></td>
+  </tr>
+  <tr>
+    <td>ATI Radeon X1950 Pro</td>
+    <td><a href="#universal15vagp30card">Universal 1.5V AGP 3.0 Card</a></td>
+  </tr>
+  <tr>
+    <td>ATI Rage 128 (Xpert 99, Xpert 128, Xpert 2000, All In Wonder 128, Rage Fury, Rage Magnum)</td>
+    <td><a href="#agp33vcard">AGP 3.3V Card</a></td>
+  </tr>
+  <tr>
+    <td>ATI Rage 128 Pro (Xpert 2000 Pro, Rage Fury Pro, All In Wonder 128
+        Pro)</td>
+    <td><a href="#universalagpcard">Universal AGP Card</a></td>
+  </tr>
+  <tr>
+    <td>ATI Rage Fury Max</td>
+    <td><a href="#agp33vcard">AGP 3.3V Card</a></td>
+  </tr>
+  <tr>
+    <td>ATI Rage LT Pro (Xpert LCD)</td>
+    <td><a href="#agp33vcard">AGP 3.3V Card</a></td>
+  </tr>
+  <tr>
+    <td>ATI Rage Pro (Xpert 98, Xpert XL, All In Wonder Pro, Turbo)</td>
+    <td><a href="#agp33vcard">AGP 3.3V Card</a></td>
+  </tr>
+  <tr>
+    <td>Matrox G200</td>
+    <td><a href="#agp33vcard">AGP 3.3V Card</a></td>
+  </tr>
+  <tr>
+    <td>Matrox G400</td>
+    <td><span style="white-space: nowrap;"><a href="#universalagpcard">Universal AGP Card</a> or</span> <span style="white-space: nowrap;"><a href="#agp33vcard">AGP 3.3V Card</a></span></td>
+  </tr>
+  <tr>
+    <td>Matrox G450</td>
+    <td><a href="#universalagpcard">Universal AGP Card</a></td>
+  </tr>
+  <tr>
+    <td>Matrox G550</td>
+    <td><a href="#universalagpcard">Universal AGP Card</a></td>
+  </tr>
+  <tr>
+    <td>Matrox P650</td>
+    <td><a href="#universal15vagp30card">Universal 1.5V AGP 3.0 Card</a></td>
+  </tr>
+  <tr>
+    <td>Matrox P750</td>
+    <td><a href="#universal15vagp30card">Universal 1.5V AGP 3.0 Card</a></td>
+  </tr>
+  <tr>
+    <td>Matrox Parhelia</td>
+    <td><span style="white-space: nowrap;"><a href="#universal15vagp30card">Universal 1.5V AGP 3.0 Card</a> or</span> <span style="white-space: nowrap;"><a href="#universalagp30card">Universal AGP 3.0 Card</a></span></td>
+  </tr>
+  <tr>
+    <td>NVIDIA GeForce 256</td>
+    <td><a href="#universalagpcard">Universal AGP Card</a></td>
+  </tr>
+  <tr>
+    <td>NVIDIA GeForce 6200</td>
+    <td><span style="white-space: nowrap;"><a href="#universal15vagp30card">Universal 1.5V AGP 3.0 Card</a> or</span> <span style="white-space: nowrap;"><a href="#universalagp30card">Universal AGP 3.0 Card</a></span></td>
+  </tr>
+  <tr>
+    <td>NVIDIA GeForce 6600</td>
+    <td><a href="#universal15vagp30card">Universal 1.5V AGP 3.0 Card</a></td>
+  </tr>
+  <tr>
+    <td>NVIDIA GeForce 6800</td>
+    <td><a href="#universal15vagp30card">Universal 1.5V AGP 3.0 Card</a></td>
+  </tr>
+  <tr>
+    <td>NVIDIA GeForce 7600</td>
+    <td><a href="#universal15vagp30card">Universal 1.5V AGP 3.0 Card</a></td>
+  </tr>
+  <tr>
+    <td>NVIDIA GeForce 7800 GS</td>
+    <td><a href="#universal15vagp30card">Universal 1.5V AGP 3.0 Card</a></td>
+  </tr>
+  <tr>
+    <td>NVIDIA GeForce FX5200</td>
+    <td><a href="#universalagp30card">Universal AGP 3.0 Card</a></td>
+  </tr>
+  <tr>
+    <td>NVIDIA GeForce FX5500</td>
+    <td><a href="#universalagp30card">Universal AGP 3.0 Card</a></td>
+  </tr>
+  <tr>
+    <td>NVIDIA GeForce FX5600</td>
+    <td><a href="#universalagp30card">Universal AGP 3.0 Card</a></td>
+  </tr>
+  <tr>
+    <td>NVIDIA GeForce FX5700</td>
+    <td><a href="#universalagp30card">Universal AGP 3.0 Card</a></td>
+  </tr>
+  <tr>
+    <td>NVIDIA GeForce FX5800</td>
+    <td><a href="#universalagp30card">Universal AGP 3.0 Card</a></td>
+  </tr>
+  <tr>
+    <td>NVIDIA GeForce FX5900</td>
+    <td><a href="#universalagp30card">Universal AGP 3.0 Card</a></td>
+  </tr>
+  <tr>
+    <td>NVIDIA GeForce FX5950</td>
+    <td><a href="#universalagp30card">Universal AGP 3.0 Card</a></td>
+  </tr>
+  <tr>
+    <td>NVIDIA GeForce2</td>
+    <td><a href="#universalagpcard">Universal AGP Card</a></td>
+  </tr>
+  <tr>
+    <td>NVIDIA GeForce2 MX400</td>
+    <td><a href="#universalagpcard">Universal AGP Card</a></td>
+  </tr>
+  <tr>
+    <td>NVIDIA GeForce3</td>
+    <td><a href="#universalagpcard">Universal AGP Card</a></td>
+  </tr>
+  <tr>
+    <td>NVIDIA GeForce4 MX4000</td>
+    <td><a href="#universalagp30card">Universal AGP 3.0 Card</a></td>
+  </tr>
+  <tr>
+    <td>NVIDIA GeForce4 MX420</td>
+    <td><a href="#universalagpcard">Universal AGP Card</a></td>
+  </tr>
+  <tr>
+    <td>NVIDIA GeForce4 MX440</td>
+    <td><a href="#universalagpcard">Universal AGP Card</a></td>
+  </tr>
+  <tr>
+    <td>NVIDIA GeForce4 MX440-8</td>
+    <td><a href="#universalagp30card">Universal AGP 3.0 Card</a></td>
+  </tr>
+  <tr>
+    <td>NVIDIA GeForce4 MX460</td>
+    <td><a href="#universalagpcard">Universal AGP Card</a></td>
+  </tr>
+  <tr>
+    <td>NVIDIA GeForce4 Ti4200</td>
+    <td><a href="#universalagpcard">Universal AGP Card</a></td>
+  </tr>
+  <tr>
+    <td>NVIDIA GeForce4 Ti4200-8</td>
+    <td><a href="#universalagp30card">Universal AGP 3.0 Card</a></td>
+  </tr>
+  <tr>
+    <td>NVIDIA GeForce4 Ti4400</td>
+    <td><a href="#universalagpcard">Universal AGP Card</a></td>
+  </tr>
+  <tr>
+    <td>NVIDIA GeForce4 Ti4600</td>
+    <td><a href="#universalagpcard">Universal AGP Card</a></td>
+  </tr>
+  <tr>
+    <td>NVIDIA GeForce4 Ti4600-8</td>
+    <td><a href="#universalagp30card">Universal AGP 3.0 Card</a></td>
+  </tr>
+  <tr>
+    <td>NVIDIA GeForce4 Ti4800</td>
+    <td><a href="#universalagp30card">Universal AGP 3.0 Card</a></td>
+  </tr>
+  <tr>
+    <td>NVIDIA Riva 128ZX</td>
+    <td><a href="#agp33vcard">AGP 3.3V Card</a></td>
+  </tr>
+  <tr>
+    <td>NVIDIA Riva TNT</td>
+    <td><a href="#agp33vcard">AGP 3.3V Card</a></td>
+  </tr>
+  <tr>
+    <td>NVIDIA Riva TNT 2</td>
+    <td><span style="white-space: nowrap;"><a href="#universalagpcard">Universal AGP Card</a> or</span> <span style="white-space: nowrap;"><a href="#agp33vcard">AGP 3.3V Card</a></span></td>
+  </tr>
+</table>
+
+<h4>AGP Motherboards</h4>
+<p>
+  There are a few motherboards which do not use the correct AGP connector.
+  This <a href="http://usa.aopen.com/products_detail.aspx?auno=322">AOpen AK79G
+  Max</a> is a universal 1.5V AGP 3.0 motherboard and yet it has an AGP
+  universal connector which accepts 3.3 volt cards. Fortunately, it also has
+  circuitry which prevents damage when a 3.3 volt AGP card is inserted and
+  lights up an
+  <a class="defs" href="../defs/defs.html#led" title="light emitting diode - a small solid-state light" onClick="return DefPopup(this)">LED</a>
+  to warn you that the video card is a 3.3 volt card. I think they built the
+  motherboard this way as a defense against video cards with incorrect voltage
+  slots. You can't damage the motherboard or video card even if the video card
+  has the wrong voltage slots with this kind of design.
+</p>
+<p>
+  You may also come across the occasional motherboard which has an AGP
+  universal connector covered by a sticker which says "do not insert 3.3 volt
+  cards". According to the specification, they shouldn't do that. Perhaps they
+  didn't want to go to the trouble of keeping 1.5 volt keyed connectors in
+  stock. It's a shame users have to be careful about this because if
+  manufacturers obeyed the specification, it wouldn't be possible to make a
+  mistake.
+</p>
+<p>
+  I also found a picture of a motherboard from one obscure manufacturer which
+  had a universal AGP connector rather than the 1.5 volt keyed connector that
+  it should have had. I doubt it had any circuitry to prevent damage if you
+  inserted a 3.3 volt card and there was no hint that you shouldn't insert one.
+  It's a good idea to stick with established manufacturers. But that was only
+  one motherboard out of hundreds I've looked at. If you're buying a
+  motherboard from someone you've never heard of, it might be a good idea to
+  check that they've used the right AGP connector.
+</p>
+<p>
+  The table below lists the AGP motherboard type for just about all the
+  consumer-oriented motherboard chipsets. There isn't a single "AGP 3.0
+  Motherboard" chipset in the list. If you're not sure what kind of chipset is
+  in your motherboard, then you can use
+  <a href="http://www.cpuid.com/cpuz.php#download">CPU-Z</a> or
+  <a href="http://www.sisoftware.net/dload/sware_figure.php?&amp;a=&amp;langx=en">Sandra Lite</a>
+  to find out. Also remember that even if a chipset supports AGP, it doesn't
+  mean that a motherboard using that chipset will always have an AGP slot. Some
+  low-end motherboards using AGP chipsets leave out the AGP connector to cut
+  costs.
+</p>
+<table align=center width=750 bgcolor="#FFFFFF" border=2 cellpadding=2 cellspacing=2>
+  <tr align=center>
+    <th bgcolor="#C0C0C0">Motherboard Chipset</th>
+    <th bgcolor="#C0C0C0">Motherboard Kind</th>
+  </tr>
+  <tr>
+    <td>ALi TXPro (Aladdin IV)</td>
+    <td>no AGP slot</td>
+  </tr>
+  <tr>
+    <td>ALi Aladdin V</td>
+    <td><a href="#agp33vmotherboard">AGP 3.3V Motherboard</a></td>
+  </tr>
+  <tr>
+    <td>ALi MAGiK 1 (M1647)</td>
+    <td><a href="#universalagpmotherboard">Universal AGP Motherboard</a></td>
+  </tr>
+  <tr>
+    <td>ALi M1649</td>
+    <td><a href="#universalagpmotherboard">Universal AGP Motherboard</a></td>
+  </tr>
+  <tr>
+    <td>AMD 750 (751)</td>
+    <td><a href="#agp33vmotherboard">AGP 3.3V Motherboard</a></td>
+  </tr>
+  <tr>
+    <td>AMD 760 (761)</td>
+    <td><a href="#universalagpmotherboard">Universal AGP Motherboard</a></td>
+  </tr>
+  <tr>
+    <td>Intel 440BX</td>
+    <td><a href="#agp33vmotherboard">AGP 3.3V Motherboard</a></td>
+  </tr>
+  <tr>
+    <td>Intel 440EX</td>
+    <td><a href="#agp33vmotherboard">AGP 3.3V Motherboard</a></td>
+  </tr>
+  <tr>
+    <td>Intel 440FX</td>
+    <td>no AGP slot</td>
+  </tr>
+  <tr>
+    <td>Intel 440GX</td>
+    <td><a href="#agp33vmotherboard">AGP 3.3V Motherboard</a></td>
+  </tr>
+  <tr>
+    <td>Intel 440LX</td>
+    <td><a href="#agp33vmotherboard">AGP 3.3V Motherboard</a></td>
+  </tr>
+  <tr>
+    <td>Intel 440ZX</td>
+    <td><a href="#agp33vmotherboard">AGP 3.3V Motherboard</a></td>
+  </tr>
+  <tr>
+    <td>Intel 440ZX-66</td>
+    <td><a href="#agp33vmotherboard">AGP 3.3V Motherboard</a></td>
+  </tr>
+  <tr>
+    <td>Intel 450GX</td>
+    <td>no AGP slot</td>
+  </tr>
+  <tr>
+    <td>Intel 450KX</td>
+    <td>no AGP slot</td>
+  </tr>
+  <tr>
+    <td>Intel 450NX</td>
+    <td>no AGP slot</td>
+  </tr>
+  <tr>
+    <td>Intel 810</td>
+    <td>no AGP slot</td>
+  </tr>
+  <tr>
+    <td>Intel 815</td>
+    <td><a href="#universalagpmotherboard">Universal AGP Motherboard</a></td>
+  </tr>
+  <tr>
+    <td>Intel 820</td>
+    <td><a href="#universalagpmotherboard">Universal AGP Motherboard</a></td>
+  </tr>
+  <tr>
+    <td>Intel 840</td>
+    <td><a href="#universalagpmotherboard">Universal AGP Motherboard</a></td>
+  </tr>
+  <tr>
+    <td>Intel 845</td>
+    <td><a href="#agp15vmotherboard">AGP 1.5V Motherboard</a></td>
+  </tr>
+  <tr>
+    <td>Intel 848</td>
+    <td><a href="#universal15vagp30motherboard">Universal 1.5V AGP 3.0 Motherboard</a></td>
+  </tr>
+  <tr>
+    <td>Intel 850</td>
+    <td><a href="#agp15vmotherboard">AGP 1.5V Motherboard</a></td>
+  </tr>
+  <tr>
+    <td>Intel 860</td>
+    <td><a href="#agp15vmotherboard">AGP 1.5V Motherboard</a></td>
+  </tr>
+  <tr>
+    <td>Intel 865</td>
+    <td><a href="#universal15vagp30motherboard">Universal 1.5V AGP 3.0 Motherboard</a></td>
+  </tr>
+  <tr>
+    <td>Intel 875</td>
+    <td><a href="#universal15vagp30motherboard">Universal 1.5V AGP 3.0 Motherboard</a></td>
+  </tr>
+  <tr>
+    <td>Intel 910</td>
+    <td>no AGP slot</td>
+  </tr>
+  <tr>
+    <td>Intel 915</td>
+    <td>no AGP slot: PCI-Express</td>
+  </tr>
+  <tr>
+    <td>Intel 925</td>
+    <td>no AGP slot: PCI-Express</td>
+  </tr>
+  <tr>
+    <td>Intel E7210</td>
+    <td>no AGP slot</td>
+  </tr>
+  <tr>
+    <td>Intel E7221</td>
+    <td>no AGP slot</td>
+  </tr>
+  <tr>
+    <td>Intel E7320</td>
+    <td>no AGP slot</td>
+  </tr>
+  <tr>
+    <td>Intel E7500</td>
+    <td>no AGP slot</td>
+  </tr>
+  <tr>
+    <td>Intel E7501</td>
+    <td>no AGP slot</td>
+  </tr>
+  <tr>
+    <td>Intel E7505</td>
+    <td><a href="#universal15vagp30motherboard">Universal 1.5V AGP 3.0 Motherboard</a></td>
+  </tr>
+  <tr>
+    <td>Intel E7520</td>
+    <td>no AGP slot</td>
+  </tr>
+  <tr>
+    <td>Intel E7525</td>
+    <td>no AGP slot: PCI-Express</td>
+  </tr>
+  <tr>
+    <td>NVIDIA NForce</td>
+    <td><a href="#agp15vmotherboard">AGP 1.5V Motherboard</a></td>
+  </tr>
+  <tr>
+    <td>NVIDIA NForce 2</td>
+    <td><a href="#universal15vagp30motherboard">Universal 1.5V AGP 3.0 Motherboard</a></td>
+  </tr>
+  <tr>
+    <td>NVIDIA NForce 3</td>
+    <td><a href="#universal15vagp30motherboard">Universal 1.5V AGP 3.0 Motherboard</a></td>
+  </tr>
+  <tr>
+    <td>NVIDIA NForce 4</td>
+    <td>no AGP slot: PCI-Express</td>
+  </tr>
+  <tr>
+    <td>SiS630</td>
+    <td><a href="#universalagpmotherboard">Universal AGP Motherboard</a></td>
+  </tr>
+  <tr>
+    <td>SiS645</td>
+    <td><a href="#universalagpmotherboard">Universal AGP Motherboard</a></td>
+  </tr>
+  <tr>
+    <td>SiS648</td>
+    <td><a href="#universal15vagp30motherboard">Universal 1.5V AGP 3.0 Motherboard</a></td>
+  </tr>
+  <tr>
+    <td>SiS649</td>
+    <td>no AGP slot: PCI-Express</td>
+  </tr>
+  <tr>
+    <td>SiS650</td>
+    <td><a href="#universalagpmotherboard">Universal AGP Motherboard</a></td>
+  </tr>
+  <tr>
+    <td>SiS651</td>
+    <td><a href="#universalagpmotherboard">Universal AGP Motherboard</a></td>
+  </tr>
+  <tr>
+    <td>SiS655</td>
+    <td><a href="#universal15vagp30motherboard">Universal 1.5V AGP 3.0 Motherboard</a></td>
+  </tr>
+  <tr>
+    <td>SiS656</td>
+    <td>no AGP slot: PCI-Express</td>
+  </tr>
+  <tr>
+    <td>SiS661</td>
+    <td><a href="#universal15vagp30motherboard">Universal 1.5V AGP 3.0 Motherboard</a></td>
+  </tr>
+  <tr>
+    <td>SiS730</td>
+    <td><a href="#universalagpmotherboard">Universal AGP Motherboard</a></td>
+  </tr>
+  <tr>
+    <td>SiS733</td>
+    <td><a href="#universalagpmotherboard">Universal AGP Motherboard</a></td>
+  </tr>
+  <tr>
+    <td>SiS735</td>
+    <td><a href="#universalagpmotherboard">Universal AGP Motherboard</a></td>
+  </tr>
+  <tr>
+    <td>SiS740</td>
+    <td>no AGP slot</td>
+  </tr>
+  <tr>
+    <td>SiS741</td>
+    <td><a href="#universal15vagp30motherboard">Universal 1.5V AGP 3.0 Motherboard</a></td>
+  </tr>
+  <tr>
+    <td>SiS745</td>
+    <td><a href="#universalagpmotherboard">Universal AGP Motherboard</a></td>
+  </tr>
+  <tr>
+    <td>SiS746</td>
+    <td><a href="#universal15vagp30motherboard">Universal 1.5V AGP 3.0 Motherboard</a></td>
+  </tr>
+  <tr>
+    <td>SiS748</td>
+    <td><a href="#universal15vagp30motherboard">Universal 1.5V AGP 3.0 Motherboard</a></td>
+  </tr>
+  <tr>
+    <td>SiS755</td>
+    <td><a href="#universal15vagp30motherboard">Universal 1.5V AGP 3.0 Motherboard</a></td>
+  </tr>
+  <tr>
+    <td>SiS756</td>
+    <td>no AGP slot: PCI-Express</td>
+  </tr>
+  <tr>
+    <td>SiS760</td>
+    <td><a href="#universal15vagp30motherboard">Universal 1.5V AGP 3.0 Motherboard</a></td>
+  </tr>
+  <tr>
+    <td>VIA CLE266</td>
+    <td>no AGP slot</td>
+  </tr>
+  <tr>
+    <td>VIA CN400</td>
+    <td>no AGP slot</td>
+  </tr>
+  <tr>
+    <td>VIA K8M800</td>
+    <td><a href="#universal15vagp30motherboard">Universal 1.5V AGP 3.0 Motherboard</a></td>
+  </tr>
+  <tr>
+    <td>VIA K8T800 (VT8385)</td>
+    <td><a href="#universal15vagp30motherboard">Universal 1.5V AGP 3.0 Motherboard</a></td>
+  </tr>
+  <tr>
+    <td>VIA K8T800 Pro</td>
+    <td><a href="#universal15vagp30motherboard">Universal 1.5V AGP 3.0 Motherboard</a></td>
+  </tr>
+  <tr>
+    <td>VIA K8T890</td>
+    <td>no AGP slot: PCI-Express</td>
+  </tr>
+  <tr>
+    <td>VIA KLE133 (VT8361)</td>
+    <td>no AGP slot</td>
+  </tr>
+  <tr>
+    <td>VIA KM133 (VT8365)</td>
+    <td><a href="#universalagpmotherboard">Universal AGP Motherboard</a></td>
+  </tr>
+  <tr>
+    <td>VIA KM266 (VT8375)</td>
+    <td><a href="#universalagpmotherboard">Universal AGP Motherboard</a></td>
+  </tr>
+  <tr>
+    <td>VIA KM400 (VT8378)</td>
+    <td><a href="#universal15vagp30motherboard">Universal 1.5V AGP 3.0 Motherboard</a></td>
+  </tr>
+  <tr>
+    <td>VIA KT133 (VT8363)</td>
+    <td><a href="#universalagpmotherboard">Universal AGP Motherboard</a></td>
+  </tr>
+  <tr>
+    <td>VIA KT266 (VT8366)</td>
+    <td><a href="#universalagpmotherboard">Universal AGP Motherboard</a></td>
+  </tr>
+  <tr>
+    <td>VIA KT333 (VT8367)</td>
+    <td><a href="#universalagpmotherboard">Universal AGP Motherboard</a> (but some implementations are <a href="#agp15vmotherboard">AGP 1.5V Motherboard</a>)</td>
+  </tr>
+  <tr>
+    <td>VIA KT400 (VT8377)</td>
+    <td><a href="#universal15vagp30motherboard">Universal 1.5V AGP 3.0 Motherboard</a></td>
+  </tr>
+  <tr>
+    <td>VIA KT600</td>
+    <td><a href="#universal15vagp30motherboard">Universal 1.5V AGP 3.0 Motherboard</a></td>
+  </tr>
+  <tr>
+    <td>VIA KT880</td>
+    <td><a href="#universal15vagp30motherboard">Universal 1.5V AGP 3.0 Motherboard</a></td>
+  </tr>
+  <tr>
+    <td>VIA KX133 (VT8371)</td>
+    <td><a href="#universalagpmotherboard">Universal AGP Motherboard</a></td>
+  </tr>
+  <tr>
+    <td>VIA MVP3 (VT82C598AT)</td>
+    <td><a href="#agp33vmotherboard">AGP 3.3V Motherboard</a></td>
+  </tr>
+  <tr>
+    <td>VIA P4M266 (VT8751)</td>
+    <td><a href="#universalagpmotherboard">Universal AGP Motherboard</a> (but most implementations are <a href="#agp15vmotherboard">AGP 1.5V Motherboard</a>)</td>
+  </tr>
+  <tr>
+    <td>VIA P4X266 (VT8753)</td>
+    <td><a href="#universalagpmotherboard">Universal AGP Motherboard</a></td>
+  </tr>
+  <tr>
+    <td>VIA P4X266A (VT8752)</td>
+    <td><a href="#universalagpmotherboard">Universal AGP Motherboard</a></td>
+  </tr>
+  <tr>
+    <td>VIA P4X333 (VT8754)</td>
+    <td><a href="#universal15vagp30motherboard">Universal 1.5V AGP 3.0 Motherboard</a></td>
+  </tr>
+  <tr>
+    <td>VIA P4X400 (VT8754)</td>
+    <td><a href="#universal15vagp30motherboard">Universal 1.5V AGP 3.0 Motherboard</a></td>
+  </tr>
+  <tr>
+    <td>VIA P4X533</td>
+    <td><a href="#universal15vagp30motherboard">Universal 1.5V AGP 3.0 Motherboard</a></td>
+  </tr>
+  <tr>
+    <td>VIA PLE133 (VT8601A)</td>
+    <td>no AGP slot</td>
+  </tr>
+  <tr>
+    <td>VIA PLE133T (VT8602)</td>
+    <td>no AGP slot</td>
+  </tr>
+  <tr>
+    <td>VIA PM133 (VT8605)</td>
+    <td><a href="#universalagpmotherboard">Universal AGP Motherboard</a></td>
+  </tr>
+  <tr>
+    <td>VIA PM800</td>
+    <td><a href="#universal15vagp30motherboard">Universal 1.5V AGP 3.0 Motherboard</a></td>
+  </tr>
+  <tr>
+    <td>VIA PM880</td>
+    <td><a href="#universal15vagp30motherboard">Universal 1.5V AGP 3.0 Motherboard</a></td>
+  </tr>
+  <tr>
+    <td>VIA Pro (VT82C691)</td>
+    <td><a href="#agp33vmotherboard">AGP 3.3V Motherboard</a></td>
+  </tr>
+  <tr>
+    <td>VIA Pro 133 (VT82C693A)</td>
+    <td><a href="#agp33vmotherboard">AGP 3.3V Motherboard</a></td>
+  </tr>
+  <tr>
+    <td>VIA Pro 133A (VT82C694X)</td>
+    <td><a href="#universalagpmotherboard">Universal AGP Motherboard</a></td>
+  </tr>
+  <tr>
+    <td>VIA Pro 266 (VT8633)</td>
+    <td><a href="#universalagpmotherboard">Universal AGP Motherboard</a></td>
+  </tr>
+  <tr>
+    <td>VIA PT800</td>
+    <td><a href="#universal15vagp30motherboard">Universal 1.5V AGP 3.0 Motherboard</a></td>
+  </tr>
+  <tr>
+    <td>VIA PT880</td>
+    <td><a href="#universal15vagp30motherboard">Universal 1.5V AGP 3.0 Motherboard</a></td>
+  </tr>
+  <tr>
+    <td>VIA PT880 Pro</td>
+    <td><a href="#universal15vagp30motherboard">Universal 1.5V AGP 3.0 Motherboard</a></td>
+  </tr>
+  <tr>
+    <td>VIA PT894</td>
+    <td>no AGP slot: PCI-Express</td>
+  </tr>
+  <tr>
+    <td>VIA PT894 Pro</td>
+    <td>no AGP slot: PCI-Express</td>
+  </tr>
+</table>
+
+<h4>Final Words</h4>
+<p>
+  Keep in mind that there are plenty of things which can go wrong when you plug
+  an AGP card into an AGP motherboard. The information given above just tells
+  you about their signaling voltage and speed multiplier compatibility. If
+  they're not compatible as described above then they definitely will not work
+  together. But even if the signaling voltages are compatible, there are other
+  things which can occasionally go wrong when you plug the card into the
+  motherboard. The most common is a motherboard BIOS incompatibility which
+  prevents the motherboard from fully recognizing the video card. The only way
+  to solve that problem is by installing an updated motherboard BIOS. There are
+  other more obscure problems like AGP signal strength and AGP timing issues
+  which can make communications between the motherboard and video card
+  unreliable. Those are very rare but they happen. There's no way to know ahead
+  of time whether you'll have that kind of problem unless you can find other
+  people who have tried the exact same video and motherboard hardware with
+  the exact same BIOS versions.
+</p>
+
+<hr size=3>
+
+<!--(PSULINKS-->
+<table align=center width=750 bgcolor="#FFFFFF" border=2 cellpadding=2 cellspacing=2>
+  <tr>
+    <th bgcolor="#C0C0C0">Power supply information</th>
+  </tr>
+  <tr>
+    <td>
+      <ul>
+        <li><a href="../psucompat/compat.html">Compatibility issues for ATX power supplies and motherboards</a>
+        <li><a href="../psurailhistory/rails.html">A short history of PC power supply voltage rails</a>
+        <li><a href="../psumultirail/multirails.html">So what's all this rubbish about multiple 12 volt rails?</a>
+        <li><a href="../psuconnectors/connectors.html">All about the various PC power supply cables and connectors</a>
+        <li><a href="../psuoverload/overload.html">Rail complications #1 - current limit problems: too much current</a>
+        <li><a href="../psucrossload/crossloading.html">Rail complications #2 - cross loading problems: unbalanced current</a>
+        <li><a href="../psuunderload/mincurrent.html">Rail complications #3 - minimum loading problems: too little current</a>
+        <li><a href="../psunonpc/nonpc.html">Using PC power supplies in things other than PCs</a>
+      </ul>
+    </td>
+  </tr>
+</table>
+<!--PSULINKS)-->
+
+<!--(INFOLINKS-->
+<table align=center width=750 bgcolor="#FFFFFF" border=2 cellpadding=2 cellspacing=2>
+  <tr>
+    <th bgcolor="#C0C0C0">Useful technical information</th>
+  </tr>
+  <tr>
+    <td>
+      <ul>
+        <li><a href="../chipsetdrivers/chipset.html">How to install your motherboard chipset drivers</a>
+        <li><a href="../memtest/memtest.html">Test your motherboard memory with Memtest86</a>
+        <li><a href="../prime95/prime95.html">Torture test your CPU with Prime95</a>
+        <li><a href="../findspecs/findspecs.html">How to find specifications for your computer</a>
+        <li><a href="../restorepoint/restore.html">Create a system restore point in case something goes wrong</a>
+        <li><a href="../adminrights/admin.html">Getting administrator privileges</a>
+        <li><a href="../biosfiddling/fiddle.html">Fiddling with your BIOS</a>
+        <li><a href="../safemode/safemode.html">How to boot into safe mode or VGA mode</a>
+        <li><a href="../cpuspeed/cpuspeed.html">Rate your CPU speed at games</a>
+        <li><a href="../defs/defs.html">Glossary of technical terms</a>
+      </ul>
+    </td>
+  </tr>
+</table>
+<!--INFOLINKS)-->
+
+<!--(RANDOMLINKS-->
+<table align=center width=750 bgcolor="#FFFFFF" border=2 cellpadding=2 cellspacing=2>
+  <tr>
+    <th bgcolor="#C0C0C0">Random stuff</th>
+  </tr>
+  <tr>
+    <td>
+      <ul>
+        <li><a href="../coasters/coasters.html">My favorite RollerCoaster Tycoon 3 coasters</a>
+        <li><a href="../peepfactory/peepfactory.html">PeepFactory peep generator for RollerCoaster Tycoon 3</a>
+        <li><a href="../backyard/view.html">The view from my old backyard</a>
+      </ul>
+    </td>
+  </tr>
+</table>
+<!--RANDOMLINKS)-->
+
+</div><!--standardindent-->
+<p align=center>Copyright &copy; 2005, 2006 by Mark Allen</p>
+</body>
+</html>
+

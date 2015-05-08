@@ -34,7 +34,7 @@ public class CacheRequestProtocolClient
     private Logger l;
     private String dnldDir;
     
-    private InetAddress localAddress;
+    private String localAddress;
     private int portUsed;
     
     private boolean sendHeader;
@@ -46,10 +46,13 @@ public class CacheRequestProtocolClient
      * @param loggerToUse
      * @param newDownloadDir 
      */
-    public CacheRequestProtocolClient(InetAddress address, int port, Logger loggerToUse, String newDownloadDir)
+    public CacheRequestProtocolClient(String address, int port, Logger loggerToUse, String newDownloadDir)
     {
         try
         {
+            localAddress=address;
+            portUsed=port;
+            
             s=new Socket(address, port);
             l=loggerToUse;
             
@@ -57,6 +60,7 @@ public class CacheRequestProtocolClient
         } catch(IOException e)
         {
             loggerToUse.logErr(CACHE_REQUEST_PROTOCOL_CLIENT_TAG, "Couldn't create new socket for "+address+":"+port);
+            e.printStackTrace();
         }
         
         sendHeader=true;
@@ -81,6 +85,7 @@ public class CacheRequestProtocolClient
             while(numRead!=-1)
             {
                 out.write(bytes, 0, numRead);
+                numRead=i.read(bytes);
             }
         } catch(FileNotFoundException e)
         {
@@ -120,8 +125,6 @@ public class CacheRequestProtocolClient
         
         try
         {
-            s.connect(null);
-            
             InputStream i;
             OutputStream o;
             PrintWriter pw;
@@ -130,7 +133,7 @@ public class CacheRequestProtocolClient
             
             i=s.getInputStream();
             o=s.getOutputStream();
-            pw=new PrintWriter(o);
+            pw=new PrintWriter(o, true);
             r=new BufferedReader(new InputStreamReader(i));
             
             pw.println("CHECK");
@@ -163,8 +166,6 @@ public class CacheRequestProtocolClient
     {
         try
         {
-            s.connect(null);
-            
             InputStream i;
             OutputStream o;
             PrintWriter pw;
@@ -172,7 +173,7 @@ public class CacheRequestProtocolClient
             
             i=s.getInputStream();
             o=s.getOutputStream();
-            pw=new PrintWriter(o);
+            pw=new PrintWriter(o, true);
             BufferedReader r=new BufferedReader(new InputStreamReader(i));
             
             pw.println("CACHE");
@@ -224,7 +225,6 @@ public class CacheRequestProtocolClient
             long fSize;
             String respCache;
             File f, diskTestFile;
-            s.connect(null);
             
             InputStream i;
             OutputStream o;
@@ -300,7 +300,6 @@ public class CacheRequestProtocolClient
     {
         try
         {
-            s.connect(null);
             
             //Yay abstraction!
             InputStream i;
@@ -310,7 +309,7 @@ public class CacheRequestProtocolClient
             
             i=s.getInputStream();
             o=s.getOutputStream();
-            pw=new PrintWriter(o);
+            pw=new PrintWriter(o, true);
             BufferedReader r=new BufferedReader(new InputStreamReader(i));
             
             pw.println("FETCH LOCAL");
@@ -378,16 +377,25 @@ public class CacheRequestProtocolClient
             
             i=s.getInputStream();
             o=s.getOutputStream();
-            pw=new PrintWriter(o);
+            pw=new PrintWriter(o, true);
             BufferedReader r=new BufferedReader(new InputStreamReader(i));
             
             pw.println("FETCH AUTODETECT");
             
             //Get the server's determination:
             respCache=r.readLine();
+            l.logMsg(CACHE_REQUEST_PROTOCOL_CLIENT_TAG, "Got the following connection type: "+respCache);
             
             //Terminate the connection so that we can reconnect later.
             closeAll(i, o, pw, r, s);
+            
+            try
+            {
+                Thread.sleep(100); //Give the server some time to catch up.
+            } catch(InterruptedException e)
+            {
+                
+            }
             
             //Since Java is weird, we have to rebuild the socket from scratch:
             s=new Socket(localAddress, portUsed);

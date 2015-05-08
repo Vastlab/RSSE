@@ -110,6 +110,7 @@ public class URLFetcher
     
     public File fetchFromServer(String url) throws MalformedURLException
     {
+        System.out.println("Fetching "+url+" from server...");
         File fileOut=null;
         //This throws the malformedurlexception that is thrown here because it 
         //is the responsibility of the calling code to check for such conditions.
@@ -151,6 +152,8 @@ public class URLFetcher
      */
     public File binFetchFromServer(String url) throws MalformedURLException
     {
+        System.out.println("Binary fetching "+url+" from server...");
+        System.out.println("Storage path="+storagePath);
         File fileOut=null;
         try
         {
@@ -161,7 +164,8 @@ public class URLFetcher
             URLConnection connection=outURL.openConnection();
             InputStream in=connection.getInputStream();
             
-            fileOut=new File(storagePath+parsePath(url));
+            fileOut=new File(storagePath+"/"+parsePath(url));
+            System.out.println(fileOut);
             OutputStream out=(new FileOutputStream(fileOut));
             
             while((cachedSize=in.read(byteBuffer))!=-1)
