@@ -17,6 +17,9 @@ public class CacheModule
     public static Database database;
     public static ConcurrentRequestManager reqMan;
     
+    //Now for all of the servers:
+    public static CacheRequestServer cacheSrvr;
+    
     public static void interpretArgs(String args[])
     {
         for(String s:args)

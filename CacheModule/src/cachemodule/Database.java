@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
@@ -390,5 +391,28 @@ public class Database
     private CacheNode internalFindByFile(File f)
     {
         return null;
+    }
+    
+    private void rcsvTraverse(ArrayList<String> l, CacheNodeWrapper n)
+    {
+        if(n!=null)
+        {
+            rcsvTraverse(l, n.left);
+            l.add(n.data.getFile().toString());
+            rcsvTraverse(l, n.right);
+        }
+    }
+    
+    /**
+     * This method generates a list of all of the URLs cached in the database.
+     * @return 
+     */
+    public ArrayList<String> generateReport()
+    {
+        ArrayList<String> list=new ArrayList<String>();
+        
+        rcsvTraverse(list, dbRoot);
+        
+        return list;
     }
 }

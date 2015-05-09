@@ -76,6 +76,21 @@ public class CMTerminal
         return retQ; //That was easy!
     }
     
+    private void runHelp(ManagementQuery q)
+    {
+        CMTerminalHelpEngine e=new CMTerminalHelpEngine();
+        
+        if(q.args.isEmpty())
+        {
+            e.printHelp("none");
+        }
+        
+        else
+        {
+            e.printHelp(q.args.get(0));
+        }
+    }
+    
     /**
      * This executes any query returned from the CM.
      * @param q 
@@ -120,6 +135,11 @@ public class CMTerminal
             }
         }
         
+        else if(q.command.equalsIgnoreCase("help"))
+        {
+            runHelp(q);
+        }
+        
         else if(q.command.equalsIgnoreCase("pwd"))
         {
             System.out.println(curPath);
@@ -139,7 +159,26 @@ public class CMTerminal
         
         else if(q.command.equalsIgnoreCase("setsrvr"))
         {
+            /* This code path should be enabled if such checking is necessary.
+            try
+            {
+                Socket s=new Socket(q.args.get(0), remotePort);
+                s.close();
+                
+                remoteHost=q.args.get(0);
+            } catch(IOException e)
+            {
+                System.err.println("ERROR: Specified server doesn't exist!");
+            }*/
             
+            remoteHost=q.args.get(0);
+        }
+        
+        else if(q.command.equalsIgnoreCase("setport"))
+        {
+            //See the note on alternative code paths above.
+            
+            remotePort=Integer.parseInt(q.args.get(0));
         }
         
         else //These will be shipped off to the server.
@@ -147,6 +186,7 @@ public class CMTerminal
             //Yes, this is some pseudo-recursion:
             try
             {
+                System.out.println("Sending command to server...");
                 execManagementQuery(makeConnection(q));
             } catch(IOException e)
             {
