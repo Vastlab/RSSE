@@ -90,8 +90,11 @@ public class ManagementServer
         private void handleConnection(Socket s) throws IOException
         {
             BufferedReader r=new BufferedReader(new InputStreamReader(s.getInputStream()));
+            System.out.println("Reading query...");
             ManagementQuery q=new ManagementQuery().fromString(r.readLine());
             ManagementQuery returnQuery=new ManagementQuery();
+            
+            System.out.println("Query: "+q);
             
             //Now try to handle the commands given:
             if(q.command.equalsIgnoreCase("cache"))
@@ -127,11 +130,30 @@ public class ManagementServer
             
             else if(q.command.equalsIgnoreCase("startservice"))
             {
+                l.logMsg(MANAGEMENT_SERVER_TAG, "Starting CM Service...");
                 returnQuery.command="PRINT";
                 returnQuery.args.add("OK");
+                
+                if(CacheModule.cacheSrvr==null)
+                {
+                    CacheModule.cacheSrvr=new CacheRequestServer(CacheModule.cfg, db, l);
+                }
+                
+                CacheModule.cacheSrvr.startServer();
             }
             
             else if(q.command.equalsIgnoreCase("stopservice"))
+            {
+                returnQuery.command="PRINT";
+                returnQuery.args.add("OK");
+                
+                if(CacheModule.cacheSrvr!=null)
+                {
+                    CacheModule.cacheSrvr.stopServer();
+                }
+            }
+            
+            else if(q.command.equalsIgnoreCase("loadcfg"))
             {
                 
             }
@@ -152,6 +174,7 @@ public class ManagementServer
                 try
                 {
                     Socket s=srvr.accept();
+                    System.out.println("Got connection. Handling...");
                     handleConnection(s);
                 } catch(IOException e)
                 {

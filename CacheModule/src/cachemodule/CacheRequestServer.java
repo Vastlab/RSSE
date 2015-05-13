@@ -5,6 +5,7 @@
 
 package cachemodule;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -21,6 +22,7 @@ public class CacheRequestServer
     private int portNum;
     private String dnldDir;
     private Thread listenerThread;
+    private Thread snapshotThread;
     private Database db;
     private Logger l;
     private ArrayList<Thread> connections;
@@ -33,6 +35,8 @@ public class CacheRequestServer
         m=new ConcurrentRequestManager();
         l=newLogger;
         connections=new ArrayList<Thread>();
+        snapshotThread=new Thread(new DatabaseSnapshotRunnable(Integer.parseInt(cfg.getSetting(CMConfig.SETTING_SAVE_FREQUENCY)), new File(dnldDir+"/snapshot.file")));
+        snapshotThread.start();
     }
     
     public synchronized void startServer()
@@ -62,6 +66,22 @@ public class CacheRequestServer
         
         listenerThread=null;
         System.out.println("Listener thread should have stopped.");
+    }
+    
+    public synchronized void changeSnapshotThread(File newFile, int newInterval)
+    {
+        snapshotThread.interrupt();
+        //This is to ensure that the thread caught the signal and stopped.
+        try
+        {
+            Thread.sleep(100);
+        } catch(InterruptedException e)
+        {
+            //Do nothing.
+        }
+        
+        snapshotThread=new Thread(new DatabaseSnapshotRunnable(newInterval, newFile));
+        snapshotThread.start();
     }
     
     private ServerSocket srvrSock;
@@ -152,6 +172,35 @@ public class CacheRequestServer
                 l.logErr(dnldDir, dnldDir);
             }
             
+        }
+    }
+    
+    private class DatabaseSnapshotRunnable implements Runnable
+    {
+        //Use a tag for this here to distance this thread from the rest of the CacheRequestServer.
+        private static final String DBSNAPSHOT_TAG="DatabaseSnapshotService"; 
+        private int secPerSleep;
+        private File snapshotFile;
+        
+        public DatabaseSnapshotRunnable(int newSecPerSleep, File newFile)
+        {
+            secPerSleep=newSecPerSleep*1000; //Specified in seconds, but Thread.sleep uses ms.
+        }
+        
+        public void run()
+        {
+            while(true)
+            {
+                try
+                {
+                    Thread.sleep(secPerSleep);
+                    db.saveDatabase(snapshotFile);
+                } catch(InterruptedException e)
+                {
+                    l.logMsg(DBSNAPSHOT_TAG, "Stopping DB shapshot thread...");
+                    return;
+                }
+            }
         }
     }
 }

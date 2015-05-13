@@ -54,6 +54,11 @@ public class ManagementQuery
     {
         Scanner strScanner=new Scanner(s);
         
+        if(!strScanner.hasNext()) //Ie. No args passed:
+        {
+            return this;
+        }
+        
         command=strScanner.next();
         
         while(strScanner.hasNext())

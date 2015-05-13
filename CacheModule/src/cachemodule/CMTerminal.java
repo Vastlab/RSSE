@@ -59,13 +59,15 @@ public class CMTerminal
     {
         ManagementQuery retQ;
         Socket s=new Socket(remoteHost, remotePort);
+        System.out.println("Starting MakeConnection...");
+        System.out.println(s.isBound());
         
         PrintWriter out=new PrintWriter(s.getOutputStream(), true);
         BufferedReader in=new BufferedReader(new InputStreamReader(s.getInputStream()));
         
         //Print out the request:
         out.println(q.toString());
-        
+        System.out.println("Printed data. Waiting on response...");
         //Get the server's response:
         retQ=new ManagementQuery().fromString(in.readLine());
         
@@ -181,6 +183,11 @@ public class CMTerminal
             remotePort=Integer.parseInt(q.args.get(0));
         }
         
+        else if(q.command.equals("")||q.command==null)
+        {
+            //Break the recursion that may occur in these circumstances.
+        }
+        
         else //These will be shipped off to the server.
         {
             //Yes, this is some pseudo-recursion:
@@ -234,6 +241,7 @@ public class CMTerminal
         while(true)
         {
             userBuffer=prompt();
+            System.out.println(userBuffer);
             
             if(userBuffer.equalsIgnoreCase("exit"))
             {

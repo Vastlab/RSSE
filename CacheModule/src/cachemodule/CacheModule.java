@@ -19,6 +19,7 @@ public class CacheModule
     
     //Now for all of the servers:
     public static CacheRequestServer cacheSrvr;
+    public static ManagementServer manageSrvr;
     
     public static void interpretArgs(String args[])
     {
@@ -63,6 +64,9 @@ public class CacheModule
         }
         
         server.stopServer();*/
+        
+        manageSrvr=new ManagementServer(9002, true);
+        manageSrvr.start();
         
         CMTerminal t=new CMTerminal();
         

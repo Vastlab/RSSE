@@ -19,19 +19,23 @@ public class CMConfig
     private String storageDir;
     private String configDir;
     private String serverPort;
+    private String saveFreq;
     private int configVersion;
     
     private static final String DEFAULT_STORAGE_DIR="./storage";
     private static final String DEFAULT_CONFIG_DIR="./";
     private static final String DEFAULT_SERVER_PORT="9001";
+    private static final String DEFAULT_SAVE_FREQUENCY="60";
     
     public static final int SETTING_STORAGE_DIR=1;
     public static final int SETTING_CONFIG_DIR=2;
     public static final int SETTING_SERVER_PORT=3;
+    public static final int SETTING_SAVE_FREQUENCY=4;
     public static final String SETTING_STORAGE_DIR_STR="storage_dir";
     public static final String SETTING_CONFIG_DIR_STR="config_dir";
     public static final String SETTING_SERVER_PORT_STR="server_port";
     public static final String CONFIG_VERSION_STR="config_version";
+    public static final String SETTING_SAVE_FREQUENCY_STR="db_save_freq";
     
     
     public String getSetting(int setting)
@@ -44,6 +48,8 @@ public class CMConfig
                 return configDir;
             case SETTING_SERVER_PORT:
                 return serverPort;
+            case SETTING_SAVE_FREQUENCY:
+                return saveFreq;
         }
         
         return null;
@@ -87,6 +93,11 @@ public class CMConfig
                     {
                         serverPort=buffrScanner.next();
                     }
+                    
+                    else if(str.equals(SETTING_SAVE_FREQUENCY_STR))
+                    {
+                        saveFreq=buffrScanner.next();
+                    }
                 }
             }
         } catch(FileNotFoundException e)
@@ -114,6 +125,7 @@ public class CMConfig
             pw.println(SETTING_STORAGE_DIR_STR+" "+storageDir);
             pw.println(SETTING_CONFIG_DIR_STR+" "+configDir);
             pw.println(SETTING_SERVER_PORT_STR+" "+serverPort);
+            pw.println(SETTING_SAVE_FREQUENCY_STR+" "+saveFreq);
             
             pw.flush();
             pw.close();
@@ -146,6 +158,7 @@ public class CMConfig
         storageDir=DEFAULT_STORAGE_DIR;
         configDir=DEFAULT_CONFIG_DIR;
         serverPort=DEFAULT_SERVER_PORT;
+        saveFreq=DEFAULT_SAVE_FREQUENCY;
     }
     
     public CMConfig(File f)
