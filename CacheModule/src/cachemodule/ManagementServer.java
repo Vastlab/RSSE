@@ -8,6 +8,7 @@
 package cachemodule;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
@@ -155,7 +156,50 @@ public class ManagementServer
             
             else if(q.command.equalsIgnoreCase("loadcfg"))
             {
+                if(CacheModule.cfg==null)
+                {
+                    CacheModule.cfg=new CMConfig();
+                }
                 
+                returnQuery.command="PRINT";
+                
+                if(CacheModule.cfg.loadSettings(new File(q.args.get(0))))
+                {
+                    returnQuery.args.add("Successfully loaded "+q.args.get(0));
+                }
+                
+                else
+                {
+                    returnQuery.args.add("ERROR: Couldn't load "+q.args.get(0));
+                }
+                
+                //Also restart the caching server and other such things that are dependent on the config:
+                if(CacheModule.cacheSrvr!=null)
+                {
+                    if(CacheModule.cacheSrvr.isRunning())
+                    {
+                        CacheModule.cacheSrvr.stopServer();
+                        CacheModule.cacheSrvr=new CacheRequestServer(CacheModule.cfg, CacheModule.database, l);
+                    }
+                }
+            }
+            
+            else if(q.command.equalsIgnoreCase("savecfg"))
+            {
+                returnQuery.command="PRINT";
+                
+                if(CacheModule.cfg!=null)
+                {
+                    if(CacheModule.cfg.saveSettings(new File(q.args.get(0))))
+                    {
+                        returnQuery.args.add("Saved configuration file: "+q.args.get(0));
+                    }
+                    
+                    else
+                    {
+                        returnQuery.args.add("ERROR: Couldn't save configuration file "+q.args.get(0));
+                    }
+                }
             }
             
             //Now print out the query and exit:

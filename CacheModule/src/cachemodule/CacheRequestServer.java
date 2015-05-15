@@ -39,6 +39,11 @@ public class CacheRequestServer
         snapshotThread.start();
     }
     
+    public boolean isRunning()
+    {
+        return listenerThread!=null;
+    }
+    
     public synchronized void startServer()
     {
         l.logMsg(CACHE_REQUEST_SERVER_TAG, "Starting server thread on port "+portNum);
@@ -66,6 +71,11 @@ public class CacheRequestServer
         
         listenerThread=null;
         System.out.println("Listener thread should have stopped.");
+        
+        if(snapshotThread!=null)
+        {
+            snapshotThread.interrupt();
+        }
     }
     
     public synchronized void changeSnapshotThread(File newFile, int newInterval)
