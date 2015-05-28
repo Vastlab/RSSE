@@ -1,7 +1,5 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * This class represents an individual client to be stored in the ClientDB.
  */
 
 package experimentalserverservice;
@@ -12,5 +10,6 @@ package experimentalserverservice;
  */
 public class ClientState
 {
-    
+    public long clientId;
+    public int curDataIndex;
 }
