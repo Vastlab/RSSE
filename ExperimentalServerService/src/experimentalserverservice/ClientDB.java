@@ -16,6 +16,9 @@
 
 package experimentalserverservice;
 
+import java.io.PrintWriter;
+import java.util.Random;
+
 /**
  *
  * @author mgohde
@@ -23,10 +26,12 @@ package experimentalserverservice;
 public class ClientDB
 {
     private ClientStateNode root;
+    private boolean first;          //This boolean changes how IDs are assigned.
     
-    public ClientDB()
+    public ClientDB(boolean isFirst)
     {
         root=null;
+        first=isFirst;
     }
     
     public synchronized ClientState getClientById(long id)
@@ -78,9 +83,61 @@ public class ClientDB
         }
     }
     
+    public synchronized boolean isFirst()
+    {
+        return first;
+    }
+    
+    public synchronized long generateId()
+    {
+        Random rand;
+        long val;
+        
+        if(first)
+        {
+            return Long.MAX_VALUE/2; //Ensure that the tree is balanced.
+        }
+        
+        rand=new Random();
+        val=rand.nextLong();
+        
+        while(internalFindById(val, root)!=null)
+        {
+            val=rand.nextLong();
+        }
+        
+        return val;
+    }
+    
     public synchronized void updateClient(ClientState s)
     {
+        ClientStateNode client;
         
+        client=internalFindById(s.clientId, root);
+        
+        if(client==null) //Add it.
+        {
+             internalAdd(s, root);
+        }
+        
+        else //Edit it.
+        {
+            client.s=s;
+        }
+    }
+    
+    public void dump(PrintWriter o)
+    {
+        if(o!=null&&root!=null)
+        {
+            rcsvDump(o, root);
+        }
+    }
+    
+    private void rcsvDump(PrintWriter o, ClientStateNode curNode)
+    {
+        //This is internally just going to be a recursive traversal with the current node first.
+        o.println(curNode.s.toString());
     }
     
     private void rcsvAdd(ClientStateNode curNode)

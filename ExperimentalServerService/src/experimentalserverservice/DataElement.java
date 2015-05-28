@@ -46,9 +46,19 @@ public class DataElement
         description=null; //Neither the title nor description need to be transmitted or received.
     }
     
+    public String getResServer()
+    {
+        return respServer;
+    }
+    
     public void setResServer(String server)
     {
         respServer=server;
+    }
+    
+    public int getResPort()
+    {
+        return respPort;
     }
     
     public void setResPort(int portNum)
@@ -56,9 +66,19 @@ public class DataElement
         respPort=portNum;
     }
     
+    public String getTitle()
+    {
+        return title;
+    }
+    
     public void setTitle(String newTitle)
     {
         title=newTitle;
+    }
+    
+    public String getDescription()
+    {
+        return description;
     }
     
     public void setDescription(String newDescription)
@@ -66,9 +86,19 @@ public class DataElement
         description=newDescription;
     }
     
+    public String getCls()
+    {
+        return className;
+    }
+    
     public void setClass(String newClass)
     {
         className=newClass;
+    }
+    
+    public String getUrl()
+    {
+        return url;
     }
     
     public void setUrl(String newURL)
