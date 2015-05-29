@@ -17,6 +17,7 @@ public class ClientState
 {
     public long clientId;
     public int curDataIndex;
+    public String expName;
     
     public ClientState()
     {

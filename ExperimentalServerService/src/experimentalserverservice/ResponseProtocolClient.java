@@ -10,7 +10,7 @@ package experimentalserverservice;
  *
  * @author mgohde
  */
-public class SnippetProcolServer
+public class ResponseProtocolClient
 {
     
 }

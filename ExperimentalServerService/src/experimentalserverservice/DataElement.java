@@ -17,11 +17,11 @@ public class DataElement
     private String className;
     private int label;
     private boolean labeled;
-    private long idNum;
-    private String title;
-    private String description;
-    private String respServer;
-    private int respPort;
+    //private long idNum; //<-- These will stay here so that future versions can hae labels for every data item if necessary.
+    //private String title;
+    //private String description;
+    //private String respServer;
+    //private int respPort;
     
     public DataElement()
     {
@@ -41,11 +41,12 @@ public class DataElement
         className=strScanner.next();
         label=Integer.parseInt(strScanner.next());
         labeled=Boolean.parseBoolean(strScanner.next());
-        idNum=Long.parseLong(strScanner.next());
-        title=null;
-        description=null; //Neither the title nor description need to be transmitted or received.
+        //idNum=Long.parseLong(strScanner.next());
+        //title=null;
+        //description=null; //Neither the title nor description need to be transmitted or received.
     }
     
+    /*
     public String getResServer()
     {
         return respServer;
@@ -84,7 +85,7 @@ public class DataElement
     public void setDescription(String newDescription)
     {
         description=newDescription;
-    }
+    }*/
     
     public String getCls()
     {
@@ -124,6 +125,6 @@ public class DataElement
     @Override
     public String toString()
     {
-        return url+" "+className+" "+label+" "+labeled+" "+idNum;
+        return url+" "+className+" "+label+" "+labeled+" ";//+idNum;
     }
 }

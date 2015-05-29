@@ -107,6 +107,17 @@ public class URLFileManager
      */
     public int getNewPosition(String url)
     {
+        //Do a linear search. Nasty.
+        int i;
+        
+        for(i=0;i<urlList.size();i++)
+        {
+            if(urlList.get(i).getUrl().equals(url))
+            {
+                return i;
+            }
+        }
+        
         return 0;
     }
     
@@ -121,7 +132,7 @@ public class URLFileManager
         boolean urlRemoved, urlUsed;
         ArrayList<Integer> removalList=new ArrayList<Integer>();
         ArrayList<Integer> additionList=new ArrayList<Integer>();
-        int i, j, valRemoved;
+        int i, j, valRemoved, valInserted;
         String cmpUrl;
         
         urlRemoved=false;
@@ -165,10 +176,28 @@ public class URLFileManager
         }
         
         //Resolve the removals by trying to insert additions in the removed spots:
-        j=0;
-        for(i=0;i<removalList.size();i++)
+        j=additionList.size()-1;
+        for(i=removalList.size()-1;i>=0;i++) //Go backwards to keep everything in order no matter what.
         {
-            valRemoved=removalList.get(i).intValue();
+            valRemoved=removalList.get(i);
+            
+            if(j<0) //Remove without replacement
+            {
+                urlList.remove(valRemoved);
+            }
+            
+            else //Replace.
+            {
+                valInserted=additionList.get(j);
+                urlList.set(valRemoved, e.urlList.get(valInserted));
+            }
+            
+            j--;
+        }
+        
+        for(i=0;i<=j;i++)
+        {
+            urlList.add(e.urlList.get(additionList.get(i)));
         }
         
         return urlRemoved;

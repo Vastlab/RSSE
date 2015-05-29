@@ -9,6 +9,7 @@ package experimentalserverservice;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Scanner;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -144,16 +145,96 @@ public class Parser
         return cmd;
     }
     
+    private Experiment doNuggetParsing(Document doc) throws NoContentException
+    {
+        Experiment e=new Experiment();
+        NodeList list=doc.getChildNodes();
+        DataElement element=new DataElement();
+
+        if(list.getLength()==0)
+        {
+            throw new NoContentException();
+        }
+
+        for(int i=0;i<list.getLength();i++)
+        {
+            Node node=list.item(i);
+
+            if(node.getNodeName().equals("title"))
+            {
+                e.name=(node.getNodeValue());
+            }
+
+            else if(node.getNodeName().equals("description"))
+            {
+                e.description=(node.getNodeValue());
+            }
+
+            else if(node.getNodeName().equals("class"))
+            {
+                element.setClass(node.getNodeValue());
+            }
+
+            else if(node.getNodeName().equals("url"))
+            {
+                element.setUrl(node.getNodeValue());
+            }
+
+            else if(node.getNodeName().equals("label"))
+            {
+                element.setLabel(Integer.parseInt(node.getNodeValue()));
+            }
+
+            else if(node.getNodeName().equals("resserver"))
+            {
+                e.resServer=(node.getNodeValue());
+            }
+
+            else if(node.getNodeName().equals("resport"))
+            {
+                e.resPort=(Integer.parseInt(node.getNodeValue()));
+            }
+        }
+        
+        e.urlList.add(element);
+        
+        return e;
+    }
+    
+    public Experiment parseNuggetStringForInformation(String nuggetData) throws NoContentException
+    {
+        Experiment e=new Experiment();
+        DocumentBuilderFactory docBuildFactory=DocumentBuilderFactory.newInstance();
+        
+        try
+        {
+            DocumentBuilder builder=docBuildFactory.newDocumentBuilder();
+            Document doc=builder.parse(nuggetData);
+            
+            e=doNuggetParsing(doc);
+        } catch(ParserConfigurationException ex)
+        {
+            l.logErr(PARSER_TAG, "Couldn't parse nugget due to misconfiguration.");
+        } catch(SAXException ex)
+        {
+            l.logErr(PARSER_TAG, "SAXException while parsing XML nugget.");
+        } catch(IOException ex)
+        {
+            l.logErr(PARSER_TAG, "Couldn't read temporary file containing RSSE nugget!");
+        }
+        
+        return e;
+    }
+    
     /**
      * Returns an ArrayList containing all data elements in the specified XML nugget.
      * Please note that it returns an ArrayList in order to provide API compatibility for future expansion.
      * @param f
      * @return 
      */
-    public ArrayList<DataElement> parseNuggetForInformation(File f)
+    public Experiment parseNuggetFileForInformation(File f) throws NoContentException
     {
-        ArrayList<DataElement> information=new ArrayList<DataElement>();
-        
+        Experiment e=new Experiment();
         DocumentBuilderFactory docBuildFactory=DocumentBuilderFactory.newInstance();
         
         try
@@ -161,59 +242,33 @@ public class Parser
             DocumentBuilder builder=docBuildFactory.newDocumentBuilder();
             Document doc=builder.parse(f);
             
-            NodeList list=doc.getChildNodes();
-            
-            DataElement element=new DataElement();
-            
-            for(int i=0;i<list.getLength();i++)
-            {
-                Node node=list.item(i);
-                
-                if(node.getNodeName().equals("title"))
-                {
-                    element.setTitle(node.getNodeValue());
-                }
-                
-                else if(node.getNodeName().equals("description"))
-                {
-                    element.setDescription(node.getNodeValue());
-                }
-                
-                else if(node.getNodeName().equals("class"))
-                {
-                    element.setClass(node.getNodeValue());
-                }
-                
-                else if(node.getNodeName().equals("url"))
-                {
-                    element.setUrl(node.getNodeValue());
-                }
-                
-                else if(node.getNodeName().equals("label"))
-                {
-                    element.setLabel(Integer.parseInt(node.getNodeValue()));
-                }
-                
-                else if(node.getNodeName().equals("resserver"))
-                {
-                    element.setResServer(node.getNodeValue());
-                }
-                
-                else if(node.getNodeName().equals("resport"))
-                {
-                    element.setResPort(Integer.parseInt(node.getNodeValue()));
-                }
-            }
-        } catch(ParserConfigurationException e)
+            e=doNuggetParsing(doc);
+        } catch(ParserConfigurationException ex)
         {
             l.logErr(PARSER_TAG, "Couldn't parse nugget due to misconfiguration.");
         } catch(SAXException ex)
         {
             l.logErr(PARSER_TAG, "SAXException while parsing XML nugget.");
-        } catch(IOException exc)
+        } catch(IOException ex)
         {
             l.logErr(PARSER_TAG, "Couldn't read temporary file containing RSSE nugget!");
         }
-        return information;
+        
+        return e;
+    }
+    
+    //Implement some lightweight parsers for things that really don't require a full-blown XML parser:
+    
+    /**
+     * Returns all of the experiment names contained within the specified string.
+     * 
+     * @param s The string to parse.
+     * @return An ArrayList of experiment names.
+     */
+    public ArrayList<String> parseExperimentsFromString(String s)
+    {
+        ArrayList<String> outputList=new ArrayList<String>();
+        Scanner strScanner=new Scanner(s);
+        String temp, strToBuild;
     }
 }
