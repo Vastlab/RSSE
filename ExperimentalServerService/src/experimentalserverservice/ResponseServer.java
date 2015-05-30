@@ -6,11 +6,30 @@
 
 package experimentalserverservice;
 
+import java.net.ServerSocket;
+
 /**
  *
  * @author mgohde
  */
 public class ResponseServer
 {
+    private ServerSocket sock;
+    private Logger l;
     
+    private Thread listenerThread;
+    
+    public ResponseServer(int portToUse, String respDir)
+    {
+        
+    }
+    
+    private class ListenerRunnable implements Runnable
+    {
+        @Override
+        public void run()
+        {
+            
+        }
+    }
 }

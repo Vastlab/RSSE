@@ -8,6 +8,7 @@ package experimentalserverservice;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Scanner;
 import javax.xml.parsers.DocumentBuilder;
@@ -16,6 +17,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 /**
@@ -46,6 +48,8 @@ public class Parser
             //Get all of the experiments in the file:
             NodeList list=doc.getElementsByTagName("experiment");
             
+            System.out.println("Experiment list length: "+list.getLength());
+            
             for(int i=0;i<list.getLength();i++)
             {
                 Experiment e=new Experiment();
@@ -54,36 +58,45 @@ public class Parser
                 Node n=list.item(i);
                 NodeList experimentContents=n.getChildNodes();
                 
+                System.out.println("Experiment contents length: "+experimentContents.getLength());
+                
                 for(int j=0;j<experimentContents.getLength();j++)
                 {
-                    Node m=list.item(j);
+                    Node m=experimentContents.item(j);
                 
-                    if(n.getNodeName().equals("description"))
+                    if(m.getNodeName().equals("description"))
                     {
-                        e.description=m.getNodeValue();
+                        e.description=m.getTextContent();
                     }
 
-                    else if(n.getNodeName().equals("title"))
+                    else if(m.getNodeName().equals("title"))
                     {
-                        e.name=m.getNodeValue();
+                        e.name=m.getTextContent();
                     }
 
-                    else if(n.getNodeName().equals("report"))
+                    else if(m.getNodeName().equals("report"))
                     {
                         e.report=Boolean.parseBoolean(m.getNodeValue());
                     }
 
-                    else if(n.getNodeName().equals("resserver"))
+                    else if(m.getNodeName().equals("resserver"))
                     {
                         e.resServer=m.getNodeValue();
                     }
 
-                    else if(n.getNodeName().equals("resport"))
+                    else if(m.getNodeName().equals("resport"))
                     {
-                        e.resPort=Integer.parseInt(m.getNodeValue());
+                        try
+                        {
+                            e.resPort=Integer.parseInt(m.getNodeValue());
+                        } catch(NumberFormatException exc)
+                        {
+                            l.logErr(PARSER_TAG, "Error in response port tag! Not a valid integer.");
+                        }
+                        
                     }
 
-                    else if(n.getNodeName().equals("data"))
+                    else if(m.getNodeName().equals("data"))
                     {
                         NodeList dataNodes=m.getChildNodes();
                         
@@ -97,15 +110,15 @@ public class Parser
                                 //Try to get class and label attributes:
                                 if(dataNode.getAttributes().getNamedItem("class")!=null)
                                 {
-                                    de.setClass(dataNode.getAttributes().getNamedItem("class").getNodeValue());
+                                    de.setClass(dataNode.getAttributes().getNamedItem("class").getTextContent());
                                 }
                                 
                                 if(dataNode.getAttributes().getNamedItem("label")!=null)
                                 {
-                                    de.setLabel(Integer.parseInt((dataNode.getAttributes().getNamedItem("class").getNodeValue())));
+                                    de.setLabel(Integer.parseInt((dataNode.getAttributes().getNamedItem("class").getTextContent())));
                                 }
                                 
-                                de.setUrl(dataNode.getNodeValue());
+                                de.setUrl(dataNode.getTextContent());
                                 
                                 e.urlList.add(de);
                             }
@@ -162,37 +175,37 @@ public class Parser
 
             if(node.getNodeName().equals("title"))
             {
-                e.name=(node.getNodeValue());
+                e.name=(node.getTextContent());
             }
 
             else if(node.getNodeName().equals("description"))
             {
-                e.description=(node.getNodeValue());
+                e.description=(node.getTextContent());
             }
 
             else if(node.getNodeName().equals("class"))
             {
-                element.setClass(node.getNodeValue());
+                element.setClass(node.getTextContent());
             }
 
             else if(node.getNodeName().equals("url"))
             {
-                element.setUrl(node.getNodeValue());
+                element.setUrl(node.getTextContent());
             }
 
             else if(node.getNodeName().equals("label"))
             {
-                element.setLabel(Integer.parseInt(node.getNodeValue()));
+                element.setLabel(Integer.parseInt(node.getTextContent()));
             }
 
             else if(node.getNodeName().equals("resserver"))
             {
-                e.resServer=(node.getNodeValue());
+                e.resServer=(node.getTextContent());
             }
 
             else if(node.getNodeName().equals("resport"))
             {
-                e.resPort=(Integer.parseInt(node.getNodeValue()));
+                e.resPort=(Integer.parseInt(node.getTextContent()));
             }
         }
         
@@ -209,7 +222,7 @@ public class Parser
         try
         {
             DocumentBuilder builder=docBuildFactory.newDocumentBuilder();
-            Document doc=builder.parse(nuggetData);
+            Document doc=builder.parse(new InputSource(new StringReader(nuggetData)));
             
             e=doNuggetParsing(doc);
         } catch(ParserConfigurationException ex)
@@ -261,14 +274,165 @@ public class Parser
     
     /**
      * Returns all of the experiment names contained within the specified string.
-     * 
+     * It might also work for all URLs within a specified string as well.
      * @param s The string to parse.
      * @return An ArrayList of experiment names.
      */
     public ArrayList<String> parseExperimentsFromString(String s)
     {
-        ArrayList<String> outputList=new ArrayList<String>();
-        Scanner strScanner=new Scanner(s);
-        String temp, strToBuild;
+        ArrayList<String> returnList=new ArrayList<String>();
+        
+        DocumentBuilderFactory docFactory=DocumentBuilderFactory.newInstance();
+        
+        try
+        {
+            DocumentBuilder builder=docFactory.newDocumentBuilder();
+            Document doc=builder.parse(new InputSource(new StringReader(s)));
+            
+            //Get all of the experiments in the file:
+            NodeList list=doc.getElementsByTagName("nugget");//doc.getChildNodes();//doc.getElementsByTagName("nugget");
+            //list=list.item(0).getChildNodes();
+            System.out.println(list.getLength());
+            
+            for(int i=0;i<list.getLength();i++)
+            {
+                //Pick out the nodes:
+                Node n=list.item(i);
+                NodeList experimentContents=n.getChildNodes();
+                
+                for(int j=0;j<experimentContents.getLength();j++)
+                {
+                    Node m=list.item(j);
+                
+                    if(m.getNodeName().equals("url")||m.getNodeName().equals("title"))
+                    {
+                        returnList.add(n.getTextContent());
+                    }
+                }
+            }
+            
+        } catch(ParserConfigurationException e)
+        {
+            l.logErr(PARSER_TAG, "Parser misconfigured! Can't read RSSE Experiment Definitions file!");
+        } catch(SAXException ex)
+        {
+            l.logErr(PARSER_TAG, "SAXException! Can't read RSSE Experiment Definitions file!");
+        } catch (IOException exc)
+        {
+            l.logErr(PARSER_TAG, "The RSSE Experiment Definitions file likely doesn't exist at the location specified.");
+        }
+        
+        return returnList;
+    }
+    
+    public long parseIdNugget(String s)
+    {
+        long lng=-1;
+        
+        DocumentBuilderFactory docFactory=DocumentBuilderFactory.newInstance();
+        
+        try
+        {
+            DocumentBuilder builder=docFactory.newDocumentBuilder();
+            Document doc=builder.parse(new InputSource(new StringReader(s)));
+            
+            //Get all of the experiments in the file:
+            NodeList list=doc.getChildNodes();//doc.getElementsByTagName("nugget");
+            list=list.item(0).getChildNodes();
+            System.out.println(list.getLength());
+            
+            for(int i=0;i<list.getLength();i++)
+            {
+                //Pick out the nodes:
+                Node n=list.item(i);
+                NodeList experimentContents=n.getChildNodes();
+                
+                for(int j=0;j<experimentContents.getLength();j++)
+                {
+                    Node m=list.item(j);
+                
+                    if(m.getNodeName().equals("id"))
+                    {
+                        lng=Long.parseLong(m.getTextContent());
+                        return lng;
+                    }
+                }
+            }
+            
+        } catch(ParserConfigurationException e)
+        {
+            l.logErr(PARSER_TAG, "Parser misconfigured! Can't read RSSE Experiment Definitions file!");
+        } catch(SAXException ex)
+        {
+            l.logErr(PARSER_TAG, "SAXException! Can't read RSSE Experiment Definitions file!");
+        } catch (IOException exc)
+        {
+            l.logErr(PARSER_TAG, "The RSSE Experiment Definitions file likely doesn't exist at the location specified.");
+        }
+        
+        return lng;
+    }
+    
+    public DataElement parseForDataElement(String s)
+    {
+        DataElement returnElement=new DataElement();
+        
+        DocumentBuilderFactory docFactory=DocumentBuilderFactory.newInstance();
+        
+        try
+        {
+            DocumentBuilder builder=docFactory.newDocumentBuilder();
+            Document doc=builder.parse(new InputSource(new StringReader(s)));
+            
+            //Get all of the experiments in the file:
+            NodeList list=doc.getElementsByTagName("nugget");//doc.getChildNodes();//doc.getElementsByTagName("nugget");
+            //list=list.item(0).getChildNodes();
+            System.out.println(list.getLength());
+            
+            for(int i=0;i<list.getLength();i++)
+            {
+                //Pick out the nodes:
+                Node n=list.item(i);
+                NodeList experimentContents=n.getChildNodes();
+                
+                for(int j=0;j<experimentContents.getLength();j++)
+                {
+                    Node m=list.item(j);
+                
+                    if(m.getNodeName().equals("url"))
+                    {
+                        returnElement.setUrl(m.getTextContent());
+                    }
+                    
+                    else if(m.getNodeName().equals("class"))
+                    {
+                        returnElement.setClass(m.getTextContent());
+                    }
+                    
+                    else if(m.getNodeName().equals("label"))
+                    {
+                        try
+                        {
+                            returnElement.setLabel(Integer.parseInt(m.getTextContent()));
+                        } catch(NumberFormatException e)
+                        {
+                            l.logErr(PARSER_TAG, "Couldn't parse label from \""+m.getTextContent()+"\"");
+                        }
+                    }
+                }
+            }
+            
+        } catch(ParserConfigurationException e)
+        {
+            l.logErr(PARSER_TAG, "Parser misconfigured! Can't read RSSE Experiment Definitions file!");
+        } catch(SAXException ex)
+        {
+            l.logErr(PARSER_TAG, "SAXException! Can't read RSSE Experiment Definitions file!");
+        } catch (IOException exc)
+        {
+            l.logErr(PARSER_TAG, "The RSSE Experiment Definitions file likely doesn't exist at the location specified.");
+        }
+        
+        return returnElement;
     }
 }

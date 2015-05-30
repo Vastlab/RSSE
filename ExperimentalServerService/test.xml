@@ -1,0 +1,13 @@
+<rsse version="1">
+	<experiment>
+		<data>
+			<url>stuff</url>
+			<url>otherstuff</url>
+		</data>
+		<description>This is the first experiment!</description>
+		<title>My totally rad experiment</title>
+		<report>true</report>
+		<resserver>addr</resserver>
+		<resport>port</resport>
+	</experiment>
+</rsse>

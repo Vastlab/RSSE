@@ -25,7 +25,10 @@ public class DataElement
     
     public DataElement()
     {
-        
+        labeled=false;
+        url=null;
+        className=null;
+        label=-1000;
     }
     
     /**
@@ -107,13 +110,18 @@ public class DataElement
         url=newURL;
     }
     
+    public int getLabel()
+    {
+        return label;
+    }
+    
     public void setLabel(int newLabel)
     {
         label=newLabel;
         
-        if(label!=-1)
+        if(label!=-1000)
         {
-            labeled=false;
+            labeled=true;
         }
     }
     

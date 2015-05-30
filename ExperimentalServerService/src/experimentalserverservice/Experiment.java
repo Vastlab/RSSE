@@ -29,4 +29,13 @@ public class Experiment
         resPort=9001;
         urlList=new ArrayList<DataElement>();
     }
+    
+    @Override
+    public String toString()
+    {
+        String s="Title: "+name;
+        s+="\nDescription: "+description+"\n";
+        
+        return s;
+    }
 }

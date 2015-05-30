@@ -64,12 +64,19 @@ public class SnippetProtocolServer
         return s;
     }
     
-    private String generateUrlNugget(String url)
+    private String generateUrlNugget(DataElement e)//String url)
     {
         String s="";
         
         s+="<nugget>\n";
-        s+="\t<url>"+url+"</url>\n";
+        s+="\t<url>"+e.getUrl()+"</url>\n";
+        s+="\t<class>"+e.getCls()+"</class>\n";
+        
+        if(e.isLabeled())
+        {
+            s+="\t<label>"+e.getLabel()+"</label>\n";
+        }
+        
         s+="</nugget>";
         
         return s;
@@ -207,7 +214,7 @@ public class SnippetProtocolServer
             {
                 if(tempExp.urlList.size()>tempState.curDataIndex)
                 {
-                    out.println(generateUrlNugget(tempExp.urlList.get(tempState.curDataIndex).getUrl()));
+                    out.println(generateUrlNugget(tempExp.urlList.get(tempState.curDataIndex)));
                 }
                 
                 else
