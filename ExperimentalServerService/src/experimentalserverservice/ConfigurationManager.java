@@ -22,8 +22,8 @@ public class ConfigurationManager
     //Set to defaults:
     public ConfigurationManager()
     {
-        URLport=Defaults.nuggetServerPort;
-        respPort=Defaults.responseServerPort;
+        URLport=Settings.nuggetServerPort;
+        respPort=Settings.responseServerPort;
         respServerName="localhost";
     }
     

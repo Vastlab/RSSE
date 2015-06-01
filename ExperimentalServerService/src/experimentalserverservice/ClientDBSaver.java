@@ -47,16 +47,18 @@ public class ClientDBSaver
         public void save()
         {
             if(internalFile.exists())
-            try
             {
-                PrintWriter outWriter=new PrintWriter(internalFile);
-                
-                internalDB.dump(outWriter);
-                outWriter.flush();
-                outWriter.close();
-            } catch(FileNotFoundException e)
-            {
-                l.logErr(DBSAVER_TAG, "Couldn't save database to: "+internalFile);
+                try
+                {
+                    PrintWriter outWriter=new PrintWriter(internalFile);
+
+                    internalDB.dump(outWriter);
+                    outWriter.flush();
+                    outWriter.close();
+                } catch(FileNotFoundException e)
+                {
+                    l.logErr(DBSAVER_TAG, "Couldn't save database to: "+internalFile);
+                }
             }
         }
         

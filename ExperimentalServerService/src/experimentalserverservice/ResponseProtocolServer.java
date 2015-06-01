@@ -24,9 +24,10 @@ public class ResponseProtocolServer
     private Logger l;
     private String responseDir;
     
-    public ResponseProtocolServer(Logger newLogger)
+    public ResponseProtocolServer(Logger newLogger, String newRespDir)
     {
-        
+        l=newLogger;
+        responseDir=newRespDir;
     }
     
     /**
