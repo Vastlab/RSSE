@@ -26,10 +26,11 @@ public class ResponseServer
     private Thread listenerThread;
     private String respDir;
     
-    public ResponseServer(int portToUse, String newRespDir)
+    public ResponseServer(int portToUse, String newRespDir, Logger newLogger)
     {
         serverSocketPort=portToUse;
         respDir=newRespDir;
+        l=newLogger;
     }
     
     public void startServer()
@@ -47,6 +48,12 @@ public class ResponseServer
     public synchronized void stopServer()
     {
         l.logMsg(RESPSERVER_TAG, "Stopping server thread...");
+        
+        if(listenerThread==null)
+        {
+            return;
+        }
+        
         listenerThread.interrupt();
         
         try

@@ -26,11 +26,12 @@ public class SnippetServer
     private ClientDB db;
     private ArrayList<Experiment> experimentList;
     
-    public SnippetServer(int portToUse, ClientDB newDb, ArrayList<Experiment> newExpList)
+    public SnippetServer(int portToUse, ClientDB newDb, ArrayList<Experiment> newExpList, Logger newLogger)
     {
         serverSocketPort=portToUse;
         db=newDb;
         experimentList=newExpList;
+        l=newLogger;
     }
     
     public void changeExperimentList(ArrayList<Experiment> newExpList)
@@ -53,6 +54,12 @@ public class SnippetServer
     public synchronized void stopServer()
     {
         l.logMsg(RESPSERVER_TAG, "Stopping server thread...");
+        
+        if(listenerThread==null)
+        {
+            return;
+        }
+        
         listenerThread.interrupt();
         
         try

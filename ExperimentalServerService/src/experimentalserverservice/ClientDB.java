@@ -16,8 +16,11 @@
 
 package experimentalserverservice;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.Random;
+import java.util.Scanner;
 
 /**
  *
@@ -131,6 +134,21 @@ public class ClientDB
         if(o!=null&&root!=null)
         {
             rcsvDump(o, root);
+        }
+    }
+    
+    public void restore(File f) throws FileNotFoundException
+    {
+        String temp;
+        Scanner s;
+        
+        s=new Scanner(f);
+        
+        while(s.hasNextLine())
+        {
+            temp=s.nextLine();
+            
+            internalAdd(new ClientState(temp), root);
         }
     }
     

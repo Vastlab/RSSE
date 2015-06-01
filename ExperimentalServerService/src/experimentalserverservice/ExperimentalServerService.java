@@ -9,6 +9,7 @@ package experimentalserverservice;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -19,6 +20,8 @@ import java.util.Scanner;
  */
 public class ExperimentalServerService
 {
+    private static final String ESS_TAG="ExperimentalServerService";
+    private static final long DB_SAVE_INTERVAL=10000; //This should work for now.
     private static final String NAME="java -jar ESS.jar";
     private static boolean loadConfig=true;
     private static String altConfigFile=null;
@@ -29,6 +32,8 @@ public class ExperimentalServerService
     public static ClientDB db=null;
     public static ClientDBSaver saver=null;
     public static File dbSnapshotFile=null;
+    public static File experimentFile=null;
+    public static ArrayList<Experiment> experimentList;
     
     public static void printHelp()
     {
@@ -39,6 +44,41 @@ public class ExperimentalServerService
         System.out.println("\t--defconfig\tWrites default configuration to ./ess.conf");
         System.out.println("\t--defaults\tIgnores the configuration file and uses defaults");
         System.out.println("\t--useconf [file]\tUses the specified configuration file rather than the default.");
+    }
+    
+    public static void loadDb(File f)
+    {
+        if(f.exists())
+        {
+            db=new ClientDB(false);
+            
+            try
+            {
+                db.restore(f);
+            } catch(FileNotFoundException e)
+            {
+                //This really should never happen.
+            }
+        }
+        
+        else
+        {
+            db=new ClientDB(true);
+        }
+    }
+    
+    public static void testSnippetProtocol()
+    {
+        SnippetProtocolClient c=new SnippetProtocolClient(l);
+        
+        ArrayList<String> expList=c.getExperimentList("localhost", Settings.nuggetServerPort, 0);
+        
+        for(String s:expList)
+        {
+            System.out.println(s);
+        }
+        
+        System.exit(5);
     }
     
     public static void interpretArgs(String[] args)
@@ -62,13 +102,13 @@ public class ExperimentalServerService
             {
                 if(Settings.generateSettingsFile(new File("./ess.conf")))
                 {
-                    System.out.println("Default config written to ./ess.conf");
+                    l.logMsg(ESS_TAG, "Default config written to ./ess.conf");
                     System.exit(0);
                 }
                 
                 else
                 {
-                    System.err.println("ERROR: Unable to write default configuration file!");
+                    l.logErr(ESS_TAG, "ERROR: Unable to write default configuration file!");
                     System.exit(1);
                 }
             }
@@ -82,7 +122,7 @@ public class ExperimentalServerService
             {
                 if(args.length<=(i+1)) //Check if the next value would go out of bounds.
                 {
-                    System.err.println("ERROR: Configuration file not specified!");
+                    l.logErr(ESS_TAG, "ERROR: Configuration file not specified!");
                     System.exit(1);
                 }
                 
@@ -90,6 +130,11 @@ public class ExperimentalServerService
                 {
                     altConfigFile=args[i+1];
                 }
+            }
+            
+            else if(args[i].equals("--testSnippetProtocol"))
+            {
+                testSnippetProtocol();
             }
         }
     }
@@ -100,6 +145,7 @@ public class ExperimentalServerService
     public static void main(String[] args) throws FileNotFoundException
     {
         File settingsFile;
+        Parser p;
         
         l=new Logger();
         Runtime.getRuntime().addShutdownHook(new Thread(new ShutdownRunnable()));
@@ -110,12 +156,12 @@ public class ExperimentalServerService
         {
             if(Settings.readSettingsFile(new File(altConfigFile)))
             {
-                System.out.println("Read configuration from "+altConfigFile);
+                l.logMsg(ESS_TAG,"Read configuration from "+altConfigFile);
             }
             
             else
             {
-                System.err.println("Specified configuration file doesn't exist!");
+                l.logErr(ESS_TAG,"Specified configuration file doesn't exist!");
                 System.exit(1);
             }
         }
@@ -133,7 +179,7 @@ public class ExperimentalServerService
             
             if(!settingsFile.exists())
             {
-                System.err.println("Couldn't read either default or local settings file!");
+                l.logErr(ESS_TAG, "Couldn't read either default or local settings file!");
                 System.exit(1);
             }
             
@@ -141,22 +187,52 @@ public class ExperimentalServerService
             {
                 if(Settings.readSettingsFile(settingsFile))
                 {
-                    System.out.println("Read configuration from "+altConfigFile);
+                    l.logMsg(ESS_TAG, "Read configuration from "+altConfigFile);
                 }
                 
                 else
                 {
-                    System.err.println("No settings file can be found! Please run "+NAME+" --genconfig");
+                    l.logErr(ESS_TAG, "No settings file can be found! Please run "+NAME+" --genconfig");
                 }
             }
         }
         
-        respSrv=new ResponseServer(Settings.responseServerPort, Settings.respDir);
+        respSrv=new ResponseServer(Settings.responseServerPort, Settings.respDir, l);
+        experimentFile=new File(Settings.experimentFile);
+        p=new Parser(l);
         
+        experimentList=p.parseExperimentFile(experimentFile);
         
+        if(experimentList.size()==0)
+        {
+            l.logErr(ESS_TAG, "No experiments defined in experiment list!");
+            System.exit(1);
+        }
+        
+        dbSnapshotFile=new File(Settings.dbDir+"/snapshot.file");
+        loadDb(dbSnapshotFile);
+        snippetSrv=new SnippetServer(Settings.nuggetServerPort, db, experimentList, l);
+        
+        saver=new ClientDBSaver(db, dbSnapshotFile, l, DB_SAVE_INTERVAL);
+        
+        //Now that everything is ready, start all services:
+        saver.start();
+        respSrv.startServer();
+        snippetSrv.startServer();
+        
+        //In the future, this portion will start a management console.
+        l.logMsg(ESS_TAG, "Ready. Type \"stop\" to stop the server.");
+        
+        Scanner userScanner=new Scanner(System.in);
+        
+        while(true)
+        {
+            if(userScanner.nextLine().equals("stop"))
+            {
+                System.exit(0);
+            }
+        }
     }
-    
-    private static final String ESS_TAG="ExperimentalServerService";
     
     //This runnable cleanly stops all threads and closes all connections.
     private static class ShutdownRunnable implements Runnable
@@ -188,6 +264,16 @@ public class ExperimentalServerService
                 
                 if(dbSnapshotFile!=null)
                 {
+                    if(!dbSnapshotFile.exists())
+                    {
+                        try
+                        {
+                            dbSnapshotFile.createNewFile();
+                        } catch(IOException e)
+                        {
+                        }
+                    }
+                    
                     try
                     {
                         PrintWriter outWriter=new PrintWriter(dbSnapshotFile);

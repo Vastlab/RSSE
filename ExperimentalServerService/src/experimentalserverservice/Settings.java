@@ -116,9 +116,7 @@ public class Settings
         PrintWriter out;
         
         if(!f.exists())
-        {
-            f.mkdirs();
-            
+        {   
             try
             {
                 f.createNewFile();
@@ -162,7 +160,6 @@ public class Settings
         
         System.out.print("Please enter a configuration filename: ");
         outFile=new File(userScanner.nextLine());
-        outFile.mkdirs();
         
         try
         {
@@ -178,8 +175,6 @@ public class Settings
             System.out.print("Enter a new filename or ^C to exit: ");
             
             outFile=new File(userScanner.nextLine());
-            
-            outFile.mkdirs();
         
             try
             {

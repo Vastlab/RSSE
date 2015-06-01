@@ -8,6 +8,7 @@ package experimentalserverservice;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.PrintWriter;
 
 /**
@@ -46,6 +47,7 @@ public class ClientDBSaver
         private static final String DBSAVER_TAG="DBSaver";
         public void save()
         {
+            l.logMsg(DBSAVER_TAG, "Saving "+internalFile);
             if(internalFile.exists())
             {
                 try
@@ -58,6 +60,17 @@ public class ClientDBSaver
                 } catch(FileNotFoundException e)
                 {
                     l.logErr(DBSAVER_TAG, "Couldn't save database to: "+internalFile);
+                }
+            }
+            
+            else
+            {
+                try
+                {
+                    internalFile.createNewFile();
+                } catch(IOException e)
+                {
+                    
                 }
             }
         }
