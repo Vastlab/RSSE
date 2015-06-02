@@ -88,10 +88,11 @@ public class Parser
                     {
                         try
                         {
-                            e.resPort=Integer.parseInt(m.getNodeValue());
+                            e.resPort=Integer.parseInt(m.getTextContent());
                         } catch(NumberFormatException exc)
                         {
-                            l.logErr(PARSER_TAG, "Error in response port tag! Not a valid integer.");
+                            l.logErr(PARSER_TAG, "Error in response port tag! Not a valid integer."+m.getTextContent());
+                            System.out.println("Thing: "+m.getTextContent());
                         }
                         
                     }
@@ -292,7 +293,6 @@ public class Parser
             //Get all of the experiments in the file:
             NodeList list=doc.getElementsByTagName("nugget");//doc.getChildNodes();//doc.getElementsByTagName("nugget");
             //list=list.item(0).getChildNodes();
-            System.out.println(list.getLength());
             
             for(int i=0;i<list.getLength();i++)
             {
@@ -302,9 +302,14 @@ public class Parser
                 
                 for(int j=0;j<experimentContents.getLength();j++)
                 {
-                    Node m=list.item(j);
+                    Node m=experimentContents.item(j);
+                    
+                    if(m==null)
+                    {
+                        break;
+                    }
                 
-                    if(m.getNodeName().equals("url")||m.getNodeName().equals("title"))
+                    else if(m.getNodeName().equals("url")||m.getNodeName().equals("title"))
                     {
                         returnList.add(n.getTextContent());
                     }
@@ -338,7 +343,7 @@ public class Parser
             
             //Get all of the experiments in the file:
             NodeList list=doc.getChildNodes();//doc.getElementsByTagName("nugget");
-            list=list.item(0).getChildNodes();
+            //list=list.item(0).getChildNodes();
             System.out.println(list.getLength());
             
             for(int i=0;i<list.getLength();i++)
@@ -349,7 +354,7 @@ public class Parser
                 
                 for(int j=0;j<experimentContents.getLength();j++)
                 {
-                    Node m=list.item(j);
+                    Node m=experimentContents.item(j);
                 
                     if(m.getNodeName().equals("id"))
                     {

@@ -94,7 +94,7 @@ public class SnippetProtocolClient
      * @param id
      * @return 
      */
-    public ArrayList<String> getExperimentList(String serverName, int port, long id)
+    public ArrayList<String> getExperimentList(String serverName, int port)//, long id)
     {
         String expListNugget;
         PrintWriter out;
@@ -189,7 +189,9 @@ public class SnippetProtocolClient
             in=new BufferedReader(new InputStreamReader(s.getInputStream()));
             
             out.println("REGISTER");
+            System.out.println(expName);
             out.println(expName);
+            out.println("end");
             
             //Read the info nugget:
             nugget=readAllXML(in);

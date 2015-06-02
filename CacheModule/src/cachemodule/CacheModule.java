@@ -65,10 +65,13 @@ public class CacheModule
         
         server.stopServer();*/
         
-        manageSrvr=new ManagementServer(9002, true);
+        manageSrvr=new ManagementServer(9000, true);
         manageSrvr.start();
         
-        CMTerminal t=new CMTerminal();
+        cacheSrvr=new CacheRequestServer(CacheModule.cfg, database, l);
+        cacheSrvr.startServer();
+        
+        CMTerminal t=new CMTerminal("localhost");
         
         t.runInterpreter();
     }

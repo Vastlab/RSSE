@@ -120,7 +120,15 @@ public class ClientDB
         
         if(client==null) //Add it.
         {
-             internalAdd(s, root);
+            if(root==null)
+            {
+                root=new ClientStateNode(null, null, s);
+            }
+            
+            else
+            {
+                internalAdd(s, root);
+            }
         }
         
         else //Edit it.

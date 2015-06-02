@@ -28,6 +28,7 @@ public class ResponseServer
     
     public ResponseServer(int portToUse, String newRespDir, Logger newLogger)
     {
+        System.out.println(portToUse);
         serverSocketPort=portToUse;
         respDir=newRespDir;
         l=newLogger;

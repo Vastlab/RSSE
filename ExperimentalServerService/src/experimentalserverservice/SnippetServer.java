@@ -18,7 +18,7 @@ import java.util.ArrayList;
  */
 public class SnippetServer
 {
-    private static final String RESPSERVER_TAG="ResponseServer";
+    private static final String SNIPPET_TAG="SnippetServer";
     private ServerSocket sock;
     private Logger l;
     private int serverSocketPort;
@@ -29,6 +29,7 @@ public class SnippetServer
     public SnippetServer(int portToUse, ClientDB newDb, ArrayList<Experiment> newExpList, Logger newLogger)
     {
         serverSocketPort=portToUse;
+        System.out.println(serverSocketPort);
         db=newDb;
         experimentList=newExpList;
         l=newLogger;
@@ -41,7 +42,7 @@ public class SnippetServer
     
     public void startServer()
     {
-        l.logMsg(RESPSERVER_TAG, "Starting server thread...");
+        l.logMsg(SNIPPET_TAG, "Starting server thread...");
         if(listenerThread!=null)
         {
             stopServer();
@@ -53,7 +54,7 @@ public class SnippetServer
     
     public synchronized void stopServer()
     {
-        l.logMsg(RESPSERVER_TAG, "Stopping server thread...");
+        l.logMsg(SNIPPET_TAG, "Stopping server thread...");
         
         if(listenerThread==null)
         {
@@ -87,44 +88,40 @@ public class SnippetServer
             try
             {
                 sock=new ServerSocket(serverSocketPort);
-                
-                if(sock!=null)
+                while(true)
                 {
-                    while(true)
+                    try
                     {
+                        System.out.println("Accepting snippet connection...");
+                        Socket in=sock.accept();
+                        System.out.println("Connection accepted");
+                        new Thread(new SocketConnectionRunnable(in)).start();
+                    } catch(IOException e)
+                    {
+                        l.logMsg(SNIPPET_TAG, "Socket closed. Stopping listener thread...");
+                        return;
+                    }
+                    try
+                    {
+                        Thread.sleep(10);
+                        l.logMsg(SNIPPET_TAG, "Listener thread interrupted. Stopping...");
+                    } catch(InterruptedException e)
+                    {
+                        //Break the thread:
                         try
                         {
-                            System.out.println("Accepting connection...");
-                            Socket in=sock.accept();
-                            System.out.println("Connection accepted");
-                            new Thread(new SocketConnectionRunnable(in)).start();
-                        } catch(IOException e)
+                            sock.close();
+                        } catch(IOException ex)
                         {
-                            l.logMsg(RESPSERVER_TAG, "Socket closed. Stopping listener thread...");
-                            return;
+                            //Does it seriously matter if there was an exception here?
                         }
-                        try
-                        {
-                            Thread.sleep(10);
-                            l.logMsg(RESPSERVER_TAG, "Listener thread interrupted. Stopping...");
-                        } catch(InterruptedException e)
-                        {
-                            //Break the thread:
-                            try
-                            {
-                                sock.close();
-                            } catch(IOException ex)
-                            {
-                                //Does it seriously matter if there was an exception here?
-                            }
 
-                            return;
-                        }
+                        return;
                     }
                 }
             } catch(IOException e)
             {
-                l.logErr(RESPSERVER_TAG, "IOException when trying to bind port "+serverSocketPort);
+                l.logErr(SNIPPET_TAG, "IOException when trying to bind port "+serverSocketPort);
             }
         }
     }
@@ -160,7 +157,7 @@ public class SnippetServer
                 in.close();
             } catch(IOException e)
             {
-                l.logErr(RESPSERVER_TAG, "Got IOException when collecting response!");
+                l.logErr(SNIPPET_TAG, "Got IOException when collecting response!");
             }
         }
     }

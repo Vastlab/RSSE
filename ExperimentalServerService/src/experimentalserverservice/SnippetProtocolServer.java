@@ -125,6 +125,7 @@ public class SnippetProtocolServer
         
         //First, determine what the client wants:
         buffer=in.readLine();
+        System.out.println("Buffer="+buffer);
         
         //Get it an ID.
         if(buffer.equals("REGISTER"))
@@ -137,7 +138,7 @@ public class SnippetProtocolServer
             //Check if the client sent along an experiment name:
             buffer=in.readLine();
             
-            if(!buffer.equals("end"))
+            if(!buffer.equals("END"))
             {
                 newState.expName=buffer;
                 
@@ -152,6 +153,7 @@ public class SnippetProtocolServer
             
             //Now print out the corresponding nugget:
             out.println(generateRegistrationNugget(newId));
+            db.updateClient(newState);
         }
         
         else if(buffer.equals("UNREGISTER"))
@@ -167,7 +169,7 @@ public class SnippetProtocolServer
         
         else if(buffer.equals("LIST"))
         {
-            in.readLine(); //Get rid of "END"
+            //in.readLine(); //Get rid of "END"
             out.println(generateExperimentListNugget());
         }
         
