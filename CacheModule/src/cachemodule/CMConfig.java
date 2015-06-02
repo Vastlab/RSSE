@@ -22,8 +22,8 @@ public class CMConfig
     private String saveFreq;
     private int configVersion;
     
-    private static final String DEFAULT_STORAGE_DIR="/var/rsse/cache/storage";
-    private static final String DEFAULT_CONFIG_DIR="/var/rsse/cache";
+    private static final String DEFAULT_STORAGE_DIR="/var/rsse/cache/storage/";
+    private static final String DEFAULT_CONFIG_DIR="/var/rsse/cache/";
     private static final String DEFAULT_SERVER_PORT="9001";
     private static final String DEFAULT_SAVE_FREQUENCY="60";
     

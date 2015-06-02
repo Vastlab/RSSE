@@ -32,6 +32,15 @@ public class ClientState
         curDataIndex=Integer.parseInt(strScanner.next());
     }
     
+    public ClientState(String s, String newExpName)
+    {
+        Scanner strScanner=new Scanner(s);
+        
+        clientId=Long.parseLong(strScanner.next());
+        curDataIndex=Integer.parseInt(strScanner.next());
+        expName=newExpName;
+    }
+    
     @Override
     public String toString()
     {

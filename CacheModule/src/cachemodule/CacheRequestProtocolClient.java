@@ -194,6 +194,13 @@ public class CacheRequestProtocolClient
             
             respCache=r.readLine();
             
+            if(respCache==null)
+            {
+                l.logErr(CACHE_REQUEST_PROTOCOL_CLIENT_TAG, "Server unexpectedly closed connection.");
+                closeAll(i, o, pw, r, s);
+                return;
+            }
+            
             if(!respCache.equalsIgnoreCase("OK"))
             {
                 Scanner newScan=new Scanner(respCache);
@@ -238,7 +245,7 @@ public class CacheRequestProtocolClient
             outWriter.println("FETCH BINARY");
             
             //Get the remote server's response (it can only be OK for commands given)
-            r.readLine();
+            System.out.println(r.readLine());
             
             outWriter.println("URL");
             outWriter.println(url);

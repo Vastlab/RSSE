@@ -222,6 +222,7 @@ public class CacheRequestProtocolClient
     {
         try
         {
+            //s=new Socket(localAddress, portUsed);
             long fSize;
             String respCache;
             File f, diskTestFile;

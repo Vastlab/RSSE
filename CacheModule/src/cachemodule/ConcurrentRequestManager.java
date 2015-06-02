@@ -8,31 +8,60 @@
 
 package cachemodule;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author mgohde
  */
 public class ConcurrentRequestManager
 {
-    private Database d;
+    //private Database d; //NOTE: This database is going to be unused for this purpose until removal is sorted out.
+    private ArrayList<String> newD;
     
     public ConcurrentRequestManager()
     {
-        d=new Database();
+        //d=new Database();
+        newD=new ArrayList<String>();
     }
     
     public synchronized void addFileFetch(String urlBeingFetched)
     {
-        d.add(new CacheNode(null, urlBeingFetched));
+        //d.add(new CacheNode(null, urlBeingFetched));
+        newD.add(urlBeingFetched);
     }
     
     public synchronized boolean fileBeingFetched(String url)
     {
-        return d.find(url)!=null;
+        int i;
+        
+        for(i=0;i<newD.size();i++)
+        {
+            if(newD.get(i).equals(url))
+            {
+                return true;
+            }
+        }
+        
+        return false;
+        
+        //return d.find(url)!=null;
     }
     
     public synchronized boolean finishFileFetch(String url)
     {
-        return d.remove(url);
+        int i;
+        
+        for(i=0;i<newD.size();i++)
+        {
+            if(newD.get(i).equals(url))
+            {
+                newD.remove(i);
+                return true;
+            }
+        }
+        
+        return false;
+        //return d.remove(url);
     }
 }

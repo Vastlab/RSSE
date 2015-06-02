@@ -147,7 +147,7 @@ public class ClientDB
     
     public void restore(File f) throws FileNotFoundException
     {
-        String temp;
+        String temp, temp1;
         Scanner s;
         
         s=new Scanner(f);
@@ -155,15 +155,23 @@ public class ClientDB
         while(s.hasNextLine())
         {
             temp=s.nextLine();
+            temp1=s.nextLine();
             
-            internalAdd(new ClientState(temp), root);
+            internalAdd(new ClientState(temp, temp1), root);
         }
     }
     
     private void rcsvDump(PrintWriter o, ClientStateNode curNode)
     {
         //This is internally just going to be a recursive traversal with the current node first.
-        o.println(curNode.s.toString());
+        
+        if(curNode!=null)
+        {
+            o.println(curNode.s.toString());
+            o.println(curNode.s.expName);
+            rcsvDump(o, curNode.left);
+            rcsvDump(o, curNode.right);
+        }
     }
     
     private void rcsvAdd(ClientStateNode curNode)

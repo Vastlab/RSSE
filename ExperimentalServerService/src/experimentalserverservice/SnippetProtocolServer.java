@@ -140,6 +140,7 @@ public class SnippetProtocolServer
             
             if(!buffer.equals("END"))
             {
+                System.out.println("[SnippetProtocolServer]\tClient "+newId+" registered with experiment "+buffer);
                 newState.expName=buffer;
                 
                 //Remove the end:

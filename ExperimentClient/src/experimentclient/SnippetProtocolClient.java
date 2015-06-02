@@ -43,7 +43,7 @@ public class SnippetProtocolClient
         do
         {
             temp=r.readLine();
-            s+=temp;
+            s+=(temp+'\n');
         } while(!temp.equals("</nugget>"));
         
         return s;
@@ -133,6 +133,9 @@ public class SnippetProtocolClient
     
     /**
      * Connects to an ESS and get the full compliment of URLs defined in an experiment.
+     * @param serverName the name of the server to connect to
+     * @param port the port to connect to
+     * @param id the id of the client
      * @return 
      */
     public ArrayList<String> getFullSet(String serverName, int port, long id)

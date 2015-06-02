@@ -21,6 +21,13 @@ public class CacheModule
     public static CacheRequestServer cacheSrvr;
     public static ManagementServer manageSrvr;
     
+    public static void printHelp()
+    {
+        System.out.println("Usage: java -jar CacheModule.jar [args]");
+        System.out.println("Start or manage the RSSE Caching Service.");
+        System.exit(0);
+    }
+    
     public static void interpretArgs(String args[])
     {
         for(String s:args)
@@ -29,7 +36,26 @@ public class CacheModule
             {
                 System.out.println("Generating configuration file...");
                 cfg=new CMConfig();
-                cfg.saveSettings(new File("/home/mgohde/rsse/cm.conf"));
+                cfg.saveSettings(new File("./cm.conf"));
+                System.exit(0);
+            }
+            
+            else if(s.equals("-h")||s.equals("--help"))
+            {
+                
+            }
+            
+            else if(s.equals("-t")||s.equals("--terminal"))
+            {
+                CMTerminal t=new CMTerminal();
+                t.runInterpreter();
+                
+                System.exit(0);
+            }
+            
+            else if(s.equals("--headless"))
+            {
+                //Shouldn't matter yet.
             }
         }
     }
@@ -65,11 +91,11 @@ public class CacheModule
         
         server.stopServer();*/
         
-        manageSrvr=new ManagementServer(9000, true);
+        manageSrvr=new ManagementServer(9998, true);
         manageSrvr.start();
         
         cacheSrvr=new CacheRequestServer(CacheModule.cfg, database, l);
-        cacheSrvr.startServer();
+        //cacheSrvr.startServer();
         
         CMTerminal t=new CMTerminal("localhost");
         

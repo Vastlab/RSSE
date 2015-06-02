@@ -33,7 +33,7 @@ public class ExperimentClient
     private static int serverPort=-1;
     private static int connectionType=0;
     private static String dir=".";
-    private static int cacheModulePort=-1;
+    private static int cacheModulePort=9001;
     private static String cacheModuleName=null;
     private static boolean configSet=false;
     private static CacheRequestProtocolClient cacheClient;
@@ -372,6 +372,8 @@ public class ExperimentClient
             
             try
             {
+                cacheClient=new CacheRequestProtocolClient(cacheModuleName, cacheModulePort, l, dir);
+
                 f=cacheClient.connectExplicitRemote(de.getUrl());
                 System.out.println("File: "+f);
             } catch(CacheErrorException e)
@@ -397,11 +399,14 @@ public class ExperimentClient
         for(i=0;i<urlList.size();i++)
         {
             s=urlList.get(i);
+            System.out.println("Contents of s: "+s);
+            System.out.println("done");
             
             System.out.println("Fetching: "+s);
             
             try
             {
+                cacheClient=new CacheRequestProtocolClient(cacheModuleName, cacheModulePort, l, dir);
                 System.out.println("File: "+cacheClient.connectExplicitRemote(s));
             } catch(CacheErrorException e)
             {
@@ -512,7 +517,7 @@ public class ExperimentClient
         }
         
         //Get the clients ready:
-        cacheClient=new CacheRequestProtocolClient(cacheModuleName, cacheModulePort, l, dir);
+        //cacheClient=new CacheRequestProtocolClient(cacheModuleName, cacheModulePort, l, dir);
         snippetClient=new SnippetProtocolClient(l);
         //The response protocol client should be handled by its respective method.
         

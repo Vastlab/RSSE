@@ -146,7 +146,7 @@ public class CacheRequestProtocolServer
             }
             
             //Just try to cache the requested data.
-            else if(reqType.equalsIgnoreCase("CACHE"))
+            else if(reqType.equalsIgnoreCase("CACHE")) //NOTE: For some reason, this code unexpectedly terminates a connection if the file is already cached.
             {
                 sockOut.println("OK");
                 
@@ -177,6 +177,13 @@ public class CacheRequestProtocolServer
                         
                         reqMan.finishFileFetch(url);
                     } //Otherwise don't even bother.
+                    
+                    //This may fix the note noted above, though it appears to be a problem with the request manager more than anything.
+                    else
+                    {
+                        System.out.println("NOTE: Workaround used!");
+                        sockOut.println("OK");
+                    }
                 }
             }
             
@@ -338,6 +345,7 @@ public class CacheRequestProtocolServer
                         
                         //Now it should be handled:
                         n=availableDatabase.find(url);
+                        System.out.println(n);
                         
                         //Catch the above error condition and begin the binary transfer.
                         if(retV!=3)

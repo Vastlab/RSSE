@@ -137,9 +137,10 @@ public class CacheRequestServer
                     try
                     {
                         Thread.sleep(10);
-                        l.logMsg(CACHE_REQUEST_SERVER_TAG, "Listener thread interrupted. Stopping...");
+                        //l.logMsg(CACHE_REQUEST_SERVER_TAG, "Listener thread interrupted. Stopping...");
                     } catch(InterruptedException e)
                     {
+                        /*
                         //Break the thread:
                         try
                         {
@@ -148,8 +149,8 @@ public class CacheRequestServer
                         {
                             //Does it seriously matter if there was an exception here?
                         }
-                        
                         return;
+                        */
                     }
                 }
             }

@@ -104,7 +104,7 @@ public class ManagementServer
                 CacheRequestProtocolClient c=new CacheRequestProtocolClient("localhost", Integer.parseInt(CacheModule.cfg.getSetting(CMConfig.SETTING_SERVER_PORT)), l, ".");
                 
                 returnQuery.command="PRINT";
-                returnQuery.args.add(new String("Cached "+q.args.size()+" files."));
+                returnQuery.args.add("Cached "+q.args.size()+" files.");
                 for(String str:q.args)
                 {
                     try
@@ -217,6 +217,10 @@ public class ManagementServer
             {
                 try
                 {
+                    if(srvr==null)
+                    {
+                        System.err.println("srvr is indeed null!");
+                    }
                     Socket s=srvr.accept();
                     System.out.println("Got connection. Handling...");
                     handleConnection(s);

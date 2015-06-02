@@ -311,7 +311,7 @@ public class Parser
                 
                     else if(m.getNodeName().equals("url")||m.getNodeName().equals("title"))
                     {
-                        returnList.add(n.getTextContent());
+                        returnList.add(m.getTextContent());
                     }
                 }
             }
@@ -402,7 +402,7 @@ public class Parser
                 
                 for(int j=0;j<experimentContents.getLength();j++)
                 {
-                    Node m=list.item(j);
+                    Node m=experimentContents.item(j);
                 
                     if(m.getNodeName().equals("url"))
                     {

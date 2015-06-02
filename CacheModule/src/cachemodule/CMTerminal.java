@@ -51,14 +51,14 @@ public class CMTerminal
     public CMTerminal()
     {
         remoteHost=null;
-        remotePort=9000;
+        remotePort=9998;
         curPath=new File("."); //Just about every OS supports this path.
     }
     
     public CMTerminal(String host)
     {
         remoteHost=host;
-        remotePort=9000;
+        remotePort=9998;
         curPath=new File(".");
     }
     

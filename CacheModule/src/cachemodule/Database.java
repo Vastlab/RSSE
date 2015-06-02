@@ -21,9 +21,12 @@ public class Database
     public static final String DB_TAG="Database";
     private CacheNodeWrapper dbRoot;
     
+    private ArrayList<CacheNode> dbPatch; //This is occasionally used as a stopgap measure.
+    
     public Database()
     {
         dbRoot=null;
+        dbPatch=new ArrayList<CacheNode>();
     }
     
     /**
@@ -97,6 +100,12 @@ public class Database
             
             //Do some horrible recursion:
             rcsvTraverse(pw, dbRoot);
+            
+            /*
+            for(int i=0;i<dbPatch.size();i++)
+            {
+                pw.println(dbPatch.get(i).getOrigin()+" "+dbPatch.get(i).getFile().getAbsolutePath());
+            }*/
         } catch(IOException e)
         {
             CacheModule.l.logErr(DB_TAG, "Couldn't save data to "+dbSnapshot.getAbsolutePath());
@@ -220,6 +229,18 @@ public class Database
     {
         boolean deletedElementFound=false;
         
+        if(find(uri)!=null)
+        {
+            dbPatch.remove(find(uri));
+            return true;
+        }
+        
+        else
+        {
+            return false;
+        }
+        
+        /*
         //See if we can find the parent of the node with this URI:
         CacheNodeWrapper n=rcsvLowLevelFind(uri, dbRoot);
         CacheNodeWrapper parent, leftTree, rightTree;
@@ -258,7 +279,7 @@ public class Database
             }
         }
         
-        return deletedElementFound;
+        return deletedElementFound;*/
     }
     
     //This will be far trickier to implement since it involves a full traversal.
@@ -278,6 +299,17 @@ public class Database
          * later on.
          */
         return internalFindByOrigin(uri);
+        
+        /*
+        for(int i=0;i<dbPatch.size();i++)
+        {
+            if(dbPatch.get(i).getOrigin().equals(uri))
+            {
+                return dbPatch.get(i);
+            }
+        }
+        
+        return null;*/
     }
     
     /**
@@ -296,6 +328,8 @@ public class Database
     
     public boolean add(CacheNode newNode)
     {
+        //dbPatch.add(newNode);
+        //return true;
         return internalAdd(newNode);
     }
     
@@ -306,7 +340,7 @@ public class Database
         int cmpVal;
         
         cmpVal=newNode.getOrigin().compareTo(w.data.getOrigin());
-        if(cmpVal>0)
+        if(cmpVal<0) //Don't ask me how, but the cmpvals got reversed somewhere in here and find no longer works...
         {
             if(w.right==null)
             {
@@ -320,7 +354,7 @@ public class Database
             }
         }
         
-        else if(cmpVal<0)
+        else if(cmpVal>0)
         {
             if(w.left==null)
             {
@@ -411,7 +445,12 @@ public class Database
     {
         ArrayList<String> list=new ArrayList<String>();
         
-        rcsvTraverse(list, dbRoot);
+        //rcsvTraverse(list, dbRoot);
+        
+        for(int i=0;i<dbPatch.size();i++)
+        {
+            list.add(dbPatch.get(i).getOrigin());
+        }
         
         return list;
     }
