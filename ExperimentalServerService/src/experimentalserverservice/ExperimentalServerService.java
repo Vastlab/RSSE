@@ -54,6 +54,7 @@ public class ExperimentalServerService
             
             try
             {
+                System.out.println("Reading database from "+f);
                 db.restore(f);
             } catch(FileNotFoundException e)
             {

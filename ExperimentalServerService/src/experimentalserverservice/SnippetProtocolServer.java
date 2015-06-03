@@ -154,6 +154,7 @@ public class SnippetProtocolServer
             
             //Now print out the corresponding nugget:
             out.println(generateRegistrationNugget(newId));
+            
             db.updateClient(newState);
         }
         
@@ -218,14 +219,14 @@ public class SnippetProtocolServer
                 if(tempExp.urlList.size()>tempState.curDataIndex)
                 {
                     out.println(generateUrlNugget(tempExp.urlList.get(tempState.curDataIndex)));
+                    
+                    tempState.curDataIndex++;
+                    db.updateClient(tempState);
                 }
                 
                 else
                 {
                     out.println(generateEmptyMessage());
-                    
-                    tempState.curDataIndex++;
-                    db.updateClient(tempState);
                 }
             }
             

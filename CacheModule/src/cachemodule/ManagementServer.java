@@ -27,6 +27,7 @@ public class ManagementServer
     private CacheRequestServer s;
     private ServerSocket srvr;
     private Thread serverThread;
+    private File snapshotFile;
     
     public ManagementServer(int port, boolean keepConfig)
     {
@@ -39,6 +40,13 @@ public class ManagementServer
         if(!keepConfig)
         {
             CacheModule.cfg=new CMConfig();
+        }
+        
+        snapshotFile=new File(CacheModule.cfg.getSetting(CMConfig.SETTING_STORAGE_DIR)+"/db.snapshot");
+        
+        if(snapshotFile.exists())
+        {
+            db.loadDatabase(snapshotFile);
         }
         
         try
@@ -137,7 +145,7 @@ public class ManagementServer
                 
                 if(CacheModule.cacheSrvr==null)
                 {
-                    CacheModule.cacheSrvr=new CacheRequestServer(CacheModule.cfg, db, l);
+                    CacheModule.cacheSrvr=new CacheRequestServer(CacheModule.cfg, CacheModule.database, l, snapshotFile);
                 }
                 
                 CacheModule.cacheSrvr.startServer();
@@ -179,7 +187,7 @@ public class ManagementServer
                     if(CacheModule.cacheSrvr.isRunning())
                     {
                         CacheModule.cacheSrvr.stopServer();
-                        CacheModule.cacheSrvr=new CacheRequestServer(CacheModule.cfg, CacheModule.database, l);
+                        CacheModule.cacheSrvr=new CacheRequestServer(CacheModule.cfg, CacheModule.database, l, snapshotFile);
                     }
                 }
             }

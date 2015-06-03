@@ -18,7 +18,7 @@ public class CacheModule
     public static ConcurrentRequestManager reqMan;
     
     //Now for all of the servers:
-    public static CacheRequestServer cacheSrvr;
+    public static CacheRequestServer cacheSrvr=null;
     public static ManagementServer manageSrvr;
     
     public static void printHelp()
@@ -94,7 +94,7 @@ public class CacheModule
         manageSrvr=new ManagementServer(9998, true);
         manageSrvr.start();
         
-        cacheSrvr=new CacheRequestServer(CacheModule.cfg, database, l);
+        //cacheSrvr=new CacheRequestServer(CacheModule.cfg, database, l, new File(CacheModule.cfg.getSetting(CMConfig.SETTING_STORAGE_DIR)+"/db.snapshot"));
         //cacheSrvr.startServer();
         
         CMTerminal t=new CMTerminal("localhost");

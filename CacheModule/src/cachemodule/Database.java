@@ -10,6 +10,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 /**
@@ -72,7 +73,11 @@ public class Database
         } catch(FileNotFoundException e)
         {
             CacheModule.l.logErr(DB_TAG, "Couldn't load database from "+dbSnapshot.getAbsolutePath());
+        } catch(NoSuchElementException e)
+        {
+            CacheModule.l.logErr(DB_TAG, "Database snapshot file is blank! This can either be fine or very bad.");
         }
+       
         return false;
     }
     
@@ -106,6 +111,9 @@ public class Database
             {
                 pw.println(dbPatch.get(i).getOrigin()+" "+dbPatch.get(i).getFile().getAbsolutePath());
             }*/
+            
+            pw.flush();
+            pw.close();
         } catch(IOException e)
         {
             CacheModule.l.logErr(DB_TAG, "Couldn't save data to "+dbSnapshot.getAbsolutePath());
@@ -445,12 +453,13 @@ public class Database
     {
         ArrayList<String> list=new ArrayList<String>();
         
-        //rcsvTraverse(list, dbRoot);
+        rcsvTraverse(list, dbRoot);
         
+        /*
         for(int i=0;i<dbPatch.size();i++)
         {
-            list.add(dbPatch.get(i).getOrigin());
-        }
+            list.add("URL: "+dbPatch.get(i).getOrigin());
+        }*/
         
         return list;
     }

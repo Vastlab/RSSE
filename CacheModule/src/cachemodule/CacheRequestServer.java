@@ -27,7 +27,9 @@ public class CacheRequestServer
     private Logger l;
     private ArrayList<Thread> connections;
     
-    public CacheRequestServer(CMConfig cfg, Database newDb, Logger newLogger)
+    private File snapshotFile;
+    
+    public CacheRequestServer(CMConfig cfg, Database newDb, Logger newLogger, File dbSnapshotFile)
     {
         portNum=Integer.parseInt(cfg.getSetting(CMConfig.SETTING_SERVER_PORT));
         dnldDir=cfg.getSetting(CMConfig.SETTING_STORAGE_DIR);
@@ -35,8 +37,10 @@ public class CacheRequestServer
         m=new ConcurrentRequestManager();
         l=newLogger;
         connections=new ArrayList<Thread>();
-        snapshotThread=new Thread(new DatabaseSnapshotRunnable(Integer.parseInt(cfg.getSetting(CMConfig.SETTING_SAVE_FREQUENCY)), new File(dnldDir+"/snapshot.file")));
+        snapshotThread=new Thread(new DatabaseSnapshotRunnable(Integer.parseInt(cfg.getSetting(CMConfig.SETTING_SAVE_FREQUENCY))));
         snapshotThread.start();
+        
+        snapshotFile=dbSnapshotFile;
     }
     
     public boolean isRunning()
@@ -90,7 +94,7 @@ public class CacheRequestServer
             //Do nothing.
         }
         
-        snapshotThread=new Thread(new DatabaseSnapshotRunnable(newInterval, newFile));
+        snapshotThread=new Thread(new DatabaseSnapshotRunnable(newInterval));
         snapshotThread.start();
     }
     
@@ -191,9 +195,8 @@ public class CacheRequestServer
         //Use a tag for this here to distance this thread from the rest of the CacheRequestServer.
         private static final String DBSNAPSHOT_TAG="DatabaseSnapshotService"; 
         private int secPerSleep;
-        private File snapshotFile;
         
-        public DatabaseSnapshotRunnable(int newSecPerSleep, File newFile)
+        public DatabaseSnapshotRunnable(int newSecPerSleep)
         {
             secPerSleep=newSecPerSleep*1000; //Specified in seconds, but Thread.sleep uses ms.
         }
