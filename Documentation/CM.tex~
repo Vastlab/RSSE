@@ -1,0 +1,12 @@
+% This document encompasses the design and implementation 
+% of the cache module.
+
+\documentclass[twocolumn,letterpaper]{article}
+
+\begin{document}
+\title{The Cache Module}
+\author{Michael Gohde}
+\date{\today}
+\maketitle
+
+\section{Overview}
