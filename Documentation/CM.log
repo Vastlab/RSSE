@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2014.7.3)  5 JUN 2015 15:26
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2014.7.3)  5 JUN 2015 15:36
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -171,12 +171,12 @@ Underfull \hbox (badness 10000) in paragraph at lines 255--276
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 278--301
+Underfull \hbox (badness 10000) in paragraph at lines 278--302
 
  []
 
 
-Overfull \hbox (177.27199pt too wide) in paragraph at lines 278--301
+Overfull \hbox (61.10509pt too wide) in paragraph at lines 278--302
 [] 
  []
 
@@ -195,7 +195,7 @@ x12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb
 ></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/
 share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/share/t
 exlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb>
-Output written on CM.pdf (8 pages, 102666 bytes).
+Output written on CM.pdf (8 pages, 102703 bytes).
 PDF statistics:
  55 PDF objects out of 1000 (max. 8388607)
  38 compressed objects within 1 object stream
