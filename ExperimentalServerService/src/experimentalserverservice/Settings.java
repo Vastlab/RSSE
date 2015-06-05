@@ -18,7 +18,7 @@ import java.util.Scanner;
 public class Settings
 {
     public static String dbDir="/var/rsse/ess/db";
-    public static String configDir="/etc/rsse";
+    public static String configDir="/var/rsse/ess";
     public static String tmpDir="/var/rsse/ess/tmp";
     public static String respDir="/var/rsse/ess/resp";
     public static String experimentFile="/var/rsse/ess/experiment.xml"; //This will eventually become an experiment directory.
@@ -26,6 +26,22 @@ public class Settings
     //Define some constants for the ConfigurationManager:
     public static int nuggetServerPort=9002;
     public static int responseServerPort=9003;
+    
+    /**
+     * This changes the default settings so that the ESS shouldn't completely break on Windows.
+     * As such, it assumes that it is installed and running from (drive):\rsse\
+     */
+    public static void updateForOS()
+    {
+        if(ExperimentalServerService.runningOnWindows)
+        {
+            dbDir="./ess/db";
+            configDir="./ess";
+            tmpDir="./rsse/ess/tmp";
+            respDir="./ess/resp";
+            experimentFile="./ess/experiment.xml";
+        }
+    }
     
     /**
      * Loads settings.

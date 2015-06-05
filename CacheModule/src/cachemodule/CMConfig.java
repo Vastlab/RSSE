@@ -27,6 +27,9 @@ public class CMConfig
     private static final String DEFAULT_SERVER_PORT="9001";
     private static final String DEFAULT_SAVE_FREQUENCY="60";
     
+    private static final String DEFAULT_STORAGE_DIR_WINDOWS="/var/rsse/cache/storage/";
+    private static final String DEFAULT_CONFIG_DIR_WINDOWS="/var/rsse/cache/";
+    
     public static final int SETTING_STORAGE_DIR=1;
     public static final int SETTING_CONFIG_DIR=2;
     public static final int SETTING_SERVER_PORT=3;
@@ -155,8 +158,18 @@ public class CMConfig
     
     public CMConfig()
     {
-        storageDir=DEFAULT_STORAGE_DIR;
-        configDir=DEFAULT_CONFIG_DIR;
+        if(CacheModule.runningOnWindows)
+        {
+            storageDir=DEFAULT_STORAGE_DIR_WINDOWS;
+            configDir=DEFAULT_CONFIG_DIR_WINDOWS;
+        }
+        
+        else
+        {
+            storageDir=DEFAULT_STORAGE_DIR;
+            configDir=DEFAULT_CONFIG_DIR;
+        }
+        
         serverPort=DEFAULT_SERVER_PORT;
         saveFreq=DEFAULT_SAVE_FREQUENCY;
     }

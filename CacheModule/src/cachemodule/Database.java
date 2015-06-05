@@ -19,6 +19,7 @@ import java.util.Scanner;
  */
 public class Database
 {
+    public static final boolean DEBUG_MODE=true;
     public static final String DB_TAG="Database";
     private CacheNodeWrapper dbRoot;
     
@@ -39,6 +40,7 @@ public class Database
     public boolean loadDatabase(File dbSnapshot)
     {
         int ver;
+        
         /*
          * The file format used for the database snapshots in this version is as follows:
          *
@@ -95,6 +97,16 @@ public class Database
         rcsvTraverse(pw, w.right);
     }
     
+    private void debugSave(PrintWriter pw)
+    {
+        int i;
+        
+        for(i=0;i<dbPatch.size();i++)
+        {
+            pw.println(dbPatch.get(i).getOrigin()+" "+dbPatch.get(i).getFile().getAbsolutePath());
+        }
+    }
+    
     public synchronized boolean saveDatabase(File dbSnapshot)
     {
         try
@@ -103,14 +115,16 @@ public class Database
             
             pw.println("VER "+RSSEConstants.RSSE_VERSION_CODE);
             
-            //Do some horrible recursion:
-            rcsvTraverse(pw, dbRoot);
-            
-            /*
-            for(int i=0;i<dbPatch.size();i++)
+            if(DEBUG_MODE)
             {
-                pw.println(dbPatch.get(i).getOrigin()+" "+dbPatch.get(i).getFile().getAbsolutePath());
-            }*/
+                debugSave(pw);
+            }
+            
+            else
+            {
+                //Do some horrible recursion:
+                rcsvTraverse(pw, dbRoot);
+            }
             
             pw.flush();
             pw.close();
@@ -235,7 +249,20 @@ public class Database
     
     public synchronized boolean remove(String uri)
     {
+        int i;
         boolean deletedElementFound=false;
+        
+        if(DEBUG_MODE)
+        {
+            for(i=0;i<dbPatch.size();i++)
+            {
+                if(dbPatch.get(i).getOrigin().equals(uri))
+                {
+                    dbPatch.remove(i);
+                    return true;
+                }
+            }
+        }
         
         if(find(uri)!=null)
         {
@@ -293,6 +320,20 @@ public class Database
     //This will be far trickier to implement since it involves a full traversal.
     public synchronized boolean remove(File f)
     {
+        int i;
+        
+        if(DEBUG_MODE)
+        {
+            for(i=0;i<dbPatch.size();i++)
+            {
+                if(dbPatch.get(i).getFile().equals(f))
+                {
+                    dbPatch.remove(i);
+                    return true;
+                }
+            }
+        }
+        
         return false;
     }
     
@@ -303,6 +344,21 @@ public class Database
      */
     public CacheNode find(String uri)
     {
+        int i;
+        
+        if(DEBUG_MODE)
+        {
+            for(i=0;i<dbPatch.size();i++)
+            {
+                if(dbPatch.get(i).getOrigin().equals(uri))
+                {
+                    return dbPatch.get(i);
+                }
+            }
+            
+            return null;
+        }
+        
         /* This function should allow for changes to the way that the database is internally implemented
          * later on.
          */
@@ -328,6 +384,21 @@ public class Database
      */
     public CacheNode find(File f)
     {
+        int i;
+        
+        if(DEBUG_MODE) //Do a simple linear search through the DB (Ouch!)
+        {
+            for(i=0;i<dbPatch.size();i++)
+            {
+                if(dbPatch.get(i).getFile().equals(f))
+                {
+                    return dbPatch.get(i);
+                }
+            }
+            
+            return null;
+        }
+        
         /*
          * See the above function.
          */
@@ -336,8 +407,12 @@ public class Database
     
     public boolean add(CacheNode newNode)
     {
-        //dbPatch.add(newNode);
-        //return true;
+        if(DEBUG_MODE)
+        {
+            dbPatch.add(newNode);
+            return true;
+        }
+        
         return internalAdd(newNode);
     }
     
@@ -451,9 +526,21 @@ public class Database
      */
     public ArrayList<String> generateReport()
     {
+        int i;
         ArrayList<String> list=new ArrayList<String>();
         
-        rcsvTraverse(list, dbRoot);
+        if(DEBUG_MODE)
+        {
+            for(i=0;i<dbPatch.size();i++)
+            {
+                list.add(dbPatch.get(i).getOrigin());
+            }
+        }
+        
+        else
+        {
+            rcsvTraverse(list, dbRoot);
+        }
         
         /*
         for(int i=0;i<dbPatch.size();i++)

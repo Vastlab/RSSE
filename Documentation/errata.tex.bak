@@ -1,0 +1,33 @@
+%This document contains last-minute errata for each RSSE release.
+
+\documentclass[letterpaper]{article}
+
+\usepackage{scrextend}
+
+\begin{document}
+\title{Errata}
+\author{Michael Gohde}
+\date{\today}
+\maketitle
+
+\section{Overview}
+It's an unfortunate fact of life that our code doesn't always work the way we expect it to. This document contains a listing of all known errata in RSSE for each version. 
+
+\section{RSSE Alpha 1}
+This is the release forked on the RSSE repo shortly before CVPR 2015. It should be almost completely feature complete, however there are likely still a number of small problems that shouldn't hamper testing or otherwise understanding how the software is supposed to work. 
+
+Known possible problems:
+
+\subsection{Windows Compatibility}
+As this implementation of RSSE was developed on a *NIX environment, several of the mannerisms and defaults from that platform are prevalent in this project's documentation and behavior. While steps have been taken to ensure that this implementation of RSSE won't outright fail on Windows, there are likely several platform-specific problems that need to be ironed out. 
+
+In all documentation, please replace all high level directories (ie. ``var'', ``usr'', etc.) with the directory where you installed RSSE. On a typical Windows system, this may be ``C:{\@backslashchar}Program Files{\@backslashchar}rsse''. The Cache Module and Experimental Server Service have been modified so that the operating system is automatically detected and should therefore default to using the current working directory on Windows. If this detection fails, please file a bug report with your current Windows version and the output of the CheckOS utility in the project's root directory.
+
+\subsection{Posting Responses}
+Response posting from the Experiment Clint isn't exactly finished yet, though the server interface is present and implemented (though not yet bug checked).
+
+\subsection{Cache Module Database Snapshots}
+The Cache Module may not always save its database snapshots correctly after loading a databse. This is likely because of a bug in the file database, which can probably be rectified by setting ``DEBUG\_MODE'' to ``true'' in ``Database.java'' and recompiling. This option should be set to ``true'' by default in the Alpha 1 release.
+
+
+\end{document}

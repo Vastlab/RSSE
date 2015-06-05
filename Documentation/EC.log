@@ -1,9 +1,9 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2014.7.3)  5 JUN 2015 15:26
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2014.7.3)  5 JUN 2015 15:24
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
-**CM.tex
-(./CM.tex
+**EC.tex
+(./EC.tex
 LaTeX2e <2011/06/27>
 Babel <3.9h> and hyphenation patterns for 78 languages loaded.
 (/usr/share/texlive/texmf-dist/tex/latex/base/article.cls
@@ -45,8 +45,8 @@ Package: scrlfile 2013/12/19 v3.12 KOMA-Script package (loading files)
 Package scrlfile, 2013/12/19 v3.12 KOMA-Script package (loading files)
                   Copyright (C) Markus Kohm
 
-)))) (./CM.aux)
-\openout1 = `CM.aux'.
+)))) (./EC.aux)
+\openout1 = `EC.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 8.
 LaTeX Font Info:    ... okay on input line 8.
@@ -66,139 +66,42 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <8> on input line 12.
 LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <6> on input line 12.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <7> on input line 28.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <5> on input line 28.
 
-Underfull \hbox (badness 10000) in paragraph at lines 20--22
+Underfull \hbox (badness 10000) in paragraph at lines 25--63
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 23--29
-
+Overfull \hbox (83.09795pt too wide) in paragraph at lines 25--63
+[] 
  []
 
 [1
 
-{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
-Underfull \hbox (badness 10000) in paragraph at lines 52--54
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 55--56
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 58--59
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 61--63
-
- []
-
-[2]
-Underfull \hbox (badness 10000) in paragraph at lines 72--73
-
- []
-
-LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <7> on input line 78.
-LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <5> on input line 78.
-
-Underfull \hbox (badness 10000) in paragraph at lines 75--93
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 95--115
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 117--140
-
- []
-
-[3]
-Overfull \hbox (0.8061pt too wide) in paragraph at lines 145--158
-\OT1/cmr/m/n/10 This con-nec-tion type al-lows the client and server to au-to-m
-at-i-cally de-tect whether
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 145--158
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 160--178
-
- []
-
-[4]
-Underfull \hbox (badness 10000) in paragraph at lines 180--206
-
- []
-
-
-Overfull \hbox (5.35432pt too wide) in paragraph at lines 180--206
-[] 
- []
-
-
-Overfull \hbox (1.66733pt too wide) in paragraph at lines 211--212
-\OT1/cmr/m/n/10 Due to the multi-platform na-ture of Java, one sin-gle di-rec-t
-ory struc-ture shouldn't
- []
-
-[5]
-Overfull \hbox (1.33388pt too wide) in paragraph at lines 233--234
-[]\OT1/cmr/m/n/10 Create the fol-low-ing di-rec-to-ries: /var/rsse/cache, /var/
-rsse/cache/storage,
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 246--250
-
- []
-
-[6]
-Underfull \hbox (badness 10000) in paragraph at lines 255--276
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 278--301
-
- []
-
-
-Overfull \hbox (177.27199pt too wide) in paragraph at lines 278--301
-[] 
- []
-
-[7] [8] (./CM.aux) ) 
+{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] [2] [3] (./EC.aux) ) 
 Here is how much of TeX's memory you used:
- 762 strings out of 493304
- 11511 string characters out of 6139872
- 86081 words of memory out of 5000000
- 4277 multiletter control sequences out of 15000+600000
+ 761 strings out of 493304
+ 11495 string characters out of 6139872
+ 85081 words of memory out of 5000000
+ 4276 multiletter control sequences out of 15000+600000
  8241 words of font info for 29 fonts, out of 8000000 for 9000
  957 hyphenation exceptions out of 8191
- 35i,6n,23p,642b,189s stack positions out of 5000i,500n,10000p,200000b,80000s
-</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/
-cm/cmbx10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmb
-x12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb
-></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/
-share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/share/t
-exlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb>
-Output written on CM.pdf (8 pages, 102666 bytes).
+ 35i,6n,23p,443b,189s stack positions out of 5000i,500n,10000p,200000b,80000s
+</usr/
+share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/
+texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texliv
+e/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf
+-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/f
+onts/type1/public/amsfonts/cm/cmr17.pfb></usr/share/texlive/texmf-dist/fonts/ty
+pe1/public/amsfonts/cm/cmti10.pfb>
+Output written on EC.pdf (3 pages, 89907 bytes).
 PDF statistics:
- 55 PDF objects out of 1000 (max. 8388607)
- 38 compressed objects within 1 object stream
+ 38 PDF objects out of 1000 (max. 8388607)
+ 26 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  1 words of extra memory for PDF output out of 10000 (max. 10000000)
 

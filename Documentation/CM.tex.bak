@@ -14,7 +14,7 @@
 \section{Overview}
 The Cache Module provides caching and internet download services for one or more Experiment Clients. As such it requires only pure network code without any XML parsing or any other such features.
 
-The CM as implemented here consists of a highly threaded design as is typical of server software written in Java. There are three main threads of execution, namely the Management Server Thread, the Cache Request Server Thread, and the Database Saver Thread. Their names should be fairly self-explanatory, and each will be documented in the following sections.
+The CM as implemented here consists of a highly theaded design as is typical of server software written in Java. There are three main threads of execution, namely the Management Server Thread, the Cache Request Server Thread, and the Database Saver Thread. Their names should be fairly self-explanatory, and each will be documented in the following sections.
 
 \section{The Cache Database}
 The Cache Database is a shared object containing references to source URLs and were they are cached in the local filesystem. The interface that the Cache Database has with the rest of the program is intended to allow for different data structures to be used to store the database, as the default binary search tree may eventually be replaced with another storage solution if necessary. The database's file format should be considered implementation-dependent, as it is specific to how each implementer chooses to format the file. As RSSE is still in a very early development state, the CM has a very simple file format defined below:
@@ -47,7 +47,7 @@ In order to start itself, the CM undergoes the following procedure:
 \section{The Management Server Thread}
 The Management Server Thread enables users to remotely or locally manage their Cache Modules. It uses the Management Protocol to communicate and execute management transactions. This specific implementation of the Management Server enables the server to execute a small set of commands related to testing, starting, and stopping the Cache Request Server.
 
-During each connection, the Management Server is passed an object containing a command and one or more arguments. It then proceeds to execute the query passed and returns another object of the same type to represent any results or output relevant to the query.
+During each connection, the Management Server is passed an object containing a command and one or more arguments. It then proceeds to execute the query passed and returns another object of the same type to represent any results or output relevent to the query.
 
 Queries are transmitted over network streams as follows:
 \\
@@ -55,14 +55,14 @@ Queries are transmitted over network streams as follows:
 COMMAND arg1 arg2 arg3 \ldots\\
 \end{addmargin}
 
-Where ``COMMAND'' is any of the commands recognized by the Management Server. Each query is terminated with a newline (`{\@backslashchar}n') character, which makes the network transfers used by the Management Server very simple:\\
+Where ``COMMAND'' is any of the commands recognized by the Mangement Server. Each query is terminated with a newline (`{\@backslashchar}n') character, which makes the network transfers used by the Management Server very simple:\\
 
 \begin{addmargin}[1em]{2em}
 \textit{Client:} COMMAND arg1 arg2 arg3 \ldots\\
 \textit{Server:} RESPCMD arg1 arg2 arg3 \ldots\\
 \end{addmargin}
 
-Where ``Client:'' and ``Server:'' are not part of the stream sent. ``RESPCMD'' in this case can be any command understood by the client. At this time, the CMTerminal (the Management Protocol client) can understand the commands ``PRINT'' and ``PRINTERR'' in addition to any other commands used to connect to a server and start sending queries. 
+Where ``Client:'' and ``Server:'' are not part of the stream sent. ``RESPCMD'' in this case can be any command understood by the client. At this time, the CMTerminal (the Management Protocol client) can udnerstand the commands ``PRINT'' and ``PRINTERR'' in addition to any other commands used to connect to a server and start sending queries. 
 
 \section{The Cache Request Server Thread}
 The Cache Request Server is quite a bit more complex than the Management Server, as it has to deal with the possibility of adding and searching elements in the database as well as managing several different connection types. All connection types are listed in the following table, though several points should be clarified first.
@@ -114,7 +114,7 @@ http://example.server/thing & \\
 \end{tabular}
 
 \subsection{Fetch Request with Known Remote}
-This connection type allows the server to send a file over the connection rather than just a reference to that file on the current filesystem. It thus allows for connections to be made from remote machines. 
+This connection type allows the server to send a file over the conneciton rather than just a reference to that file on the current filesystem. It thus allows for connections to be made from remote machines. 
 \\
 \\
 \begin{tabular}{|l|l|}
@@ -141,7 +141,7 @@ OK \textit{or} ERR & \\
 \subsection{Fetch Request with Forced Binary Transfer}
 See previous subsection.
 
-\subsection{Fetch Request with Auto-detect}
+\subsection{Fetch Request with Autodetect}
 This connection type allows the client and server to automatically detect whether or not they are running on the same machine (ie. discern between Local and Remote) so that redundant files are not created. Once the connection type is detected and returned by the server, the client should then proceed to use the new connection type explicitly to connect to the server again. This feature isn't currently used by the Experiment Client, though it will be in future releases. 
 \\
 \\
@@ -208,10 +208,10 @@ During connections, errors may be thrown for a number of reasons. The error code
 The Database Saver thread saves the database at specified intervals to a snapshot file that can be loaded later on startup. 
 
 \section{Directory Structure}
-Due to the multi-platform nature of Java, one single directory structure shouldn't be provided. Implementations are individually free to put files where they see fit or where is appropriate for the given platform, however this implementation targeted at *NIX platforms installs itself in the following directories:
+Due to the multiplatform nature of Java, one single directory structure shouldn't be provided. Implementations are individually free to put files where they see fit or where is appropriate for the given platform, however this implementation targeted at *NIX platforms installs itself in the following directories:
 
 \subsection{/var/rsse}
-The general storage and configuration location for RSSE is in the /var/rsse directory on *NIX platforms. Within this, each component of RSSE may maintain its own subdirectory in order to store any files that should be logically separated from all of the other components.
+The general storage and configuration location for RSSE is in the /var/rsse directory on *NIX platoforms. Within this, each component of RSSE may maintain its own subdirectory in order to store any files that should be logically separated from all of the other components.
 
 \subsection{/usr/sbin} 
 The RSSE .jar files should all be placed in the /usr/sbin directory, while any loaders for RSSE (such as the one used in the sample installer script) should be placed anywhere else that is appropriate.
@@ -249,7 +249,7 @@ Start the Cache Module. You should be greeted with:\\
 If you see this prompt, then installation was likely successful. Enter the command ``startservice'' to start the caching server. When you have finished with the Cache Module, enter the command ``stopservice'' to stop the caching server.
 
 \section{Using the CMTerminal}
-By default or when running the cache module with the ``--terminal'' argument, you will be presented with a command line interface to the Management Server. This section will be broken into two subsections, one for the CMTerminal that appears by default and one for remote administration through the ``--terminal'' argument.
+By default or when running the cache module with the ``--terminal'' argument, you will be presented with a command line interface to the Mangement Server. This section will be broken into two subsections, one for the CMTerminal that appears by default and one for remote administration through the ``--terminal'' argument.
 
 \subsection{Default CMTerminal}
 By default, the Cache Module will launch a command line interpreter so that users can easily manage the CM's operation. This means that no commands need to be issued to connect the CMTerminal to its host, as it is already preconfigured to communicate with the local Cache Module. As such, very few commands should be used in this mode. They are listed in the following table:
@@ -302,7 +302,7 @@ ls & Lists the contents of the current working directory.\\
 \section{Known Bugs}
 \begin{enumerate}
    \item It appears that the Cache Request protocol can't currently handle the client sending an error at the end of a connection.
-   \item The auto-detect feature of the ``Fetch Request with Auto detect'' isn't yet able to accurately discern whether a client is operating on the same physical machine as the server. As such, it shouldn't be used yet.
+   \item The autodetect feature of the ``Fetch Request with Autodetect'' isn't yet able to accurately discern whether a client is operating on the same physical machine as the server. As such, it shouldn't be used yet.
 \end{enumerate}
 
 \end{document}

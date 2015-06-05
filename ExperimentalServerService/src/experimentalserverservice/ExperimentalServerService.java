@@ -20,12 +20,14 @@ import java.util.Scanner;
  */
 public class ExperimentalServerService
 {
+    
     private static final String ESS_TAG="ExperimentalServerService";
     private static final long DB_SAVE_INTERVAL=10000; //This should work for now.
-    private static final String NAME="java -jar ESS.jar";
+    private static final String NAME="java -jar ExperimentalServerService.jar";
     private static boolean loadConfig=true;
     private static String altConfigFile=null;
     
+    public static boolean runningOnWindows;
     public static Logger l=null;
     public static ResponseServer respSrv=null;
     public static SnippetServer snippetSrv=null;
@@ -34,6 +36,19 @@ public class ExperimentalServerService
     public static File dbSnapshotFile=null;
     public static File experimentFile=null;
     public static ArrayList<Experiment> experimentList;
+    
+    /**
+     * Check if this program is running on Windows so that it's a bit less user-hostile.
+     * @return 
+     */
+    public static boolean checkIfWindows()
+    {
+        String os;
+        
+        os=System.getProperty("os.name");
+        
+        return os.startsWith("Windows");
+    }
     
     public static void printHelp()
     {
@@ -147,6 +162,10 @@ public class ExperimentalServerService
     {
         File settingsFile;
         Parser p;
+        
+        //Check for OS before anything else:
+        runningOnWindows=checkIfWindows();
+        Settings.updateForOS();
         
         l=new Logger();
         Runtime.getRuntime().addShutdownHook(new Thread(new ShutdownRunnable()));

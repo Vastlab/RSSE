@@ -381,6 +381,11 @@ public class ExperimentClient
                 System.err.println("Error while caching data.");
             }
         }
+        
+        else
+        {
+            System.exit(1);
+        }
     }
     
     public static void connectAll()

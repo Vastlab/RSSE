@@ -12,6 +12,7 @@ import java.io.File;
  */
 public class CacheModule
 {
+    public static boolean runningOnWindows;
     public static Logger l;
     public static CMConfig cfg;
     public static Database database;
@@ -26,6 +27,19 @@ public class CacheModule
         System.out.println("Usage: java -jar CacheModule.jar [args]");
         System.out.println("Start or manage the RSSE Caching Service.");
         System.exit(0);
+    }
+    
+    /**
+     * Check if this program is running on Windows so that it's a bit less user-hostile.
+     * @return 
+     */
+    public static boolean checkIfWindows()
+    {
+        String os;
+        
+        os=System.getProperty("os.name");
+        
+        return os.startsWith("Windows");
     }
     
     public static void interpretArgs(String args[])
@@ -64,6 +78,8 @@ public class CacheModule
      */
     public static void main(String[] args)
     {
+        runningOnWindows=checkIfWindows();
+        
         l=new Logger();
         cfg=new CMConfig();
         database=new Database();
