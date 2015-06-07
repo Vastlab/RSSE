@@ -1,0 +1,121 @@
+% This is documentation for the Experimental SErver Service, which, aside from
+% the cache module, should be the most extensive and complex of the lot.
+% Please excuse the totally high quality of the writing in this document,
+% as late-night flights tend not to lend themselves well to writing overall.
+
+\documentclass[letterpaper]{article}
+
+\usepackage{scrextend}
+
+\begin{document}
+\title{The Experimental Server Service}
+\author{Michael Gohde}
+\date{\today}
+\maketitle
+
+\section{Overview}
+The Experimental Server Service is the fundamental core of RSSE. It parses XML files containing experiments and provides URLs and other such data to any clients that are able to connect to it. Due to the comparatively complex nature of its design, most components of the ESS will be documented here. 
+
+Please note that all network connections and file formats (aside from those used for configuration) should be regarded as standard within this implementation. As such, all otehr implementations of RSSE should follow the same such file formats and networking protocols to ensure maximum compatibility with a wide range of Experiment Clients.
+
+\section{The Experiment File}
+The first notable portion of the Experimental Server Service is entirely in the control of its users and managers. The \textit{Experiment File} is an XML file containing all information relevent to as many experiments as necessary for the given application. This file is currently read on the startup of the Experimental Server Service, however it would be beneficial to continuously re-parse this file in order to continuously provide clients with updates and other such information relevent to changes in experiments. 
+
+The Experiment File may be composed of the following tags, though they will be described and several examples will be given in the following subsections.
+\\
+\\
+\begin{tabular}{|l|l|}
+\hline
+\textbf{Tag} & \textbf{Description} \\
+\hline
+\hline
+rsse & The root tag for the entire file. \\
+\hline
+experiment & Tag used to denote an individual experiment. \\
+\hline
+data & Tag used to mark a section for data within an experiment. \\
+\hline
+url & Denotes an individual member of the dataset accessible by URL.\\
+\hline
+description & Human-readable description of what the experiment is about.\\
+\hline
+title & Human-readable title used by the ESS and clients to differentiate\\
+      & between experiments.\\
+\hline
+report & Flag used to set whether or not experiment clients may post\\ 
+       & responses.\\
+\hline
+resserver & The server that each client should post responses to. \\
+\hline
+resport & The port the client should use while posting responses.\\
+\hline
+\end{tabular}
+
+\subsection{rsse}
+The \textit{$<$rsse$>$} tag may have at most one attribute named \textit{``version''}. This attribute is a string literal containing the integer representation of the current version of RSSE that the file expects the ESS to adhere to. 
+\\
+\textit{Example:} $<$rsse version=``1''$>$\\
+
+\subsection{url}
+The \textit{$<$url$>$} tag may also accept attributes describing the URL's class and label if appropriate. These attributes are named, quite appropriately, ``class'' and ``label''. The following is an example of such a URL tag with both a class and a label:
+\\
+\textit{Example:} $<$url class="cls" label="1"$>$
+
+If the label in is set to the constant value ``-1000'', then it will be regarded by the Experimental Server Service as unlabeled. 
+
+\subsection{Example File}
+The following is a brief example file made to illustate the heirarchy of tags implemented for Experiment Files:
+\\
+\\
+$<$rsse version=``1''$>$
+\begin{addmargin}[1em]{2em}
+	 $<$experiment$>$
+     \begin{addmargin}[2em]{3em}
+          $<$data$>$
+          \begin{addmargin}[3em]{4em}
+               $<$url$>$testurl1$<$/url$>$\\
+               $<$url class=``test'' label=``1''$>$testurl2$<$/url$>$
+          \end{addmargin}
+          $<$/data$>$\\
+          $<$description$>$This is a test experiment.$<$/description$>$\\
+          $<$title$>$Title$<$/title$>$\\ 
+          $<$report$>$false$<$/report$>$\\
+          $<$resserver$>$addr$<$/resserver$>$\\
+          $<$resport$>$port$<$/resport$>$
+      \end{addmargin}
+      $<$/experiment$>$
+\end{addmargin}
+$<$/rsse$>$\\
+
+\section{XML Nuggets}
+Throughout the comments and related text within the Experimental Server Service itself, there are several references to ``XML Nuggets.'' The concept behind XML Nuggets is that RSSE servers can pass individual small snippets of XML generated from the greater experiment file instead of explicitly using its own network protocol for such purposes. 
+
+\subsection{Nuggets Sent by the Server}
+RSSE requires that servers be able to send nuggets containing URLs and other information necessary to define experiments.  
+
+The server can send any number of the following tags in each nugget:
+
+\begin{tabular}{|l|l|}
+\hline
+\textbf{Tag} & \textbf{Description}\\
+\hline
+\hline
+nugget & Root level tag for each nugget file.\\
+\hline
+title & Title of an experiment.\\
+\hline
+description & Description of the selected experiment. 
+\end{tabular}
+
+\subsection{Nuggets Sent by the Client}
+This section will cover all nuggets that are sent by the client but aren't related to responses.
+
+\subsection{Responses Sent by the Client}
+At the time of this writing, the ESS should be able to handle responses sent by clients, though this functionality has not yet been tested or implemented in the Client.
+
+Because this feature is not yet complete, it will not be documented here and any implementation in the ESS is subject to change. 
+
+\section{Installation and Usage}
+Installing the Experimental Server Service should be a fairly straightforward process. 
+
+\end{document}

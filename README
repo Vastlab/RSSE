@@ -1,1 +1,4 @@
-This is a readme!
+This is a reference implementation for RSSE written in Java.
+
+Please refer to the Documentation directory in order to get
+an overview of all of the components of RSSE.

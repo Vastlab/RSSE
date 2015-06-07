@@ -115,7 +115,7 @@ public class Parser
                                 
                                 if(dataNode.getAttributes().getNamedItem("label")!=null)
                                 {
-                                    de.setLabel(Integer.parseInt((dataNode.getAttributes().getNamedItem("class").getTextContent())));
+                                    de.setLabel(Integer.parseInt((dataNode.getAttributes().getNamedItem("label").getTextContent())));
                                 }
                                 
                                 de.setUrl(dataNode.getTextContent());
