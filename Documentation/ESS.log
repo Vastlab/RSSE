@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2015.6.5)  6 JUN 2015 20:41
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2015.6.5)  9 JUN 2015 12:07
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -48,71 +48,107 @@ Package scrlfile, 2013/12/19 v3.12 KOMA-Script package (loading files)
 )))) (./ESS.aux)
 \openout1 = `ESS.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 8.
-LaTeX Font Info:    ... okay on input line 8.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 8.
-LaTeX Font Info:    ... okay on input line 8.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 8.
-LaTeX Font Info:    ... okay on input line 8.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 8.
-LaTeX Font Info:    ... okay on input line 8.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 8.
-LaTeX Font Info:    ... okay on input line 8.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 8.
-LaTeX Font Info:    ... okay on input line 8.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 10.
+LaTeX Font Info:    ... okay on input line 10.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 10.
+LaTeX Font Info:    ... okay on input line 10.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 10.
+LaTeX Font Info:    ... okay on input line 10.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 10.
+LaTeX Font Info:    ... okay on input line 10.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 10.
+LaTeX Font Info:    ... okay on input line 10.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 10.
+LaTeX Font Info:    ... okay on input line 10.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <12> on input line 12.
+(Font)              <12> on input line 14.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <8> on input line 12.
+(Font)              <8> on input line 14.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <6> on input line 12.
+(Font)              <6> on input line 14.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <7> on input line 25.
+(Font)              <7> on input line 27.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <5> on input line 25.
+(Font)              <5> on input line 27.
 
-Underfull \hbox (badness 10000) in paragraph at lines 22--51
+Underfull \hbox (badness 10000) in paragraph at lines 24--53
 
  []
 
 
-Overfull \hbox (14.0562pt too wide) in paragraph at lines 22--51
+Overfull \hbox (14.0562pt too wide) in paragraph at lines 24--53
 [] 
  []
 
 [1
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
-Underfull \hbox (badness 10000) in paragraph at lines 53--56
+Underfull \hbox (badness 10000) in paragraph at lines 55--58
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 65--69
+Underfull \hbox (badness 10000) in paragraph at lines 67--71
 
  []
 
 
-Overfull \hbox (1.13956pt too wide) in paragraph at lines 74--76
+Overfull \hbox (1.13956pt too wide) in paragraph at lines 76--78
 \OML/cmm/m/it/10 <$\OT1/cmr/m/n/10 url class=``test'' label=``1''$\OML/cmm/m/it
 /10 >$\OT1/cmr/m/n/10 testurl2$\OML/cmm/m/it/10 <$\OT1/cmr/m/n/10 /url$\OML/cmm
 /m/it/10 >$ 
  []
 
 [2]
-Underfull \hbox (badness 10000) in paragraph at lines 86--87
+Underfull \hbox (badness 10000) in paragraph at lines 88--89
 
  []
 
-[3] (./ESS.aux) ) 
+
+Underfull \hbox (badness 10000) in paragraph at lines 128--128
+[]\OT1/cmr/m/n/10 An ex-per-i-ment
+ []
+
+
+Underfull \hbox (badness 2932) in paragraph at lines 128--129
+\OT1/cmr/m/n/10 nugget con-tain-ing in-for-ma-tion
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 134--134
+[]\OT1/cmr/m/n/10 An ex-per-i-ment
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 120--141
+
+ []
+
+
+Overfull \hbox (3.9803pt too wide) in paragraph at lines 120--141
+[] 
+ []
+
+[3]
+Underfull \hbox (badness 10000) in paragraph at lines 146--149
+
+ []
+
+[4]
+Overfull \hbox (2.27847pt too wide) in paragraph at lines 170--171
+\OT1/cmr/m/n/10 the doc-u-men-ta-tion pro-vided and then place it in ``/var/rss
+e/ess/experiment.xml'' 
+ []
+
+[5] (./ESS.aux) ) 
 Here is how much of TeX's memory you used:
  761 strings out of 495028
  11504 string characters out of 6181498
- 79794 words of memory out of 5000000
+ 81794 words of memory out of 5000000
  4027 multiletter control sequences out of 15000+600000
  8241 words of font info for 29 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 35i,6n,23p,545b,234s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 35i,8n,23p,545b,234s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/
 cmbx10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12
 .pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb><
@@ -120,10 +156,10 @@ cmbx10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12
 are/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/tex
 live/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/share/texlive/te
 xmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb>
-Output written on ESS.pdf (3 pages, 89361 bytes).
+Output written on ESS.pdf (5 pages, 104129 bytes).
 PDF statistics:
- 42 PDF objects out of 1000 (max. 8388607)
- 29 compressed objects within 1 object stream
+ 48 PDF objects out of 1000 (max. 8388607)
+ 33 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  1 words of extra memory for PDF output out of 10000 (max. 10000000)
 

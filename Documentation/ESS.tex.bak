@@ -1,4 +1,4 @@
-% This is documentation for the Experimental Server Service, which, aside from
+% This is documentation for the Experimental SErver Service, which, aside from
 % the cache module, should be the most extensive and complex of the lot.
 % Please excuse the totally high quality of the writing in this document,
 % as late-night flights tend not to lend themselves well to writing overall.
@@ -19,7 +19,7 @@ The Experimental Server Service is the core component of RSSE. It parses XML fil
 Please note that all network connections and file formats (aside from those used for configuration) should be regarded as standard. As such, all other implementations of RSSE should follow the same such file formats and networking protocols to ensure maximum compatibility with a wide range of Experiment Clients.
 
 \section{The Experiment File}
-The first notable portion of the Experimental Server Service is entirely in the control of its users and managers. The \textit{Experiment File} is an XML file containing all information relevant to as many experiments as necessary for the given application. This file is currently read on the startup of the Experimental Server Service, however it would be beneficial to continuously re-parse this file in order to continuously provide clients with updates and other such information relevant to changes in experiments. 
+The first notable portion of the Experimental Server Service is entirely in the control of its users and managers. The \textit{Experiment File} is an XML file containing all information relevent to as many experiments as necessary for the given application. This file is currently read on the startup of the Experimental Server Service, however it would be beneficial to continuously re-parse this file in order to continuously provide clients with updates and other such information relevent to changes in experiments. 
 
 The Experiment File may be composed of the following tags, though they will be described and several examples will be given in the following subsections.
 \\
@@ -64,7 +64,7 @@ The \textit{$<$url$>$} tag may also accept attributes describing the URL's class
 If the label in is set to the constant value ``-1000'', then it will be regarded by the Experimental Server Service as unlabeled. 
 
 \subsection{Example File}
-The following is a brief example file made to illustrate the hierarchy of tags implemented for Experiment Files:
+The following is a brief example file made to illustate the heirarchy of tags implemented for Experiment Files:
 \\
 \\
 $<$rsse version=``1''$>$
@@ -111,7 +111,6 @@ url & An individual element in a dataset. Technically, this tag\\
     & the experiment definitions file.\\
 \hline
 id & ID for the client.\\
-\hline
 \end{tabular}
 
 \subsection{The Snippet Protocol}
@@ -143,9 +142,9 @@ When ``argument'' is specified, the client prints each argument in the order sta
 
 For example, to register, a client may send:
 \begin{addmargin}[1em]{2em}
-\textit{Client: } REGISTER\\
-\textit{Client: } Title of an experiment\\
-\textit{Server: (XML nugget with ID number)}\\
+\textit{Client: } REGISTER
+\textit{Client: } Title of an experiment
+\textit{Server: (XML nugget with ID number)}
 \end{addmargin}
 
 \section{Responses Sent by the Client}
@@ -170,7 +169,7 @@ The following directories should be created (Windows users should replace ``var'
 At this time there are unfortunately no automated utilities to help you write an experiment file. As such, you will have to manually write such a file according to the documentation provided and then place it in ``/var/rsse/ess/experiment.xml''
 
 \subsection{Generating a Default Settings File}
-Like all of the other components of RSSE, the Experimental Server Service makes use of configuration files to avoid having to use an excessive number of command line arguments for each invocation. In order to generate the default configuration file, enter the following in a terminal:
+Like all of the other components of RSSE, the Experimental Server Service makes use of configuration files to avoid having to use an excessive number of command line arguments for each invocation. In order to generate the default configuration file, enter the folowing in a terminal:
 
 \begin{addmargin}[1em]{2em}
 \textit{java -jar ExperimentalServerService.jar --defconfig}
@@ -179,7 +178,7 @@ Like all of the other components of RSSE, the Experimental Server Service makes 
 Once the file is written, tweak it to suit your needs and install it in either ``/var/rsse/ess/ec.conf'' or the install location depending on your operating system. 
 
 \subsection{Starting the Server}
-After all of the previous steps have been completed, please ensure that the Experimental Server Service can write to all of the directories you created as well as listen on the sockets specified in the server's configuration file.
+After all of the previous steps have been completed, please ensure that the Experimental Server Service can write to all of the driectories you created as well as listen on the sockets specified in the server's configuration file.
 
 To start the server, enter the following command:
 \begin{addmargin}[1em]{2em}
