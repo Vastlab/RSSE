@@ -2,3 +2,6 @@ This is a reference implementation for RSSE written in Java.
 
 Please refer to the Documentation directory in order to get
 an overview of all of the components of RSSE.
+
+Changelog:
+Alpha1 -- The first alpha release. Should more or less work for the most part, though it is missing response support (in the client).
