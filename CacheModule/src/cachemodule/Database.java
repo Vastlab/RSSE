@@ -19,7 +19,7 @@ import java.util.Scanner;
  */
 public class Database
 {
-    public static final boolean DEBUG_MODE=true;
+    public static final boolean DEBUG_MODE=false;
     public static final String DB_TAG="Database";
     private CacheNodeWrapper dbRoot;
     
@@ -54,16 +54,21 @@ public class Database
             Scanner strScanner;
             String origin;
             File dest;
+            long l;
+            
+            System.out.println("Attempting to load database from "+dbSnapshot.getAbsolutePath());
             
             //Get the version information
-            s.next(); //Read the "VER"
-            ver=s.nextInt(999999999); //I doubt there will be this many versions of RSSE.
+            strScanner=new Scanner(s.nextLine());
+            strScanner.next();                       //Read the "VER"
+            ver=Integer.parseInt(strScanner.next()); //I doubt there will be this many versions of RSSE.
             
             if(ver>RSSEConstants.RSSE_VERSION_CODE)
             {
                 return false;
             }
             
+            l=System.currentTimeMillis();
             while(s.hasNextLine())
             {
                 strScanner=new Scanner(s.nextLine());
@@ -72,12 +77,14 @@ public class Database
                 
                 add(new CacheNode(dest, origin));
             }
+            
+            System.out.println("Loading database snapshot took: "+(System.currentTimeMillis()-l)+"ms");
         } catch(FileNotFoundException e)
         {
-            CacheModule.l.logErr(DB_TAG, "Couldn't load database from "+dbSnapshot.getAbsolutePath());
+            //CacheModule.l.logErr(DB_TAG, "Couldn't load database from "+dbSnapshot.getAbsolutePath());
         } catch(NoSuchElementException e)
         {
-            CacheModule.l.logErr(DB_TAG, "Database snapshot file is blank! This can either be fine or very bad.");
+            //CacheModule.l.logErr(DB_TAG, "Database snapshot file is blank! This can either be fine or very bad.");
         }
        
         return false;
@@ -91,6 +98,19 @@ public class Database
         }
         
         rcsvTraverse(pw, w.left);
+        
+        if(w.data==null)
+        {
+            return;
+        }
+        
+        else
+        {
+            if(w.data.getFile()==null) //Ensure that null files aren't printed.
+            {
+                return;
+            }
+        }
         
         pw.println(w.data.getOrigin()+" "+w.data.getFile().getAbsolutePath());
         
@@ -130,7 +150,7 @@ public class Database
             pw.close();
         } catch(IOException e)
         {
-            CacheModule.l.logErr(DB_TAG, "Couldn't save data to "+dbSnapshot.getAbsolutePath());
+            //CacheModule.l.logErr(DB_TAG, "Couldn't save data to "+dbSnapshot.getAbsolutePath());
         }
         return false;
     }
