@@ -29,11 +29,12 @@ import java.util.Scanner;
  */
 public class ClientDB
 {
-    private static final boolean DEBUG_MODE=true;
+    private static final boolean DEBUG_MODE=false;
     private ClientStateNode root;
     private boolean first;          //This boolean changes how IDs are assigned.
     
     private ArrayList<ClientState> debugDb;
+    private Random rand;
     
     public ClientDB(boolean isFirst)
     {
@@ -44,6 +45,8 @@ public class ClientDB
         {
             debugDb=new ArrayList<ClientState>();
         }
+        
+        rand=new Random(System.currentTimeMillis());
     }
     
     public synchronized ClientState getClientById(long id)
@@ -147,15 +150,14 @@ public class ClientDB
     
     public synchronized long generateId()
     {
-        Random rand;
         long val;
         
         if(first)
         {
+            first=false;
             return Long.MAX_VALUE/2; //Ensure that the tree is balanced.
         }
         
-        rand=new Random();
         val=rand.nextLong();
         
         while(internalFindById(val, root)!=null)
@@ -185,6 +187,8 @@ public class ClientDB
             {
                 debugDb.set(index, s);
             }
+            
+            return;
         }
         
         client=internalFindById(s.clientId, root);
@@ -216,6 +220,8 @@ public class ClientDB
         {
             int i;
             
+            System.out.println("Dumping "+debugDb.size()+" elements to disk.");
+            
             for(i=0;i<debugDb.size();i++)
             {
                 o.println(debugDb.get(i).toString());
@@ -243,7 +249,7 @@ public class ClientDB
             temp=s.nextLine();
             temp1=s.nextLine();
             
-            internalAdd(new ClientState(temp, temp1), root);
+            updateClient(new ClientState(temp, temp1));
         }
     }
     
@@ -284,6 +290,7 @@ public class ClientDB
             {
                 if(curNode.right==null)
                 {
+                    System.out.println("Instantiating new client node...");
                     curNode.right=new ClientStateNode(null, null, newState);
                 }
                 
@@ -297,6 +304,7 @@ public class ClientDB
             {
                 if(curNode.left==null)
                 {
+                    System.out.println("Instantiating new client node...");
                     curNode.left=new ClientStateNode(null, null, newState);
                 }
                 
