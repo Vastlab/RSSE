@@ -26,6 +26,7 @@ public class ExperimentClient
     private static final int CONNECTION_TYPE_REGISTER=3;
     private static final int CONNECTION_TYPE_LIST=4;
     private static final int CONNECTION_TYPE_GETINFO=5;
+    private static final int CONNECTION_TYPE_RESPOND=6;
     
     private static boolean initial=false;
     private static boolean saveConfig=false;
@@ -42,7 +43,7 @@ public class ExperimentClient
     private static Logger l;
     private static String expName;
     
-    
+    private static String respFileName;
     
     public static void printHelp()
     {
@@ -186,7 +187,19 @@ public class ExperimentClient
             
             else if(args[i].equals("-r")||args[i].equals("--respond"))
             {
+                if(args.length<=(i+1))
+                {
+                    System.err.println("Response file name not specified!");
+                    System.exit(1);
+                }
                 
+                else
+                {
+                    respFileName=args[i+1];
+                    i++;
+                    
+                    connectionType=CONNECTION_TYPE_RESPOND;
+                }
             }
             
             else if(args[i].equals("-g")||args[i].equals("--getinfo"))
@@ -464,7 +477,26 @@ public class ExperimentClient
     
     public static void connectRespond()
     {
-        //Not yet!
+        Parser p;
+        Experiment e;
+        ReturnState s;
+        
+        responseClient=new ResponseProtocolClient(l);
+        
+        //Need to get information first.
+        try
+        {
+            e=snippetClient.getInformation(serverName, serverPort, expName);
+            
+            p=new Parser(l);
+            s=p.parseNuggetForResponse(new File(respFileName));
+            
+            responseClient.respond(e.resServer, e.resPort, s.e, s.s, clientId);
+        } catch(NoContentException ex)
+        {
+            System.err.println("Can't respond!");
+            System.exit(1);
+        }
     }
     
     public static void connectGetInfo()
@@ -543,6 +575,8 @@ public class ExperimentClient
             case CONNECTION_TYPE_GETINFO:
                 connectGetInfo();
                 break;
+            case CONNECTION_TYPE_RESPOND:
+                connectRespond();
         }
     }
     

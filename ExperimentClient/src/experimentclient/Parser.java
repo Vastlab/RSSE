@@ -159,6 +159,58 @@ public class Parser
         return cmd;
     }
     
+    public ReturnState parseNuggetForResponse(File f)
+    {
+        ReturnState s=new ReturnState();
+        DocumentBuilderFactory docBuildFactory=DocumentBuilderFactory.newInstance();
+        
+        try
+        {
+            DocumentBuilder builder=docBuildFactory.newDocumentBuilder();
+            Document doc=builder.parse(f);
+            NodeList list=doc.getChildNodes();
+            
+            s.e=new DataElement();
+            
+            for(int i=0;i<list.getLength();i++)
+            {
+                Node n=list.item(i);
+                
+                if(n.getNodeName().equals("respdata"))
+                {
+                    s.s=n.getTextContent();
+                }
+                
+                else if(n.getNodeName().equals("class"))
+                {
+                    s.e.setClass(n.getTextContent());
+                }
+                
+                else if(n.getNodeName().equals("label"))
+                {
+                    s.e.setLabel(Integer.parseInt(n.getTextContent()));
+                }
+                
+                else if(n.getNodeName().equals("url"))
+                {
+                    s.e.setUrl(n.getTextContent());
+                }
+            }
+            
+        } catch(ParserConfigurationException ex)
+        {
+            l.logErr(PARSER_TAG, "Couldn't parse nugget due to misconfiguration.");
+        } catch(SAXException ex)
+        {
+            l.logErr(PARSER_TAG, "SAXException while parsing XML nugget.");
+        } catch(IOException ex)
+        {
+            l.logErr(PARSER_TAG, "Couldn't read temporary file containing RSSE nugget!");
+        }
+        
+        return s;
+    }
+    
     private Experiment doNuggetParsing(Document doc) throws NoContentException
     {
         Experiment e=new Experiment();

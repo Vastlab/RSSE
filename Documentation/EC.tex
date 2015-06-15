@@ -122,4 +122,22 @@ Since datasets may change, it is worthwhile to occasionally check if more data h
 \end{addmargin}
 
 If there are no more files to fetch, the client will exit with return code 1. This allows scripts to be written to automatically update the current dataset.
+
+\section{Responses}
+In Open Set Recognition, it is often useful to post responses back to an experiment author so that new classes and labels can be added. In order to simplify the process of posting responses back to a server, the client uses its own XML file format to encapsulate responses to be sent.
+
+Since all tags should be included for every file, the format will be demonstrated by example:\\
+\\
+$<$response$>$
+\begin{addmargin}[1em]{2em}
+      $<$respdata$>$any arbitrary string full of response data$<$/respdata$>$\\
+      $<$class$>$some class$<$/class$>$\\
+      $<$label$>$1$<$/label$>$
+\end{addmargin}
+$<$/response$>$\\
+
+In order to send the response, first ensure that all basic configuration and registration has been completed, then call:
+\begin{addmargin}[1em]{2em}
+   \textit{java -jar ExperimentClient.jar -r respfile.xml}
+\end{addmargin}
 \end{document}
