@@ -44,6 +44,7 @@ public class ExperimentClient
     private static String expName;
     
     private static String respFileName;
+    private static boolean eflagSet=false;
     
     public static void printHelp()
     {
@@ -217,6 +218,7 @@ public class ExperimentClient
                 
                 else
                 {
+                    eflagSet=true;
                     expName=args[i+1];
                     i++;
                 }
@@ -320,10 +322,14 @@ public class ExperimentClient
             
             state=new ClientState(fileScanner.nextLine());
             
+            if(fileScanner.hasNextLine())
+            {
+                expName=fileScanner.nextLine();
+            }
+            
             fileScanner.close();
             
             clientId=state.clientId;
-            expName=state.expName;
         } catch(FileNotFoundException e)
         {
             System.err.println("Couldn't load registration info. Please run \""+NAME+" -i\"");
@@ -356,7 +362,7 @@ public class ExperimentClient
         {
             out=new PrintWriter(outputFile);
             
-            out.println(state);
+            out.println(state.otherToString());
             
             out.flush();
             out.close();
@@ -475,28 +481,52 @@ public class ExperimentClient
         }
     }
     
+    private static Experiment getInfo()
+    {
+        Experiment e;
+        Parser p;
+        
+        e=null;
+        
+        try
+        {
+            p=new Parser(l);
+            e=snippetClient.getInformation(serverName, serverPort, expName); //Note: expName is either useless or null.
+        } catch(NoContentException ex)
+        {
+            System.err.println("Server returned no meaningful information. Exiting...");
+            System.exit(1);
+        }
+        
+        return e;
+    }
+    
     public static void connectRespond()
     {
         Parser p;
         Experiment e;
         ReturnState s;
         
-        responseClient=new ResponseProtocolClient(l);
+        System.out.println("Posting response from file: "+respFileName);
         
-        //Need to get information first.
-        try
+        //We need to first ensure that expname has some meaningful information:
+        if(!eflagSet)
         {
-            e=snippetClient.getInformation(serverName, serverPort, expName);
-            
-            p=new Parser(l);
-            s=p.parseNuggetForResponse(new File(respFileName));
-            
-            responseClient.respond(e.resServer, e.resPort, s.e, s.s, clientId);
-        } catch(NoContentException ex)
-        {
-            System.err.println("Can't respond!");
-            System.exit(1);
+            //Try to load it from disk:
+            loadClientState();
         }
+        System.out.println("Loaded client state.");
+        
+        responseClient=new ResponseProtocolClient(l);
+        e=getInfo();
+        
+        System.out.println("Information obtained: ");
+        System.out.println(e.resServer);
+        System.out.println(e.resPort);
+        p=new Parser(l);
+        s=p.parseNuggetForResponse(new File(respFileName));
+
+        responseClient.respond(e.resServer, e.resPort, s.e, s.s, clientId);
     }
     
     public static void connectGetInfo()
@@ -505,6 +535,11 @@ public class ExperimentClient
         
         try
         {
+            if(!eflagSet)
+            {
+                loadClientState();
+            }
+            
             e=snippetClient.getInformation(serverName, serverPort, expName);
             
             System.out.println("Information for "+expName);
@@ -577,6 +612,7 @@ public class ExperimentClient
                 break;
             case CONNECTION_TYPE_RESPOND:
                 connectRespond();
+                break;
         }
     }
     

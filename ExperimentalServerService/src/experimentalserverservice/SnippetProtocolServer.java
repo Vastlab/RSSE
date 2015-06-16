@@ -39,8 +39,9 @@ public class SnippetProtocolServer
         s+="<nugget>\n";
         s+="\t<title>"+e.name+"</title>\n";
         s+="\t<description>"+e.description+"</description>\n";
-        s+="\t<resserver>"+e.resServer+"</resserver>\n";
-        s+="\t<resport>"+e.resPort+"</resport>\n";
+        s+="\t<resserver>"+Settings.responseServerName+"</resserver>\n";
+        System.out.println("Sending response server port: "+Settings.responseServerPort);
+        s+="\t<resport>"+Settings.responseServerPort+"</resport>\n";
         s+="</nugget>";
         
         return s;

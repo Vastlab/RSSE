@@ -1,0 +1,5 @@
+<response>
+	<respdata>any arbitrary string full of response data</respdata>
+	<class>some class</class>
+	<label>1</label>
+</response>

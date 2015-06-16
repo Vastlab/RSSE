@@ -41,4 +41,13 @@ public class ClientState
         
         return s;
     }
+    
+    public String otherToString()
+    {
+        String s;
+        
+        s=toString()+"\n"+expName;
+        
+        return s;
+    }
 }

@@ -36,7 +36,7 @@ public class ResponseServer
     
     public void startServer()
     {
-        l.logMsg(RESPSERVER_TAG, "Starting server thread...");
+        l.logMsg(RESPSERVER_TAG, "Starting response server thread...");
         if(listenerThread!=null)
         {
             stopServer();
@@ -48,7 +48,7 @@ public class ResponseServer
     
     public synchronized void stopServer()
     {
-        l.logMsg(RESPSERVER_TAG, "Stopping server thread...");
+        l.logMsg(RESPSERVER_TAG, "Stopping response server thread...");
         
         if(listenerThread==null)
         {

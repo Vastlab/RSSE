@@ -25,6 +25,7 @@ public class Settings
     
     //Define some constants for the ConfigurationManager:
     public static int nuggetServerPort=9002;
+    public static String responseServerName="localhost";
     public static int responseServerPort=9003;
     
     /**
@@ -110,6 +111,11 @@ public class Settings
                 {
                     experimentFile=s.next();
                 }
+                
+                else if(temp.equals("responseservername"))
+                {
+                    responseServerName=s.next();
+                }
             }
             
             success=true;
@@ -152,6 +158,7 @@ public class Settings
             out.println("respdir "+respDir);
             out.println("nuggetserverport "+nuggetServerPort);
             out.println("responseserverport "+responseServerPort);
+            out.println("responseservername "+responseServerName);
             out.println("experimentfile "+experimentFile);
             
             out.flush();

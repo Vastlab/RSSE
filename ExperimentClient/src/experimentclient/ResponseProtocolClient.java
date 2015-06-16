@@ -55,9 +55,12 @@ public class ResponseProtocolClient
             //in=new BufferedReader(new InputStreamReader(s.getInputStream()));
             
             out.println("RESPOND");
+            System.out.println("Sending RESPOND");
             out.println(userId);
+            System.out.println("Sending "+userId);
             
             out.println(generateXML(element, result));
+            System.out.println("Sending nugget: \n"+generateXML(element, result));
             
             out.flush();
             out.close();

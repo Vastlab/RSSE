@@ -34,6 +34,11 @@ public class Parser
         l=newLogger;
     }
     
+    /**
+     * Parses an experiment definition file for experiments to serve.
+     * @param f
+     * @return an ArrayList containing any experiments found in the file.
+     */
     public ArrayList<Experiment> parseExperimentFile(File f)
     {
         ArrayList<Experiment> returnList=new ArrayList<Experiment>();
@@ -159,6 +164,12 @@ public class Parser
         return cmd;
     }
     
+    /**
+     * Parses a response from an XML file.
+     * This response will be sent upstream to a response server. 
+     * @param f
+     * @return 
+     */
     public ReturnState parseNuggetForResponse(File f)
     {
         ReturnState s=new ReturnState();
@@ -168,7 +179,7 @@ public class Parser
         {
             DocumentBuilder builder=docBuildFactory.newDocumentBuilder();
             Document doc=builder.parse(f);
-            NodeList list=doc.getChildNodes();
+            NodeList list=doc.getChildNodes().item(0).getChildNodes();
             
             s.e=new DataElement();
             
@@ -221,44 +232,51 @@ public class Parser
         {
             throw new NoContentException();
         }
-
-        for(int i=0;i<list.getLength();i++)
+        
+        
+        for(int j=0;j<list.getLength();j++)
         {
-            Node node=list.item(i);
-
-            if(node.getNodeName().equals("title"))
+            Node parentNode=list.item(j);
+            
+            for(int i=0;i<parentNode.getChildNodes().getLength();i++)
             {
-                e.name=(node.getTextContent());
-            }
+                Node node=parentNode.getChildNodes().item(i);
 
-            else if(node.getNodeName().equals("description"))
-            {
-                e.description=(node.getTextContent());
-            }
+                if(node.getNodeName().equals("title"))
+                {
+                    e.name=(node.getTextContent());
+                }
 
-            else if(node.getNodeName().equals("class"))
-            {
-                element.setClass(node.getTextContent());
-            }
+                else if(node.getNodeName().equals("description"))
+                {
+                    e.description=(node.getTextContent());
+                }
 
-            else if(node.getNodeName().equals("url"))
-            {
-                element.setUrl(node.getTextContent());
-            }
+                else if(node.getNodeName().equals("class"))
+                {
+                    element.setClass(node.getTextContent());
+                }
 
-            else if(node.getNodeName().equals("label"))
-            {
-                element.setLabel(Integer.parseInt(node.getTextContent()));
-            }
+                else if(node.getNodeName().equals("url"))
+                {
+                    element.setUrl(node.getTextContent());
+                }
 
-            else if(node.getNodeName().equals("resserver"))
-            {
-                e.resServer=(node.getTextContent());
-            }
+                else if(node.getNodeName().equals("label"))
+                {
+                    element.setLabel(Integer.parseInt(node.getTextContent()));
+                }
 
-            else if(node.getNodeName().equals("resport"))
-            {
-                e.resPort=(Integer.parseInt(node.getTextContent()));
+                else if(node.getNodeName().equals("resserver"))
+                {
+                    e.resServer=(node.getTextContent());
+                }
+
+                else if(node.getNodeName().equals("resport"))
+                {
+                    e.resPort=(Integer.parseInt(node.getTextContent()));
+                    System.out.println("Node: "+node.getTextContent());
+                }
             }
         }
         
@@ -267,6 +285,12 @@ public class Parser
         return e;
     }
     
+    /**
+     * Parses the contents of a string for information.
+     * @param nuggetData
+     * @return
+     * @throws NoContentException 
+     */
     public Experiment parseNuggetStringForInformation(String nuggetData) throws NoContentException
     {
         Experiment e=new Experiment();
@@ -382,6 +406,11 @@ public class Parser
         return returnList;
     }
     
+    /**
+     * Returns a long representing the client's ID number from an XML nugget.
+     * @param s
+     * @return client id number
+     */
     public long parseIdNugget(String s)
     {
         long lng=-1;
@@ -430,6 +459,11 @@ public class Parser
         return lng;
     }
     
+    /**
+     * Parses a DataElement from an XML nugget.
+     * @param s
+     * @return 
+     */
     public DataElement parseForDataElement(String s)
     {
         DataElement returnElement=new DataElement();
