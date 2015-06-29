@@ -1,0 +1,15 @@
+<rsse version="1">
+	<experiment>
+		<title>title</title>
+		<resserver>respserv</resserver>
+		<resport>9001</resport>
+		<description>hello, this is a totally amazing description!
+</description>
+		<report>true</report>
+		<data>
+			<url>url1</url>
+			<url>url2</url>
+			<url>url3</url>
+		</data>
+	</experiment>
+</rsse>
