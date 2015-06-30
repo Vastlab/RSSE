@@ -167,7 +167,7 @@ public class ExperimentalServerService
         runningOnWindows=checkIfWindows();
         Settings.updateForOS();
         
-        l=new Logger();
+        l=new DefaultStreamLogger();
         Runtime.getRuntime().addShutdownHook(new Thread(new ShutdownRunnable()));
         
         interpretArgs(args);

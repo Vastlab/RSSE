@@ -562,7 +562,7 @@ public class ExperimentClient
      */
     public static void main(String[] args)
     {
-        l=new Logger();
+        l=new DefaultStreamLogger();
         parseArgs(args);
         
         //Now proceed to execute:

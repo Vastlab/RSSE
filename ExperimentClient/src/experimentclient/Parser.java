@@ -97,7 +97,7 @@ public class Parser
                         } catch(NumberFormatException exc)
                         {
                             l.logErr(PARSER_TAG, "Error in response port tag! Not a valid integer."+m.getTextContent());
-                            System.out.println("Thing: "+m.getTextContent());
+                            //System.out.println("Thing: "+m.getTextContent());
                         }
                         
                     }

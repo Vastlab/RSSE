@@ -11,27 +11,14 @@ package experimentclient;
  *
  * @author mgohde
  */
-public class Logger
+public interface Logger
 {
     /**
      * Logs an error to whichever stream is currently selected.
      * @param tag
      * @param message 
      */
-    public void logErr(String tag, String message)
-    {
-        //For now it just prints to stderr:
-        System.err.println("["+tag+"]\t"+message);
-    }
+    public void logErr(String tag, String message);
     
-    public void logMsg(String tag, String message)
-    {
-        //See logErr.
-        System.out.println("["+tag+"]\t"+message);
-    }
-    
-    public Logger()
-    {
-        //No nothing.
-    }
+    public void logMsg(String tag, String message);
 }

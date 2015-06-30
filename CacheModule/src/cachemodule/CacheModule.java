@@ -80,7 +80,7 @@ public class CacheModule
     {
         runningOnWindows=checkIfWindows();
         
-        l=new Logger();
+        l=new DefaultStreamLogger();
         cfg=new CMConfig();
         database=new Database();
         

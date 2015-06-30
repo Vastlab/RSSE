@@ -34,6 +34,11 @@ public class Parser
         l=newLogger;
     }
     
+    /**
+     * Parses an experiment definition file for experiments to serve.
+     * @param f
+     * @return an ArrayList containing any experiments found in the file.
+     */
     public ArrayList<Experiment> parseExperimentFile(File f)
     {
         ArrayList<Experiment> returnList=new ArrayList<Experiment>();
@@ -88,10 +93,11 @@ public class Parser
                     {
                         try
                         {
-                            e.resPort=Integer.parseInt(m.getNodeValue());
+                            e.resPort=Integer.parseInt(m.getTextContent());
                         } catch(NumberFormatException exc)
                         {
-                            l.logErr(PARSER_TAG, "Error in response port tag! Not a valid integer.");
+                            l.logErr(PARSER_TAG, "Error in response port tag! Not a valid integer."+m.getTextContent());
+                            //System.out.println("Thing: "+m.getTextContent());
                         }
                         
                     }
@@ -115,7 +121,7 @@ public class Parser
                                 
                                 if(dataNode.getAttributes().getNamedItem("label")!=null)
                                 {
-                                    de.setLabel(Integer.parseInt((dataNode.getAttributes().getNamedItem("label").getTextContent())));
+                                    de.setLabel(Integer.parseInt((dataNode.getAttributes().getNamedItem("class").getTextContent())));
                                 }
                                 
                                 de.setUrl(dataNode.getTextContent());
@@ -158,6 +164,64 @@ public class Parser
         return cmd;
     }
     
+    /**
+     * Parses a response from an XML file.
+     * This response will be sent upstream to a response server. 
+     * @param f
+     * @return 
+     */
+    public ReturnState parseNuggetForResponse(File f)
+    {
+        ReturnState s=new ReturnState();
+        DocumentBuilderFactory docBuildFactory=DocumentBuilderFactory.newInstance();
+        
+        try
+        {
+            DocumentBuilder builder=docBuildFactory.newDocumentBuilder();
+            Document doc=builder.parse(f);
+            NodeList list=doc.getChildNodes().item(0).getChildNodes();
+            
+            s.e=new DataElement();
+            
+            for(int i=0;i<list.getLength();i++)
+            {
+                Node n=list.item(i);
+                
+                if(n.getNodeName().equals("respdata"))
+                {
+                    s.s=n.getTextContent();
+                }
+                
+                else if(n.getNodeName().equals("class"))
+                {
+                    s.e.setClass(n.getTextContent());
+                }
+                
+                else if(n.getNodeName().equals("label"))
+                {
+                    s.e.setLabel(Integer.parseInt(n.getTextContent()));
+                }
+                
+                else if(n.getNodeName().equals("url"))
+                {
+                    s.e.setUrl(n.getTextContent());
+                }
+            }
+            
+        } catch(ParserConfigurationException ex)
+        {
+            l.logErr(PARSER_TAG, "Couldn't parse nugget due to misconfiguration.");
+        } catch(SAXException ex)
+        {
+            l.logErr(PARSER_TAG, "SAXException while parsing XML nugget.");
+        } catch(IOException ex)
+        {
+            l.logErr(PARSER_TAG, "Couldn't read temporary file containing RSSE nugget!");
+        }
+        
+        return s;
+    }
+    
     private Experiment doNuggetParsing(Document doc) throws NoContentException
     {
         Experiment e=new Experiment();
@@ -168,44 +232,51 @@ public class Parser
         {
             throw new NoContentException();
         }
-
-        for(int i=0;i<list.getLength();i++)
+        
+        
+        for(int j=0;j<list.getLength();j++)
         {
-            Node node=list.item(i);
-
-            if(node.getNodeName().equals("title"))
+            Node parentNode=list.item(j);
+            
+            for(int i=0;i<parentNode.getChildNodes().getLength();i++)
             {
-                e.name=(node.getTextContent());
-            }
+                Node node=parentNode.getChildNodes().item(i);
 
-            else if(node.getNodeName().equals("description"))
-            {
-                e.description=(node.getTextContent());
-            }
+                if(node.getNodeName().equals("title"))
+                {
+                    e.name=(node.getTextContent());
+                }
 
-            else if(node.getNodeName().equals("class"))
-            {
-                element.setClass(node.getTextContent());
-            }
+                else if(node.getNodeName().equals("description"))
+                {
+                    e.description=(node.getTextContent());
+                }
 
-            else if(node.getNodeName().equals("url"))
-            {
-                element.setUrl(node.getTextContent());
-            }
+                else if(node.getNodeName().equals("class"))
+                {
+                    element.setClass(node.getTextContent());
+                }
 
-            else if(node.getNodeName().equals("label"))
-            {
-                element.setLabel(Integer.parseInt(node.getTextContent()));
-            }
+                else if(node.getNodeName().equals("url"))
+                {
+                    element.setUrl(node.getTextContent());
+                }
 
-            else if(node.getNodeName().equals("resserver"))
-            {
-                e.resServer=(node.getTextContent());
-            }
+                else if(node.getNodeName().equals("label"))
+                {
+                    element.setLabel(Integer.parseInt(node.getTextContent()));
+                }
 
-            else if(node.getNodeName().equals("resport"))
-            {
-                e.resPort=(Integer.parseInt(node.getTextContent()));
+                else if(node.getNodeName().equals("resserver"))
+                {
+                    e.resServer=(node.getTextContent());
+                }
+
+                else if(node.getNodeName().equals("resport"))
+                {
+                    e.resPort=(Integer.parseInt(node.getTextContent()));
+                    System.out.println("Node: "+node.getTextContent());
+                }
             }
         }
         
@@ -214,6 +285,12 @@ public class Parser
         return e;
     }
     
+    /**
+     * Parses the contents of a string for information.
+     * @param nuggetData
+     * @return
+     * @throws NoContentException 
+     */
     public Experiment parseNuggetStringForInformation(String nuggetData) throws NoContentException
     {
         Experiment e=new Experiment();
@@ -292,7 +369,6 @@ public class Parser
             //Get all of the experiments in the file:
             NodeList list=doc.getElementsByTagName("nugget");//doc.getChildNodes();//doc.getElementsByTagName("nugget");
             //list=list.item(0).getChildNodes();
-            System.out.println(list.getLength());
             
             for(int i=0;i<list.getLength();i++)
             {
@@ -302,11 +378,16 @@ public class Parser
                 
                 for(int j=0;j<experimentContents.getLength();j++)
                 {
-                    Node m=list.item(j);
-                
-                    if(m.getNodeName().equals("url")||m.getNodeName().equals("title"))
+                    Node m=experimentContents.item(j);
+                    
+                    if(m==null)
                     {
-                        returnList.add(n.getTextContent());
+                        break;
+                    }
+                
+                    else if(m.getNodeName().equals("url")||m.getNodeName().equals("title"))
+                    {
+                        returnList.add(m.getTextContent());
                     }
                 }
             }
@@ -325,6 +406,11 @@ public class Parser
         return returnList;
     }
     
+    /**
+     * Returns a long representing the client's ID number from an XML nugget.
+     * @param s
+     * @return client id number
+     */
     public long parseIdNugget(String s)
     {
         long lng=-1;
@@ -338,7 +424,7 @@ public class Parser
             
             //Get all of the experiments in the file:
             NodeList list=doc.getChildNodes();//doc.getElementsByTagName("nugget");
-            list=list.item(0).getChildNodes();
+            //list=list.item(0).getChildNodes();
             System.out.println(list.getLength());
             
             for(int i=0;i<list.getLength();i++)
@@ -349,7 +435,7 @@ public class Parser
                 
                 for(int j=0;j<experimentContents.getLength();j++)
                 {
-                    Node m=list.item(j);
+                    Node m=experimentContents.item(j);
                 
                     if(m.getNodeName().equals("id"))
                     {
@@ -373,6 +459,11 @@ public class Parser
         return lng;
     }
     
+    /**
+     * Parses a DataElement from an XML nugget.
+     * @param s
+     * @return 
+     */
     public DataElement parseForDataElement(String s)
     {
         DataElement returnElement=new DataElement();
@@ -397,7 +488,7 @@ public class Parser
                 
                 for(int j=0;j<experimentContents.getLength();j++)
                 {
-                    Node m=list.item(j);
+                    Node m=experimentContents.item(j);
                 
                     if(m.getNodeName().equals("url"))
                     {

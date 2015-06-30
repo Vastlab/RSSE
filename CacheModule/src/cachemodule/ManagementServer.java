@@ -32,7 +32,7 @@ public class ManagementServer
     public ManagementServer(int port, boolean keepConfig)
     {
         db=new Database();
-        l=new Logger();
+        l=new DefaultStreamLogger();
         
         CacheModule.l=l;
         CacheModule.database=db;
