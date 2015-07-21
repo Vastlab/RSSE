@@ -116,6 +116,21 @@ public class SnippetProtocolServer
         return "<nugget>\n</nugget>";
     }
     
+    private Experiment findByName(String expName)
+    {
+        int i;
+        
+        for(i=0;i<experimentList.size();i++)
+        {
+            if(experimentList.get(i).name.equals(expName))
+            {
+                return experimentList.get(i);
+            }
+        }
+        
+        return null;
+    }
+    
     public void serve() throws IOException
     {
         String buffer;
@@ -151,6 +166,13 @@ public class SnippetProtocolServer
             else
             {
                 newState.expName=experimentList.get(0).name;
+            }
+            
+            tempExp=findByName(newState.expName);
+            
+            for(i=0;i<tempExp.urlList.size();i++)
+            {
+                newState.dataMap.add(i);
             }
             
             //Now print out the corresponding nugget:

@@ -27,6 +27,10 @@ public class ExperimentalServerService
     private static boolean loadConfig=true;
     private static String altConfigFile=null;
     
+    /* Some files and such for logging purposes: */
+    private static File outFile=null;
+    private static File errFile=null;
+    
     public static boolean runningOnWindows;
     public static Logger l=null;
     public static ResponseServer respSrv=null;
@@ -36,6 +40,9 @@ public class ExperimentalServerService
     public static File dbSnapshotFile=null;
     public static File experimentFile=null;
     public static ArrayList<Experiment> experimentList;
+    
+    /* Variables used mostly for interfacing with the ESS. */
+    public static File newExpFile;
     
     /**
      * Check if this program is running on Windows so that it's a bit less user-hostile.
@@ -59,6 +66,10 @@ public class ExperimentalServerService
         System.out.println("\t--defconfig\tWrites default configuration to ./ess.conf");
         System.out.println("\t--defaults\tIgnores the configuration file and uses defaults");
         System.out.println("\t--useconf [file]\tUses the specified configuration file rather than the default.");
+        System.out.println("\t-lf, --logfile\tLogs all output to a file.");
+        System.out.println("\t-ef, --errfile\tIf \"--logfile\" is already specified, logs all errors to this ");
+        System.out.println("\t\tfile rather than the file specified by \"--logfile\".");
+        System.out.println("\t-uf, --updatefile\tUpdates the experiment definition file with new information.");
     }
     
     public static void loadDb(File f)
@@ -95,6 +106,11 @@ public class ExperimentalServerService
         }
         
         System.exit(5);
+    }
+    
+    private static boolean argsLengthCheck(int index, int size)
+    {
+        return size>(index+1);
     }
     
     public static void interpretArgs(String[] args)
@@ -152,6 +168,50 @@ public class ExperimentalServerService
             {
                 testSnippetProtocol();
             }
+            
+            else if(args[i].equals("-lf")||args[i].equals("--logfile"))
+            {
+                if(argsLengthCheck(i, args.length))
+                {
+                    outFile=new File(args[i+1]);
+                    errFile=outFile;
+                    
+                    i++;
+                }
+                
+                else
+                {
+                    l.logErr(ESS_TAG, "ERROR: Log file name not specified!");
+                }
+            }
+            
+            else if(args[i].equals("-ef")||args[i].equals("--errfile"))
+            {
+                if(argsLengthCheck(i, args.length))
+                {
+                    errFile=new File(args[i+1]);
+                    
+                    i++;
+                }
+                
+                else
+                {
+                    l.logErr(ESS_TAG, "ERROR: Log file name not specified!");
+                }
+            }
+            
+            else if(args[i].equals("-uf")||args[i].equals("--updatefile"))
+            {
+                if(argsLengthCheck(i, args.length))
+                {
+                    
+                }
+                
+                else
+                {
+                    l.logErr(ESS_TAG, "ERROR: New experiment definition file not specified.");
+                }
+            }
         }
     }
     
@@ -171,6 +231,20 @@ public class ExperimentalServerService
         Runtime.getRuntime().addShutdownHook(new Thread(new ShutdownRunnable()));
         
         interpretArgs(args);
+        
+        //Now switch to the logging type requested by the user:
+        if(outFile!=null)
+        {
+            if(outFile==errFile)
+            {
+                l=new FileLogger(outFile);
+            }
+            
+            else
+            {
+                l=new FileLogger(outFile, errFile);
+            }
+        }
         
         if(altConfigFile!=null)
         {

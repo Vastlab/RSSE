@@ -49,6 +49,26 @@ public class ClientDB
         rand=new Random(System.currentTimeMillis());
     }
     
+    public ArrayList<Long> getAllClientIds()
+    {
+        ArrayList<Long> idList=new ArrayList<Long>();
+        
+        if(DEBUG_MODE)
+        {
+            for(ClientState s:debugDb)
+            {
+                idList.add(s.clientId);
+            }
+        }
+        
+        else
+        {
+            rcsvGetAllClientIds(idList, root);
+        }
+        
+        return idList;
+    }
+    
     public synchronized ClientState getClientById(long id)
     {
         ClientStateNode wrapper;
@@ -250,6 +270,16 @@ public class ClientDB
             temp1=s.nextLine();
             
             updateClient(new ClientState(temp, temp1));
+        }
+    }
+    
+    private void rcsvGetAllClientIds(ArrayList<Long> list, ClientStateNode n)
+    {
+        if(n!=null)
+        {
+            list.add(n.s.clientId);
+            rcsvGetAllClientIds(list, n.left);
+            rcsvGetAllClientIds(list, n.right);
         }
     }
     

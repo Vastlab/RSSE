@@ -17,7 +17,7 @@ public class DataElement
     private String className;
     private int label;
     private boolean labeled;
-    //private long idNum; //<-- These will stay here so that future versions can hae labels for every data item if necessary.
+    private long idNum; //Used for additions to experiment files.
     //private String title;
     //private String description;
     //private String respServer;
@@ -29,6 +29,7 @@ public class DataElement
         url=null;
         className=null;
         label=-1000;
+        idNum=0;
     }
     
     /**
@@ -115,6 +116,16 @@ public class DataElement
         return label;
     }
     
+    public long getId()
+    {
+        return idNum;
+    }
+    
+    public void setId(long newId)
+    {
+        idNum=newId;
+    }
+    
     public void setLabel(int newLabel)
     {
         label=newLabel;
@@ -133,6 +144,11 @@ public class DataElement
     @Override
     public String toString()
     {
-        return url+" "+className+" "+label+" "+labeled+" ";//+idNum;
+        return url+" "+className+" "+label+" "+labeled+" "+idNum;
+    }
+    
+    boolean equals(DataElement e)
+    {
+        return e.getUrl().equals(getUrl());
     }
 }

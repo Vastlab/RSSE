@@ -7,6 +7,7 @@
 
 package experimentalserverservice;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
@@ -17,11 +18,14 @@ public class ClientState
 {
     public long clientId;
     public int curDataIndex;
+    public ArrayList<Integer> dataMap; /* This is the map of data elements to give the client. */
+    //public DataQueue dataQueue;
     public String expName;
     
     public ClientState()
     {
-        
+        dataMap=new ArrayList<Integer>();
+        //dataQueue=new DataQueue();
     }
     
     public ClientState(String s)
