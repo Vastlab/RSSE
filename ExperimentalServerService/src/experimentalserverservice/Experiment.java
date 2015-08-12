@@ -5,6 +5,8 @@
 
 package experimentalserverservice;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -49,6 +51,20 @@ public class Experiment
         }
     }
     
+    /**
+     * This method generates id numbers for all dataelements in the set.
+     */
+    public void id()
+    {
+        idCounter=0;
+        
+        for(DataElement e:urlList)
+        {
+            e.setId(idCounter);
+            idCounter++;
+        }
+    }
+    
     @Override
     public String toString()
     {
@@ -67,7 +83,7 @@ public class Experiment
         String outStr;
         
         outStr="title\t"+name;
-        outStr+="\ndescription\t"+description;
+        outStr+="\ndescription\n"+description;
         outStr+="\nidcounter\t"+idCounter;
         
         for(DataElement e:urlList)
@@ -80,17 +96,43 @@ public class Experiment
     
     /**
      * Used to load from experiment digest files.
-     * @param s 
+     * @param f the digest file to read.
+     * @return the experiment loaded so that 
      */
-    public void loadFromString(String s)
+    public Experiment loadFromDigestFile(File f) throws FileNotFoundException
     {
-        Scanner strScanner=new Scanner(s);
+        Scanner fileScanner=new Scanner(f);
         Scanner lineScanner;
-        String temp;
+        String tempLine, temp;
         
-        while(strScanner.hasNextLine())
+        while(fileScanner.hasNextLine())
         {
+            tempLine=fileScanner.nextLine();
+            lineScanner=new Scanner(tempLine);
             
+            temp=lineScanner.next();
+            
+            if(temp.equals("title"))
+            {
+                name=lineScanner.next();
+            }
+            
+            else if(temp.equals("description"))
+            {
+                description=fileScanner.nextLine();
+            }
+            
+            else if(temp.equals("idcounter"))
+            {
+                idCounter=Integer.parseInt(lineScanner.next());
+            }
+            
+            else
+            {
+                urlList.add(new DataElement(tempLine));
+            }
         }
+        
+        return this;
     }
 }

@@ -45,51 +45,14 @@ public class DataElement
         className=strScanner.next();
         label=Integer.parseInt(strScanner.next());
         labeled=Boolean.parseBoolean(strScanner.next());
-        //idNum=Long.parseLong(strScanner.next());
-        //title=null;
-        //description=null; //Neither the title nor description need to be transmitted or received.
+        idNum=Integer.parseInt(strScanner.next());
     }
     
-    /*
-    public String getResServer()
+    @Override
+    public String toString()
     {
-        return respServer;
+        return url+" "+className+" "+label+" "+labeled+" "+idNum;
     }
-    
-    public void setResServer(String server)
-    {
-        respServer=server;
-    }
-    
-    public int getResPort()
-    {
-        return respPort;
-    }
-    
-    public void setResPort(int portNum)
-    {
-        respPort=portNum;
-    }
-    
-    public String getTitle()
-    {
-        return title;
-    }
-    
-    public void setTitle(String newTitle)
-    {
-        title=newTitle;
-    }
-    
-    public String getDescription()
-    {
-        return description;
-    }
-    
-    public void setDescription(String newDescription)
-    {
-        description=newDescription;
-    }*/
     
     public String getCls()
     {
@@ -141,11 +104,7 @@ public class DataElement
         return labeled;
     }
     
-    @Override
-    public String toString()
-    {
-        return url+" "+className+" "+label+" "+labeled+" "+idNum;
-    }
+    
     
     boolean equals(DataElement e)
     {

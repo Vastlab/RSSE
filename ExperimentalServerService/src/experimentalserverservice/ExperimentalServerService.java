@@ -293,13 +293,43 @@ public class ExperimentalServerService
         
         respSrv=new ResponseServer(Settings.responseServerPort, Settings.respDir, l);
         experimentFile=new File(Settings.experimentFile);
-        p=new Parser(l);
         
-        experimentList=p.parseExperimentFile(experimentFile);
-        
-        if(experimentList.size()==0)
+        //Check if there is actually an experiment definition file somewhere
+        if(experimentFile.exists())
         {
-            l.logErr(ESS_TAG, "No experiments defined in experiment list!");
+            //Now try to read or generate digests:
+            File digestList=new File(experimentFile.getName()+".list");
+            FileDeltaTool tool=new FileDeltaTool(l);
+            p=new Parser(l);
+            
+            if(digestList.exists())
+            {
+                experimentList=tool.loadFromDigests(digestList);
+            }
+            
+            else
+            {
+                System.out.printf("Experiment file %s doesn't have a digest list. Generating...\n", experimentFile.getName());
+                experimentList=p.parseExperimentFile(experimentFile);
+                
+                //Generate ids for all of the data.
+                for(Experiment e:experimentList)
+                {
+                    e.id();
+                }
+                
+                tool.saveDigests(digestList, experimentList);
+            }
+            
+            if(experimentList.size()==0)
+            {
+                l.logErr(ESS_TAG, "Error: No experiments defined!");
+            }
+        }
+        
+        else
+        {
+            l.logErr(ESS_TAG, "Error: Experiment definition file not found!");
             System.exit(1);
         }
         
@@ -379,6 +409,19 @@ public class ExperimentalServerService
                     {
                         l.logErr(ESS_TAG, "Couldn't save database to: "+dbSnapshotFile);
                     }
+                }
+            }
+            
+            if(experimentList!=null && experimentFile!=null)
+            {
+                if(!experimentList.isEmpty())
+                {
+                    File newDigestFile=new File(experimentFile.getName()+".list");
+                    FileDeltaTool tool=new FileDeltaTool(l);
+                    
+                    l.logMsg(ESS_TAG, "Writing experiment digests...");
+                    
+                    tool.saveDigests(outFile, experimentList);
                 }
             }
         }

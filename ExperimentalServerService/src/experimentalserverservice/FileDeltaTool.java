@@ -7,7 +7,10 @@
 package experimentalserverservice;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 /**
  *
@@ -15,12 +18,11 @@ import java.util.ArrayList;
  */
 public class FileDeltaTool
 {
-    private Settings settings;
+    private static final String FILEDELTATOOL_TAG="FileDeltaTool";
     private Logger l;
     
-    public FileDeltaTool(Settings newSettings, Logger newL)
+    public FileDeltaTool(Logger newL)
     {
-        settings=newSettings;
         l=newL;
     }
     
@@ -38,14 +40,106 @@ public class FileDeltaTool
         
         experimentList=p.parseExperimentFile(inputFile);
         
-        for(Experiment e:experimentList)
+        for(Experiment e:experimentList) /* Give each data element an id.*/
         {
+            e.idCounter=0;
             
+            for(DataElement de:e.urlList)
+            {
+                de.setId(e.idCounter);
+                e.idCounter++;
+            }
         }
         
         return experimentList;
     }
     
+    public void saveDigests(File masterFile, ArrayList<Experiment> experimentList)
+    {
+        PrintWriter fileWriter, digestWriter;
+        Scanner fileNameScanner;
+        String name;
+        
+        if(masterFile.exists())
+        {
+            masterFile.delete();
+        }
+        
+        try
+        {
+            fileWriter=new PrintWriter(masterFile);
+
+            //Generate some filenames:
+            for(Experiment e:experimentList)
+            {
+                fileNameScanner=new Scanner(e.name);
+                name="";
+
+                while(fileNameScanner.hasNext()) //Remove any spaces in the name.
+                {
+                    name+=fileNameScanner.next();
+                }
+                
+                name+=".digest";
+                
+                fileWriter.println(name);
+                
+                //Now write the digest file:
+                digestWriter=new PrintWriter(new File(name));
+                digestWriter.println(e.saveToString());
+                digestWriter.flush();
+                digestWriter.close();
+            }
+        
+        }catch(FileNotFoundException ex)
+        {
+            
+        }
+    }
+    
+    public ArrayList<Experiment> loadFromDigests(File digestListFile)
+    {
+        Scanner digestFileScanner;
+        Scanner digestScanner;
+        ArrayList<Experiment> returnList;
+        File digestFile;
+        Experiment tempE;
+        returnList=new ArrayList<Experiment>();
+        
+        try
+        {
+            digestFileScanner=new Scanner(digestListFile);
+            
+            while(digestFileScanner.hasNextLine())
+            {
+                digestFile=new File(digestFileScanner.nextLine());
+                
+                if(digestFile.exists())
+                {
+                    tempE=new Experiment().loadFromDigestFile(digestFile);
+                    returnList.add(tempE);
+                }
+                
+                else
+                {
+                    l.logErr(FILEDELTATOOL_TAG, "Error: digest file "+digestFile.getAbsolutePath()+" not found!");
+                }
+            }
+        } catch(FileNotFoundException e)
+        {
+            return null;
+        }
+        
+        return returnList;
+    }
+    
+    /**
+     * Merges all changes into the client database.
+     * @param existing
+     * @param dList
+     * @param db
+     * @return 
+     */
     public Experiment mergeWithClientDb(Experiment existing, ArrayList<Delta> dList, ClientDB db)
     {
         Experiment condensed=new Experiment(existing);
@@ -101,9 +195,20 @@ public class FileDeltaTool
             
             if(c.expName.equals(existing.name))
             {
-                
+                for(i=0;i<c.dataMap.size();i++)
+                {
+                    for(Mapping m:map)
+                    {
+                        if(c.dataMap.get(i)==m.from)
+                        {
+                            c.dataMap.set(i, m.to);
+                        }
+                    }
+                }
             }
         }
+        
+        return condensed;
     }
     
     /**
