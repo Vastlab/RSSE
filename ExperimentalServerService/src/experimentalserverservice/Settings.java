@@ -27,6 +27,7 @@ public class Settings
     public static int nuggetServerPort=9002;
     public static String responseServerName="localhost";
     public static int responseServerPort=9003;
+    public static int fileUpdateServerPort=8000;
     
     /**
      * This changes the default settings so that the ESS shouldn't completely break on Windows.

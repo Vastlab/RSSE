@@ -25,17 +25,17 @@ public class FileUpdateServer
 {
     private static final String UPDSRV_TAG="FileUpdateServer";
     private Logger l;
-    private Settings settings;
     private File secret;
     private String secretStr;
     private ClientDB db;
+    private Thread updateThread;
+    private ServerSocket updateThreadSocket;
     int i;
     
-    public FileUpdateServer(Logger newL, ClientDB newdb, Settings newSettings)
+    public FileUpdateServer(Logger newL, ClientDB newdb)
     {
         l=newL;
         db=newdb;
-        settings=newSettings;
         
         secret=new File("secret.file");
         
@@ -68,6 +68,39 @@ public class FileUpdateServer
                 
                 l.logErr(UPDSRV_TAG, "Warning: wouldn't save secret file. Password for this session="+secretStr);
             }
+        }
+        
+        updateThread=null;
+    }
+    
+    /**
+     * Starts the FileUpdate service.
+     */
+    public void start()
+    {
+        if(updateThread!=null)
+        {
+            //Only do something if it's thoroughly dead:
+            if(!updateThread.isAlive())
+            {
+                updateThread=new Thread(new FileUpdateRunnable(Settings.fileUpdateServerPort));
+                updateThread.start();
+            }
+        }
+    }
+    
+    /**
+     * Stops the FileUpdate service.
+     */
+    public void stop()
+    {
+        try
+        {
+            updateThreadSocket.close(); //This should probably get the thread's attention.
+            updateThread.interrupt();
+        } catch(IOException e)
+        {
+            //Once again, this shouldn't really be a problem.
         }
     }
     
@@ -204,6 +237,7 @@ public class FileUpdateServer
             try
             {
                 internalSock=new ServerSocket(port);
+                updateThreadSocket=internalSock;
             } catch(IOException e)
             {
                 l.logErr(UPDSRV_TAG, "Couldn't bind socket: "+port);

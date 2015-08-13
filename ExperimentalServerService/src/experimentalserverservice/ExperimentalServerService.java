@@ -40,6 +40,7 @@ public class ExperimentalServerService
     public static File dbSnapshotFile=null;
     public static File experimentFile=null;
     public static ArrayList<Experiment> experimentList;
+    public static FileUpdateServer fileUpdSrv;
     
     /* Variables used mostly for interfacing with the ESS. */
     public static File newExpFile;
