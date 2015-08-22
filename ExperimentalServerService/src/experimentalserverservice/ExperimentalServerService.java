@@ -21,8 +21,8 @@ import java.util.Scanner;
 public class ExperimentalServerService
 {
     
-    private static final String ESS_TAG="ExperimentalServerService";
-    private static final long DB_SAVE_INTERVAL=10000; //This should work for now.
+    public static final String ESS_TAG="ExperimentalServerService";
+    public static final long DB_SAVE_INTERVAL=10000; //This should work for now.
     private static final String NAME="java -jar ExperimentalServerService.jar";
     private static boolean loadConfig=true;
     private static String altConfigFile=null;
@@ -41,6 +41,10 @@ public class ExperimentalServerService
     public static File experimentFile=null;
     public static ArrayList<Experiment> experimentList;
     public static FileUpdateServer fileUpdSrv;
+    
+    public static ManagementServer manSrv=null;
+    
+    public static boolean initialized=false;
     
     /* Variables used mostly for interfacing with the ESS. */
     public static File newExpFile;
@@ -247,6 +251,8 @@ public class ExperimentalServerService
             }
         }
         
+        
+        
         if(altConfigFile!=null)
         {
             if(Settings.readSettingsFile(new File(altConfigFile)))
@@ -291,6 +297,19 @@ public class ExperimentalServerService
                 }
             }
         }
+        
+        //Now that all of that is done, pass off control to the ManagementServer. 
+        //This change was made to centralize and sanitize control in RSSE within one thread that can be administered remotely.
+        try
+        {
+            manSrv=new ManagementServer(Settings.managementServerPort, l);
+            manSrv.start();
+        } catch(IOException e)
+        {
+            l.logErr(ESS_TAG, "Couldn't bind management server port! Running serially...");
+        }
+        
+        /*
         
         respSrv=new ResponseServer(Settings.responseServerPort, Settings.respDir, l);
         experimentFile=new File(Settings.experimentFile);
@@ -344,7 +363,7 @@ public class ExperimentalServerService
         saver.start();
         respSrv.startServer();
         snippetSrv.startServer();
-        
+        */
         //In the future, this portion will start a management console.
         l.logMsg(ESS_TAG, "Ready. Type \"stop\" to stop the server.");
         
