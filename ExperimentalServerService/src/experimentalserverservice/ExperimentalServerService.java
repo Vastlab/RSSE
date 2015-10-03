@@ -307,7 +307,26 @@ public class ExperimentalServerService
         } catch(IOException e)
         {
             l.logErr(ESS_TAG, "Couldn't bind management server port! Running serially...");
+            manSrv.init(null);
+            
+            l.logMsg(ESS_TAG, "Ready. Type \"stop\" to stop the server.");
+        
+            Scanner userScanner=new Scanner(System.in);
+
+            while(true)
+            {
+                if(userScanner.nextLine().equals("stop"))
+                {
+                    System.exit(0);
+                }
+            }
         }
+        
+        //If we're here with no major problems, then we need to tell the management server to init anyway:
+        manSrv.init(null);
+        
+        ManagementConsole c=new ManagementConsole("localhost", Settings.managementServerPort);
+        c.run();
         
         /*
         
@@ -365,17 +384,7 @@ public class ExperimentalServerService
         snippetSrv.startServer();
         */
         //In the future, this portion will start a management console.
-        l.logMsg(ESS_TAG, "Ready. Type \"stop\" to stop the server.");
         
-        Scanner userScanner=new Scanner(System.in);
-        
-        while(true)
-        {
-            if(userScanner.nextLine().equals("stop"))
-            {
-                System.exit(0);
-            }
-        }
     }
     
     //This runnable cleanly stops all threads and closes all connections.
