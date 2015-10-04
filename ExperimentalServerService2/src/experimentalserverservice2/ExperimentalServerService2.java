@@ -18,6 +18,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 /**
  *
@@ -32,6 +33,7 @@ public class ExperimentalServerService2
     public static String defaultConfigFile="/var/rsse/ess/config.conf";
     public static String errorFile=null;
     public static String messageFile=null;
+    public static DataServer dataServer;
     
     public static ArrayList<Experiment> experimentList;
     
@@ -216,9 +218,24 @@ public class ExperimentalServerService2
         
         //Now start the actual server service:
         l.logMsg("Init", "Spawning data server thread...\n");
+        dataServer=new DataServer(l,  experimentList, Settings.nuggetServerPort);
+        try
+        {
+            dataServer.start();
+        } catch(IOException e)
+        {
+            l.logErr("Init", "Failed to spawn dataServer! This is very bad.");
+            System.exit(3);
+        }
         
         //aaaand the results service as well:
         l.logMsg("Init", "Spawning results server thread...\n");
+    }
+    
+    //Shuts down all services and saves anything else. 
+    public void deInit()
+    {
+        
     }
     
     public static boolean loadExperiments(File experimentDir)
@@ -251,7 +268,15 @@ public class ExperimentalServerService2
      */
     public static void main(String[] args)
     {
-        // TODO code application logic here
+        interpretArgs(args);
+        init();
+        
+        Scanner s=new Scanner(System.in);
+        
+        System.out.println("Press enter to stop the ESS.");
+        s.nextLine();
+        
+        
     }
     
 }
