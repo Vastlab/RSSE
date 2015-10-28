@@ -33,6 +33,7 @@ public class DataServer
         listenerThread=null;
         experimentList=expList;
         this.port=port;
+        this.l=l;
     }
     
     /**
@@ -45,6 +46,7 @@ public class DataServer
         {
             srvrSock=new ServerSocket(port);
             listenerThread=new Thread(new ListenerRunnable(srvrSock));
+            listenerThread.start();
         }
     }
     
@@ -64,6 +66,11 @@ public class DataServer
         }
     }
     
+    public boolean isRunning()
+    {
+        return listenerThread!=null;
+    }
+    
     private class ListenerRunnable implements Runnable
     {
         ServerSocket sock;
@@ -73,10 +80,10 @@ public class DataServer
         {
             while(true)
             {
+                l.logMsg("ConnectionListener", "Accepting connection...");
                 try
                 {
                     Socket s=sock.accept();
-                    l.logMsg("ConnectionListener", "Accepting connection...");
                     new Thread(new ConnectionRunnable(new Connection(s))).start();
                 } catch(IOException e)
                 {

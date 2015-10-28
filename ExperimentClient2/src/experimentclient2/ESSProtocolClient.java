@@ -2,7 +2,7 @@
  * This is the client end of the new ESS protocol.
  */
 
-package experimentalserverservice2;
+package experimentclient2;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -33,7 +33,8 @@ public class ESSProtocolClient
         c.out.println("getexperiments");
         
         //Check for server response:
-        buf=c.in.readLine();
+        buf=c.in.readLine(); //This is the number of experiments.
+        int numExps=Integer.parseInt(buf);
         
         try
         {
@@ -46,7 +47,7 @@ public class ESSProtocolClient
             return null;
         }
         
-        while(true)
+        for(int i=0;i<numExps;i++)
         {
             try
             {
@@ -69,10 +70,13 @@ public class ESSProtocolClient
         Connection c=new Connection(s);
         
         c.out.println("getdata");
+        System.out.println("LOCAL: getdata");
         c.out.println(experimentName);
+        System.out.println("LOCAL: "+experimentName);
         
         //Check if the server has the experiment:
         buf=c.in.readLine();
+        System.out.println("REMOTE: "+buf);
         
         if(!buf.equals("OK"))
         {
@@ -83,7 +87,7 @@ public class ESSProtocolClient
         
         //Now try to read the experiment from the stream:
         e=new Experiment(l);
-        e.readFromStream(c.rawIn);
+        e.readFromStream(c.in);//c.rawIn);
         
         c.close();
         

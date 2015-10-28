@@ -4,13 +4,15 @@
  * updates. 
  */
 
-package experimentalserverservice2;
+package experimentclient2;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -153,7 +155,7 @@ public class Experiment
     {
         InputStream is=new FileInputStream(f);
         
-        if(!readFromStream(is))
+        if(!readFromStream(new BufferedReader(new InputStreamReader(is))))
         {
             throw new FileNotFoundException();
         }
@@ -167,68 +169,80 @@ public class Experiment
      * @param is 
      * @return whether or not the data could be read.
      */
-    public boolean readFromStream(InputStream is)
+    public boolean readFromStream(BufferedReader is)
     {
-        Scanner s=new Scanner(is);
+        //Scanner s=new Scanner(is);
         Scanner lineScanner;
         String buf;
         String line;
         
-        buf=s.nextLine();
+        try
+        {
+            buf=is.readLine();
+
+            if(!buf.equalsIgnoreCase("RSSE DIGEST"))
+            {
+                return false;
+            }
+
+            while(true)//s.hasNextLine())
+            {
+                line=is.readLine();
+                //System.out.println(line);
+                
+                //This means that the connection has been terminated.
+                if(line==null)
+                {
+                    break;
+                }
+                
+                lineScanner=new Scanner(line);
+
+                buf=lineScanner.next();
+
+                if(buf.equals("title:"))
+                {
+                    this.experimentName=lineScanner.next();
+                }
+
+                else if(buf.equals("shouldrespond:"))
+                {
+                    //Ignore it.
+                }
+
+                else if(buf.equals("responseserver:"))
+                {
+                    responseServer=lineScanner.next();
+                }
+
+                else if(buf.equals("responseport: "))
+                {
+                    responseServerPort=Integer.parseInt(lineScanner.next());
+                }
+
+                else if(buf.equals("numelements: "))
+                {
+                    //Ignore this as well.
+                }
+
+                else if(buf.equals("url:"))
+                {
+                    DataElement elem=new DataElement();
+                    elem.URL=lineScanner.next();
+                    dataList.add(elem);
+                }
+
+                else if(buf.equals("END RSSE DIGEST"))
+                {
+                    break;
+                }
+            }
         
-        if(!buf.equalsIgnoreCase("RSSE DIGEST"))
+            return true;
+        } catch(IOException e)
         {
             return false;
         }
-        
-        while(true)//s.hasNextLine())
-        {
-            line=s.nextLine();
-            
-            lineScanner=new Scanner(line);
-            
-            buf=lineScanner.next();
-            System.out.println(buf);
-            
-            if(buf.equals("title:"))
-            {
-                this.experimentName=lineScanner.next();
-            }
-            
-            else if(buf.equals("shouldrespond:"))
-            {
-                //Ignore it.
-            }
-            
-            else if(buf.equals("responseserver:"))
-            {
-                responseServer=lineScanner.next();
-            }
-            
-            else if(buf.equals("responseport: "))
-            {
-                responseServerPort=Integer.parseInt(lineScanner.next());
-            }
-            
-            else if(buf.equals("numelements: "))
-            {
-                //Ignore this as well.
-            }
-            
-            else if(buf.equals("url:"))
-            {
-                DataElement elem=new DataElement();
-                elem.URL=lineScanner.next();
-                dataList.add(elem);
-            }
-            
-            else if(buf.equals("END RSSE DIGEST"))
-            {
-                break;
-            }
-        }
-        
-        return true;
     }
     
     /**

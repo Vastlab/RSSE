@@ -1,0 +1,9 @@
+<rsse>
+	<title>demo</title>
+	<description>This is a test experiment to see if the ESS works.</description>
+	<data>
+		<url>http://fastmeister.vast.uccs.edu/numbers.txt</url>
+	</data>
+	<resserver>someserver</resserver>
+	<resport>9003</resport>
+</rsse>

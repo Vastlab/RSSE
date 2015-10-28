@@ -2,7 +2,7 @@
  * This represents an individual element of data to be distributed.
  */
 
-package experimentalserverservice2;
+package experimentclient2;
 
 import java.util.Scanner;
 

@@ -2,7 +2,7 @@
  * Re-implementation of the RSSE parser. 
  */
 
-package experimentalserverservice2;
+package experimentclient2;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -11,7 +11,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Scanner;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -31,7 +30,7 @@ public class Parser
     private Logger l;
     private Experiment e;
     
-    private static Experiment internalparse(File f, Logger l) throws ParserConfigurationException, SAXException, IOException
+    private static Experiment internalparse(String s, Logger l) throws ParserConfigurationException, SAXException, IOException
     {
         Experiment e=new Experiment(l);
         
@@ -39,7 +38,7 @@ public class Parser
         //just a little absurd?
         DocumentBuilderFactory docBuildFac=DocumentBuilderFactory.newInstance();
         DocumentBuilder builder=docBuildFac.newDocumentBuilder();
-        Document d=builder.parse(f);
+        Document d=builder.parse(s);
         
         Element topElement=d.getDocumentElement(); //Get the top level element, in this case <rsse>
         
@@ -49,7 +48,15 @@ public class Parser
             return null;
         }
         
-        NodeList subList=topElement.getChildNodes();
+        Node n=topElement.getChildNodes().item(0);
+        
+        if(n==null)
+        {
+            l.logErr(PARSER_TAG, "Couldn't parse any experiments from the file.");
+            return null;
+        }
+        
+        NodeList subList=n.getChildNodes();
         
         String resServer=null;
         int resPort=0;
@@ -58,7 +65,7 @@ public class Parser
         for(int i=0;i<subList.getLength();i++)
         {
             Node tmp=subList.item(i);
-            //System.out.println("tmp="+tmp.getNodeName());
+            
             if(tmp.getNodeName().equals("title"))
             {
                 e.experimentName=tmp.getTextContent();
@@ -93,7 +100,7 @@ public class Parser
             
             else if(tmp.getNodeName().equals("resport"))
             {
-                resPort=Integer.parseInt(tmp.getTextContent());
+                resPort=Integer.parseInt(tmp.getNodeValue());
             }
         }
         
@@ -115,16 +122,9 @@ public class Parser
     
     private static String readFile(File f) throws FileNotFoundException, IOException
     {
-        Scanner s=new Scanner(f);
-        String retS="";
-        //BufferedReader r=new BufferedReader(new FileReader(f));
+        BufferedReader r=new BufferedReader(new FileReader(f));
         
-        while(s.hasNext())
-        {
-            retS+=s.nextLine()+"\n";
-        }
-        
-        return retS;
+        return readFile(r);
     }
     
     public Experiment getData()
@@ -136,14 +136,14 @@ public class Parser
     {
         this.l=l;
         
-        this.e=internalparse(f, l);
+        this.e=internalparse(readFile(f), l);
     }
     
     public Parser(BufferedReader r, Logger l) throws IOException, ParserConfigurationException, SAXException
     {
         this.l=l;
         
-        //this.e=internalparse(readFile(r), l);
+        this.e=internalparse(readFile(r), l);
     }
     
     public Parser(String s, Logger l)

@@ -27,7 +27,7 @@ public class ESSProtocolServer
     /**
      * Default constructor. 
      * @param c Connection to use.
-     * @param experiments list of experiements to check and send to the client.
+     * @param experiments list of experiments to check and send to the client.
      * @param l Logger object to use.
      */
     public ESSProtocolServer(Connection c, ArrayList<Experiment> experiments, Logger l)
@@ -47,6 +47,7 @@ public class ESSProtocolServer
         try
         {
             buf=in.readLine();
+            System.out.println("Got command: "+buf);
             
             //Prints out a list of all of the experiments 
             if(buf.equals("getexperiments"))
@@ -86,6 +87,7 @@ public class ESSProtocolServer
                 
                 else //Print out the dataset:
                 {
+                    out.println("OK");
                     expToUse.dumpToStream(out);
                 }
             }
@@ -114,6 +116,8 @@ public class ESSProtocolServer
                 
                 else
                 {
+                    out.println("OK");
+                    
                     //Read the experiment sent:
                     Experiment remoteExp=new Experiment(l);
                     remoteExp.readFromStream(rawIn);
@@ -121,8 +125,11 @@ public class ESSProtocolServer
                     //Now compute and print the deltas:
                     DeltaTool tool=new DeltaTool();
                     out.println(tool.diffString(remoteExp, expToUse));
+                    out.println("END");
                 }
             }
+            
+            c.close();
         
         //Now try to parse the value provided:
         } catch(IOException e)

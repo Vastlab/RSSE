@@ -194,6 +194,9 @@ public class ExperimentalServerService2
             //Do nothing, all defaults should be present.
         }
         
+        //With our new configuration, try to build or validate a directory structure:
+        checkMakeDirs();
+        
         //Read all experiments:
         l.logMsg("Init", "Loading experiments.");
         
@@ -233,15 +236,57 @@ public class ExperimentalServerService2
     }
     
     //Shuts down all services and saves anything else. 
-    public void deInit()
+    public static void deInit()
     {
+        if(dataServer.isRunning())
+        {
+            dataServer.stop();
+        }
+    }
+    
+    /**
+     * Checks if a directory exists, and if it doesn't, makes it.
+     * @param dirName 
+     */
+    private static void checkMake(String dirName)
+    {
+        File f=new File(dirName);
         
+        if(!f.exists())
+        {
+            l.logErr("Init", "Directory "+dirName+" doesn't exist. Creating...");
+            f.mkdirs();
+        }
+    }
+    
+    /**
+     * Attempts to check for the directories necessary and make them as appropriate.
+     */
+    public static void checkMakeDirs()
+    {
+        checkMake(Settings.configDir);
+        checkMake(Settings.dbDir);
+        checkMake(Settings.experimentDir);
+        checkMake(Settings.respDir);
+        checkMake(Settings.tmpDir);
     }
     
     public static boolean loadExperiments(File experimentDir)
     {
         experimentList=new ArrayList<Experiment>();
         File files[]=experimentDir.listFiles();
+        
+        if(files==null)
+        {
+            l.logErr("Init", "Experiment directory "+experimentDir+" doesn't exist. Exiting...");
+            System.exit(1);
+        }
+        
+        else if(files.length==0)
+        {
+            l.logErr("Init", "No experiments were found in "+experimentDir+". Exiting...");
+            System.exit(1);
+        }
         
         for(File f:files)
         {
@@ -276,7 +321,7 @@ public class ExperimentalServerService2
         System.out.println("Press enter to stop the ESS.");
         s.nextLine();
         
-        
+        deInit();
     }
     
 }
