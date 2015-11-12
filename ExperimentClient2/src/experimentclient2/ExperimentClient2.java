@@ -441,6 +441,12 @@ public class ExperimentClient2
      */
     public static void main(String[] args)
     {
+        if(args.length==0)
+        {
+            printUsage();
+            return;
+        }
+        
         l=new DefaultStreamLogger();
         actionType=-1; //All action types are positive.
         interpretArgs(args);

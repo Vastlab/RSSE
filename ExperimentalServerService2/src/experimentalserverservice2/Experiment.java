@@ -231,6 +231,34 @@ public class Experiment
         return true;
     }
     
+    @Override
+    public String toString()
+    {
+        String s="";
+        
+        s+=("RSSE DIGEST\n");
+        s+=("title: ");
+        s+=(experimentName+"\n");
+        s+=("shouldrespond: "+(responseServer!=null)+"\n");
+        
+        if(responseServer!=null)
+        {
+            s+=("responseserver: "+responseServer+"\n");
+            s+=("responseport: "+responseServerPort+"\n");
+        }
+        
+        s+=("numelements: "+dataList.size()+"\n");
+        
+        for(DataElement e:dataList)
+        {
+            s+=("url: "+e.URL+"\n");
+        }
+        
+        s+=("END RSSE DIGEST\n");
+        
+        return s;
+    }
+    
     /**
      * Writes the contents of the experiment to a stream.
      * The output is formatted as an RSSE Digest file.
@@ -241,7 +269,7 @@ public class Experiment
         pw.println("RSSE DIGEST");
         pw.print("title: ");
         pw.println(experimentName);
-        pw.println("shouldrespond: "+responseServer!=null);
+        pw.println("shouldrespond: "+(responseServer!=null));
         
         if(responseServer!=null)
         {

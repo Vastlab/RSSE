@@ -199,6 +199,7 @@ public class Experiment
                 lineScanner=new Scanner(line);
 
                 buf=lineScanner.next();
+                System.out.println("Buffer contents: "+buf);
 
                 if(buf.equals("title:"))
                 {
@@ -220,7 +221,7 @@ public class Experiment
                     responseServerPort=Integer.parseInt(lineScanner.next());
                 }
 
-                else if(buf.equals("numelements: "))
+                else if(buf.equals("numelements:"))
                 {
                     //Ignore this as well.
                 }
@@ -232,7 +233,7 @@ public class Experiment
                     dataList.add(elem);
                 }
 
-                else if(buf.equals("END RSSE DIGEST"))
+                else if(buf.equals("END"))
                 {
                     break;
                 }
@@ -271,5 +272,17 @@ public class Experiment
         }
         
         pw.println("END RSSE DIGEST");
+    }
+    
+    @Override
+    public Experiment clone()
+    {
+        try
+        {
+            return (Experiment) super.clone();
+        } catch(CloneNotSupportedException e)
+        {
+            return null;
+        }
     }
 }

@@ -44,21 +44,26 @@ public class ESSProtocolServer
         InputStream rawIn=c.rawIn;
         String buf;
         
+        l.logMsg("Protocol", "Contacted to get experiment data.");
+        
         try
         {
             buf=in.readLine();
-            System.out.println("Got command: "+buf);
+            //System.out.println("Got command: "+buf);
+            l.logMsg("READ", buf);
             
             //Prints out a list of all of the experiments 
             if(buf.equals("getexperiments"))
             {
                 //Print the number of experiments.
                 out.println(experiments.size());
+                l.logMsg("WRITE", ""+experiments.size());
                 
                 //Now print out all experiment titles:
                 for(Experiment exp:experiments)
                 {
                     out.println(exp.experimentName);
+                    l.logMsg("WRITE", exp.experimentName);
                 }
             }
             
@@ -66,6 +71,8 @@ public class ESSProtocolServer
             {
                 //Read in the title of the experiment to get data for.
                 buf=in.readLine();
+                
+                l.logMsg("READ", buf);
                 
                 Experiment expToUse=null;
                 
@@ -82,11 +89,15 @@ public class ESSProtocolServer
                 
                 if(expToUse==null)
                 {
+                    l.logMsg("WRITE", "NOEXIST");
                     out.println("NOEXIST"); //Inform the client that that experiment doesn't exist.
                 }
                 
                 else //Print out the dataset:
                 {
+                    l.logMsg("WRITE", "OK");
+                    System.out.println("[WRITE] EXPERIMENT:");
+                    System.out.println(expToUse);
                     out.println("OK");
                     expToUse.dumpToStream(out);
                 }

@@ -88,6 +88,7 @@ public class ESSProtocolClient
         //Now try to read the experiment from the stream:
         e=new Experiment(l);
         e.readFromStream(c.in);//c.rawIn);
+        System.out.println("e list size: "+e.dataList.size());
         
         c.close();
         

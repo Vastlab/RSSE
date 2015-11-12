@@ -17,6 +17,7 @@ package experimentalserverservice2;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -34,6 +35,7 @@ public class ExperimentalServerService2
     public static String errorFile=null;
     public static String messageFile=null;
     public static DataServer dataServer;
+    public static boolean runningLocally=false;
     
     public static ArrayList<Experiment> experimentList;
     
@@ -50,6 +52,7 @@ public class ExperimentalServerService2
         System.out.println("\t-ef, --errfile\tIf \"--logfile\" is already specified, logs all errors to this ");
         System.out.println("\t\tfile rather than the file specified by \"--logfile\".");
         System.out.println("\t-uf, --updatefile\tUpdates the experiment definition file with new information.");
+        System.out.println("\t---local\tStores data locally rather than in system directories.");
     }
     
     /**
@@ -66,6 +69,12 @@ public class ExperimentalServerService2
             {
                 printHelp();
                 System.exit(1);
+            }
+            
+            else if(s.equalsIgnoreCase("--local"))
+            {
+                Settings.runningLocally();
+                runningLocally=true;
             }
             
             else if(s.equalsIgnoreCase("--genconfig"))
@@ -146,6 +155,11 @@ public class ExperimentalServerService2
      */
     public static void init()
     {
+        if(runningLocally)
+        {
+            defaultConfigFile="config.conf";
+            Settings.runningLocally();
+        }
         //First, get the logger ready:
         if(errorFile!=null||messageFile!=null)
         {
@@ -181,7 +195,7 @@ public class ExperimentalServerService2
         }
         
         //Now try to load a configuration file:
-        if(loadConfigFile)
+        if(loadConfigFile&&!runningLocally)
         {
             if(Settings.readSettingsFile(new File(defaultConfigFile)))
             {
@@ -192,6 +206,10 @@ public class ExperimentalServerService2
         else
         {
             //Do nothing, all defaults should be present.
+            if(runningLocally)
+            {
+                l.logMsg("Init", "Note: configuration ignored; running locally.");
+            }
         }
         
         //With our new configuration, try to build or validate a directory structure:
@@ -202,7 +220,7 @@ public class ExperimentalServerService2
         
         if(loadExperiments(new File(Settings.experimentDir)))
         {
-            l.logMsg("Init", "Successfully loaded "+experimentList.size()+" experiments.");
+            l.logMsg("Init", "Successfully loaded "+experimentList.size()+" experiment(s).");
         }
         
         else
@@ -307,6 +325,13 @@ public class ExperimentalServerService2
         
         return true;
     }
+    
+    public static void printConsoleHelp()
+    {
+        PrintStream o=System.out;
+        
+        o.println("Command List: help");
+    }
 
     /**
      * @param args the command line arguments
@@ -317,8 +342,20 @@ public class ExperimentalServerService2
         init();
         
         Scanner s=new Scanner(System.in);
+        String tmp;
+        System.out.println("Press enter to stop the ESS or type \"help\" for more options.");
+        System.out.print(">");
+        tmp=s.nextLine();
         
-        System.out.println("Press enter to stop the ESS.");
+        while(!tmp.equals(""))
+        {
+            if(tmp.equalsIgnoreCase("help"))
+            {
+                printConsoleHelp();
+            }
+            tmp=s.nextLine();
+            System.out.print(">");
+        }
         s.nextLine();
         
         deInit();

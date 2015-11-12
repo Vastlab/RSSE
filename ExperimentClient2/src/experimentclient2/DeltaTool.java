@@ -79,10 +79,37 @@ public class DeltaTool
     public ArrayList<Delta> readDeltaList(String deltaString)
     {
         ArrayList<Delta> deltaList=new ArrayList<Delta>();
+        Scanner lineScanner=new Scanner(deltaString);
+        Scanner tokenScanner;
+        String buf;
+        
+        //Skip past the number of deltas.
+        buf=lineScanner.nextLine();
+        //buf=lineScanner.nextLine();
+        //numDiffs=Integer.parseInt(buf);
+        
+        tokenScanner=new Scanner(buf);
+        
+        //Validate the string.
+        if(!tokenScanner.next().equals("numdiffs:"))
+        {
+            return null;
+        }
+        
+        int numDeltas=Integer.parseInt(tokenScanner.next());
+        
+        for(int i=0;i<numDeltas;i++)
+        {
+            buf=lineScanner.next();
+            deltaList.add(Delta.fromString(buf));
+        }
+        
+        return deltaList;
     }
     
     public ArrayList<Delta> readDeltaList(InputStream s)
     {
+        int numDiffs;
         ArrayList<Delta> deltaList=new ArrayList<Delta>();
         Scanner lineScanner=new Scanner(s);
         Scanner tokenScanner;
@@ -90,6 +117,7 @@ public class DeltaTool
         
         //Read in the number of differences:
         buf=lineScanner.nextLine();
+        numDiffs=Integer.parseInt(buf);
         tokenScanner=new Scanner(buf);
         
         if(!tokenScanner.next().equals("numdiffs:"))

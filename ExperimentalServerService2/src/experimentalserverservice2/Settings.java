@@ -32,6 +32,19 @@ public class Settings
     public static int fileUpdateServerPort=8001;
     
     /**
+     * Configures the server to run locally. This is especially useful for 
+     * debugging.
+     */
+    public static void runningLocally()
+    {
+        dbDir="./ess/db";
+        configDir="./ess";
+        tmpDir="./ess/tmp";
+        respDir="./ess/resp";
+        experimentDir="./ess/experiments";
+    }
+    
+    /**
      * This changes the default settings so that the ESS shouldn't completely break on Windows.
      * As such, it assumes that it is installed and running from (drive):\rsse\
      */
@@ -41,9 +54,9 @@ public class Settings
         {
             dbDir="./ess/db";
             configDir="./ess";
-            tmpDir="./rsse/ess/tmp";
+            tmpDir="./ess/tmp";
             respDir="./ess/resp";
-            experimentDir="./ess/experiment.xml";
+            experimentDir="./ess/experiments";
         }
     }
     
@@ -183,6 +196,7 @@ public class Settings
     {
         File outFile;
         Scanner userScanner=new Scanner(System.in);
+        String tmp;
         
         System.out.print("Please enter a configuration filename: ");
         outFile=new File(userScanner.nextLine());
@@ -212,26 +226,50 @@ public class Settings
         }
         
         System.out.print("Enter a location for user database snapshots [default="+dbDir+"]: ");
-        dbDir=userScanner.nextLine();
+        tmp=userScanner.nextLine();
+        if(!tmp.equals(""))
+        {
+            dbDir=tmp;
+        }
         
         //Skipping configdir
         
         System.out.print("Enter a location for temporary data [default="+tmpDir+"]: ");
-        tmpDir=userScanner.nextLine();
+        tmp=userScanner.nextLine();
+        if(!tmp.equals(""))
+        {
+            tmpDir=tmp;
+        }
         
         System.out.print("Enter a location to store responses in [default="+respDir+"]: ");
-        respDir=userScanner.nextLine();
+        tmp=userScanner.nextLine();
+        if(!tmp.equals(""))
+        {
+            respDir=tmp;
+        }
         
-        System.out.println("Enter a port for clients to get experiments from [default="+nuggetServerPort+"]: ");
-        nuggetServerPort=Integer.parseInt(userScanner.nextLine());
+        System.out.print("Enter a port for clients to get experiments from [default="+nuggetServerPort+"]: ");
+        tmp=userScanner.nextLine();
+        if(!tmp.equals(""))
+        {
+            nuggetServerPort=Integer.parseInt(tmp);
+        }
         
-        System.out.println("Enter a port for clients to respond to [default="+responseServerPort+"]: ");
-        responseServerPort=Integer.parseInt(userScanner.nextLine());
+        System.out.print("Enter a port for clients to respond to [default="+responseServerPort+"]: ");
+        tmp=userScanner.nextLine();
+        if(!tmp.equals(""))
+        {
+            responseServerPort=Integer.parseInt(tmp);
+        }
         
-        System.out.println("Enter the path to the experiment definitions file [default="+experimentDir+"]: ");
-        experimentDir=userScanner.nextLine();
+        System.out.print("Enter the path to the experiment definitions file [default="+experimentDir+"]: ");
+        tmp=userScanner.nextLine();
+        if(!tmp.equals(""))
+        {
+            experimentDir=tmp;
+        }
         
-        System.out.println("Configuration complete. Now attempting to write the configuration...");
+        System.out.print("Configuration complete. Now attempting to write the configuration...");
         
         if(generateSettingsFile(outFile))
         {
