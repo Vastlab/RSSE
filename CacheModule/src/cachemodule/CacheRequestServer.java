@@ -212,6 +212,7 @@ public class CacheRequestServer
                 } catch(InterruptedException e)
                 {
                     l.logMsg(DBSNAPSHOT_TAG, "Stopping DB shapshot thread...");
+                    db.saveDatabase(snapshotFile); //Ensure that the DB can be restored correctly.
                     return;
                 }
             }

@@ -5,6 +5,7 @@
 package cachemodule;
 
 import java.io.File;
+import java.io.IOException;
 
 /**
  *
@@ -26,6 +27,9 @@ public class CacheModule
     {
         System.out.println("Usage: java -jar CacheModule.jar [args]");
         System.out.println("Start or manage the RSSE Caching Service.");
+        System.out.println("\t--genconfig\tGenerates default configuration file.");
+        System.out.println("\t-t, --terminal\tActs as a Cache Management Terminal.");
+        System.out.println("\t--headless\tRuns without spawning a management terminal.");
         System.exit(0);
     }
     
@@ -56,7 +60,7 @@ public class CacheModule
             
             else if(s.equals("-h")||s.equals("--help"))
             {
-                
+                printHelp();
             }
             
             else if(s.equals("-t")||s.equals("--terminal"))
@@ -82,7 +86,7 @@ public class CacheModule
         
         l=new DefaultStreamLogger();
         cfg=new CMConfig();
-        database=new Database();
+        database=new ArrayListDatabase(l);
         
         interpretArgs(args);
         
@@ -113,7 +117,22 @@ public class CacheModule
         //cacheSrvr=new CacheRequestServer(CacheModule.cfg, database, l, new File(CacheModule.cfg.getSetting(CMConfig.SETTING_STORAGE_DIR)+"/db.snapshot"));
         //cacheSrvr.startServer();
         
+        //Try to load and execute a configuration script if it exists locally:
+        File initScript=new File("cm.init");
+        
         CMTerminal t=new CMTerminal("localhost");
+        
+        if(initScript.exists())
+        {
+            l.logMsg("CacheModule", "Found init script. Running...");
+            try
+            {
+                t.dispatchScript(initScript);
+            } catch(IOException e)
+            {
+                l.logErr("CacheModule", "ERROR: Can't execute init script.");
+            }
+        }
         
         t.runInterpreter();
     }

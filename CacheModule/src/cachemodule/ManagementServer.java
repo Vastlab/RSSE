@@ -31,8 +31,8 @@ public class ManagementServer
     
     public ManagementServer(int port, boolean keepConfig)
     {
-        db=new Database();
         l=new DefaultStreamLogger();
+        db=new ArrayListDatabase(l);
         
         CacheModule.l=l;
         CacheModule.database=db;
@@ -42,7 +42,7 @@ public class ManagementServer
             CacheModule.cfg=new CMConfig();
         }
         
-        snapshotFile=new File(CacheModule.cfg.getSetting(CMConfig.SETTING_STORAGE_DIR)+"/db.snapshot");
+        snapshotFile=new File(CacheModule.cfg.getSetting(CMConfig.SETTING_STORAGE_DIR)+"db.snapshot");
         
         if(snapshotFile.exists())
         {
@@ -102,6 +102,7 @@ public class ManagementServer
             System.out.println("Reading query...");
             ManagementQuery q=new ManagementQuery().fromString(r.readLine());
             ManagementQuery returnQuery=new ManagementQuery();
+            boolean stopService=false;
             
             System.out.println("Query: "+q);
             
@@ -182,6 +183,13 @@ public class ManagementServer
                 }
                 
                 //Also restart the caching server and other such things that are dependent on the config:
+                snapshotFile=new File(CacheModule.cfg.getSetting(CMConfig.SETTING_STORAGE_DIR)+"db.snapshot");
+        
+                if(snapshotFile.exists())
+                {
+                    db.loadDatabase(snapshotFile);
+                }
+                
                 if(CacheModule.cacheSrvr!=null)
                 {
                     if(CacheModule.cacheSrvr.isRunning())
@@ -210,6 +218,26 @@ public class ManagementServer
                 }
             }
             
+            else if(q.command.equals("shutdown"))
+            {
+                returnQuery.command="PRINT";
+                returnQuery.args.add("Stopping Cache Module instance...");
+                stopService=true;
+            }
+            
+            else if(q.command.equals("listcommands"))
+            {
+                returnQuery.command="PRINT";
+                returnQuery.args.add("cache -- cache a URL\n");
+                returnQuery.args.add("report -- print a list of cached objects.\n");
+                returnQuery.args.add("startservice -- start cache server service.\n");
+                returnQuery.args.add("stopservice -- stop cache server service.\n");
+                returnQuery.args.add("loadcfg -- load configuration from a file.\n");
+                returnQuery.args.add("savecfg -- save configuration to a file.\n");
+                returnQuery.args.add("shutdown -- stop the cache module completely.\n");
+                returnQuery.args.add("listcommands -- print this message.\n");
+            }
+            
             //Now print out the query and exit:
             PrintWriter pw=new PrintWriter(s.getOutputStream(), true);
             pw.println(returnQuery.toString());
@@ -217,6 +245,24 @@ public class ManagementServer
             pw.close();
             r.close();
             s.close();
+            
+            //Gracefully shut everything down:
+            if(stopService)
+            {
+                CacheModule.cacheSrvr.stopServer();
+                srvr.close();
+                
+                //Sleep for thread synchronization:
+                try
+                {
+                    Thread.sleep(1000);
+                } catch(InterruptedException e)
+                {
+                
+                }
+                
+                System.exit(0);
+            }
         }
         
         public void run()

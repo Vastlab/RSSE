@@ -1,0 +1,3 @@
+loadcfg cm.conf
+loadcfg cm.conf
+startservice

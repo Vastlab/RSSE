@@ -25,6 +25,7 @@ package cachemodule;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
@@ -257,6 +258,22 @@ public class CMTerminal
             
             ManagementQuery q=new ManagementQuery().fromString(userBuffer); //User buffer conveniently has the same formatting as this.
             
+            execManagementQuery(q);
+        }
+    }
+    
+    /**
+     * Sends the commands contained in a file to the remote management server.
+     * This should make configuration and execution more convenient.
+     * @param f 
+     */
+    public void dispatchScript(File f) throws FileNotFoundException
+    {
+        Scanner fileScanner=new Scanner(f);
+        
+        while(fileScanner.hasNextLine())
+        {
+            ManagementQuery q=new ManagementQuery().fromString(fileScanner.nextLine());
             execManagementQuery(q);
         }
     }

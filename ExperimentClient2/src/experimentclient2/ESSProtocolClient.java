@@ -95,7 +95,7 @@ public class ESSProtocolClient
         return e;
     }
     
-    public String getDeltaString(String server, int port, String remoteExperiment, Experiment localExperiment) throws IOException
+    public String getDeltaString(String server, int port, String remoteExperiment) throws IOException
     {
         String outStr="";
         String buf;
@@ -103,10 +103,15 @@ public class ESSProtocolClient
         Socket s=new Socket(server, port);
         Connection c=new Connection(s);
         
-        c.out.println("DELTA");
+        c.out.println("delta");
         c.out.println(remoteExperiment);
         
         buf=c.in.readLine();
+        if(buf==null)
+        {
+            System.err.println("buf==null!");
+            return null;
+        }
         
         if(buf.equals("NOEXIST"))
         {

@@ -391,6 +391,10 @@ public class ExperimentClient2
         }
     }
     
+    /**
+     * Resolves remote file's differences with local file.
+     * @param accountingFile 
+     */
     public static void doResolve(File accountingFile)
     {
         try
@@ -408,10 +412,29 @@ public class ExperimentClient2
             e=new Experiment(l);
             e.readFromStream(lineReader);//new BufferedReader(new InputStreamReader(rawIn)));
             
-            System.out.println(e.dataList.get(index).URL);
+            //System.out.println(e.dataList.get(index).URL);
             
             rawIn.close();
-                
+            
+            //Now that we have the file, try to establish a connection and get some deltas:
+            ESSProtocolClient c=new ESSProtocolClient(l);
+            String d=c.getDeltaString(serverName, serverPort, e.experimentName);
+            
+            //Now merge the deltas:
+            DeltaResolver r=new DeltaResolver(d);
+            Experiment newE=r.resolve(e);
+            
+            //Now write out the new experiment:
+            accountingFile.delete();
+            accountingFile.createNewFile();
+            PrintWriter pw=new PrintWriter(accountingFile);
+            
+            pw.println("curindex: 0");
+            newE.dumpToStream(pw);
+            pw.flush();
+            pw.close();
+            
+            System.out.println("Deltas resolved. See new digest file.");
         } catch(IOException e)
         {
             System.err.println("Couldn't generate URL file.");

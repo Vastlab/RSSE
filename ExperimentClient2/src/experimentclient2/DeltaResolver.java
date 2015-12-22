@@ -24,7 +24,7 @@ public class DeltaResolver
         deltaList=t.readDeltaList(deltaString);
     }
     
-    public Experiment resolve(Experiment newE, Experiment curE)
+    public Experiment resolve(Experiment curE)
     {
         int curExpIndex;
         Experiment e=(Experiment) curE.clone();
